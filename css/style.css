@@ -35,3 +35,14 @@ button {
 
   cursor: pointer;
 }
+
+.card {
+
+  background: white;
+
+  padding: 30px;
+
+  border-radius: 10px;
+
+  font-size: 32px;
+}
