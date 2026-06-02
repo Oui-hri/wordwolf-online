@@ -43,6 +43,4 @@ function startTopicCountdown() {
 
 }
 
-showScreen("topic-screen");
-
-startTopicCountdown();
+showScreen("title-screen");
