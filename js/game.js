@@ -29,7 +29,6 @@ export function getRandomTopic(category) {
 
   let selectedCategory = category;
 
-  // 全部ランダム
   if (category === "random") {
 
     const categories =
@@ -42,6 +41,14 @@ export function getRandomTopic(category) {
         categories.length
       )
       ];
+
+  }
+
+  if (!TOPICS[selectedCategory]) {
+
+    throw new Error(
+      `存在しないカテゴリー: ${selectedCategory}`
+    );
 
   }
 
@@ -59,16 +66,21 @@ export function getRandomTopic(category) {
   let citizenTopic;
   let wolfTopic;
 
-  // どちらを市民にするかランダム
   if (Math.random() < 0.5) {
 
-    citizenTopic = topic.word1;
-    wolfTopic = topic.word2;
+    citizenTopic =
+      topic.word1;
+
+    wolfTopic =
+      topic.word2;
 
   } else {
 
-    citizenTopic = topic.word2;
-    wolfTopic = topic.word1;
+    citizenTopic =
+      topic.word2;
+
+    wolfTopic =
+      topic.word1;
 
   }
 
@@ -83,7 +95,15 @@ export function getRandomTopic(category) {
 // ワードウルフ選出
 export function chooseWolf(players) {
 
-  if (!players || players.length === 0) {
+  if (!Array.isArray(players)) {
+
+    throw new Error(
+      "playersが配列ではありません"
+    );
+
+  }
+
+  if (players.length === 0) {
 
     throw new Error(
       "プレイヤーが存在しません"
@@ -104,7 +124,15 @@ export function assignRoles(
   category
 ) {
 
-  if (!players || players.length < 3) {
+  if (!Array.isArray(players)) {
+
+    throw new Error(
+      "playersが配列ではありません"
+    );
+
+  }
+
+  if (players.length < 3) {
 
     throw new Error(
       "プレイヤーは3人以上必要です"
@@ -145,42 +173,66 @@ export function assignRoles(
 
   return {
     category: result.category,
+    wolfIndex,
     players: assignedPlayers
   };
 
 }
 
-// 議論タイマー
+// ゲーム開始
+export function startGame(
+  players,
+  category
+) {
+
+  return assignRoles(
+    players,
+    category
+  );
+
+}
+
+// タイマー
 export function startDiscussionTimer(
   seconds,
+  onTick,
   onFinish
 ) {
 
   let time = seconds;
 
-  const timer = setInterval(() => {
+  const timer =
+    setInterval(() => {
 
-    console.log(
-      `残り時間: ${time}秒`
-    );
+      if (onTick) {
 
-    time--;
+        onTick(time);
 
-    if (time < 0) {
-
-      clearInterval(timer);
-
-      console.log(
-        "議論終了"
-      );
-
-      if (onFinish) {
-        onFinish();
       }
 
-    }
+      console.log(
+        `残り時間: ${time}秒`
+      );
 
-  }, 1000);
+      time--;
+
+      if (time < 0) {
+
+        clearInterval(timer);
+
+        console.log(
+          "議論終了"
+        );
+
+        if (onFinish) {
+
+          onFinish();
+
+        }
+
+      }
+
+    }, 1000);
 
   return timer;
 
@@ -200,6 +252,18 @@ export function changeGameState(
   );
 
   return roomData;
+
+}
+
+// ウルフ取得
+export function getWolfPlayer(
+  players
+) {
+
+  return players.find(
+    player =>
+      player.role === "wolf"
+  );
 
 }
 
@@ -240,18 +304,6 @@ export function judgeTieAfterRevote() {
 
 }
 
-// ウルフ取得
-export function getWolfPlayer(
-  players
-) {
-
-  return players.find(
-    player =>
-      player.role === "wolf"
-  );
-
-}
-
 // =========================
 // テスト用
 // =========================
@@ -273,8 +325,8 @@ export function testGame() {
     }
   ];
 
-  const gameResult =
-    assignRoles(
+  const result =
+    startGame(
       players,
       "random"
     );
@@ -282,15 +334,17 @@ export function testGame() {
   console.log(
     "カテゴリー"
   );
+
   console.log(
-    gameResult.category
+    result.category
   );
 
   console.log(
     "役職配布"
   );
+
   console.table(
-    gameResult.players
+    result.players
   );
 
 }
