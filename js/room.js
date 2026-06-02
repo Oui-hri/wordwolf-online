@@ -1,10 +1,15 @@
 import { database } from "./firebase.js";
 
 import {
+  assignRoles
+} from "./game.js";
+
+import {
   ref,
   set,
   get,
-  onValue
+  onValue,
+  update
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
 
 console.log("room.js 読み込みOK");
@@ -15,13 +20,11 @@ const joinRoomButton = document.getElementById("join-room-button");
 const roomCode = document.getElementById("room-code");
 const playerList = document.getElementById("player-list");
 const startGameButton = document.getElementById("start-game-button");
+const topicCard = document.querySelector("#topic-screen .card");
 
-//今操作している人の情報を一時的に覚えるための箱
-  //今いるルーム名を覚えます。
+// 今操作している人の情報を一時的に覚えるための変数
 let currentRoomName = "";
-  //今のプレイヤーIDを覚えます。
 let currentPlayerId = "";
-  //今の人がホストかどうかを覚えます。
 let currentIsHost = false;
 
 // ルーム作成ボタンが押されたときの処理
@@ -154,6 +157,7 @@ function showWaitingRoom(roomName) {
   roomCode.textContent = roomName;
   updateStartGameButton();
 }
+
 // ホストだけゲーム開始ボタンを押せるようにする処理
 function updateStartGameButton() {
   if (!startGameButton) {
@@ -181,16 +185,54 @@ function startGame() {
     return;
   }
 
-  const statusRef = ref(database, "rooms/" + currentRoomName + "/status");
+  const roomRef = ref(database, "rooms/" + currentRoomName);
 
-  set(statusRef, "discussion")
+  get(roomRef)
+    .then((snapshot) => {
+      if (!snapshot.exists()) {
+        throw new Error("ルーム情報が見つかりません");
+      }
+
+      const roomData = snapshot.val();
+      const playersData = roomData.players;
+
+      if (!playersData) {
+        throw new Error("参加者がいません");
+      }
+
+      const players = Object.keys(playersData).map((playerId) => {
+        return {
+          uid: playerId,
+          name: playersData[playerId].name,
+          isHost: playersData[playerId].isHost
+        };
+      });
+
+      if (players.length < 3) {
+        throw new Error("ゲーム開始には3人以上必要です");
+      }
+
+      const assignedData = assignRoles(players, "random");
+
+      const updates = {};
+
+      assignedData.players.forEach((player) => {
+        updates["players/" + player.uid + "/role"] = player.role;
+        updates["players/" + player.uid + "/topic"] = player.topic;
+      });
+
+      updates["game/category"] = assignedData.category;
+      updates["status"] = "discussion";
+
+      return update(roomRef, updates);
+    })
     .then(() => {
       console.log("ゲーム開始OK");
       alert("ゲームを開始しました");
     })
     .catch((error) => {
       console.error("ゲーム開始エラー", error);
-      alert("ゲーム開始に失敗しました");
+      alert(error.message || "ゲーム開始に失敗しました");
     });
 }
 
@@ -204,7 +246,7 @@ function listenRoomStatus(roomName) {
     console.log("現在のステータス:", status);
 
     if (status === "discussion") {
-      showDiscussionScreen();
+      showTopicScreen();
     }
   });
 }
@@ -216,6 +258,38 @@ function showDiscussionScreen() {
 
   waitingScreen.classList.add("hidden");
   discussionScreen.classList.remove("hidden");
+}
+
+// お題確認画面を表示する処理
+function showTopicScreen() {
+  const waitingScreen = document.getElementById("waiting-screen");
+  const topicScreen = document.getElementById("topic-screen");
+
+  waitingScreen.classList.add("hidden");
+  topicScreen.classList.remove("hidden");
+
+  const playerRef = ref(
+    database,
+    "rooms/" + currentRoomName + "/players/" + currentPlayerId
+  );
+
+  get(playerRef)
+    .then((snapshot) => {
+      if (!snapshot.exists()) {
+        alert("プレイヤー情報が見つかりません");
+        return;
+      }
+
+      const playerData = snapshot.val();
+
+      if (topicCard) {
+        topicCard.textContent = playerData.topic;
+      }
+    })
+    .catch((error) => {
+      console.error("お題取得エラー", error);
+      alert("お題の取得に失敗しました");
+    });
 }
 
 // 参加者一覧をリアルタイムで表示する処理
