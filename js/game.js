@@ -14,16 +14,56 @@ export const GAME_STATE = {
   RESULT: "result"
 };
 
-// ランダムでお題を取得
-export function getRandomTopic() {
+// カテゴリー一覧取得
+export function getCategories() {
 
-  const index =
-    Math.floor(Math.random() * TOPICS.length);
+  return [
+    ...Object.keys(TOPICS),
+    "random"
+  ];
 
-  return TOPICS[index];
 }
 
-// ランダムでウルフを決定
+// お題取得
+export function getRandomTopic(category) {
+
+  let selectedCategory = category;
+
+  // 全部ランダム
+  if (category === "random") {
+
+    const categories =
+      Object.keys(TOPICS);
+
+    selectedCategory =
+      categories[
+      Math.floor(
+        Math.random() *
+        categories.length
+      )
+      ];
+
+  }
+
+  const topics =
+    TOPICS[selectedCategory];
+
+  const topic =
+    topics[
+    Math.floor(
+      Math.random() *
+      topics.length
+    )
+    ];
+
+  return {
+    category: selectedCategory,
+    topic: topic
+  };
+
+}
+
+// ワードウルフ選出
 export function chooseWolf(players) {
 
   if (players.length === 0) {
@@ -31,45 +71,66 @@ export function chooseWolf(players) {
   }
 
   return Math.floor(
-    Math.random() * players.length
+    Math.random() *
+    players.length
   );
+
 }
 
-// プレイヤーへ役職とお題を配布
-export function assignRoles(players) {
+// 役職配布
+export function assignRoles(
+  players,
+  category
+) {
 
   if (!players || players.length < 3) {
+
     throw new Error(
       "プレイヤーは3人以上必要です"
     );
+
   }
 
-  const topic = getRandomTopic();
-  const wolfIndex = chooseWolf(players);
+  const result =
+    getRandomTopic(category);
 
-  return players.map((player, index) => {
+  const topic =
+    result.topic;
 
-    if (index === wolfIndex) {
+  const wolfIndex =
+    chooseWolf(players);
 
-      return {
-        ...player,
-        role: "wolf",
-        topic: topic.wolf
-      };
+  const assignedPlayers =
+    players.map(
+      (player, index) => {
 
-    }
+        if (index === wolfIndex) {
 
-    return {
-      ...player,
-      role: "citizen",
-      topic: topic.citizen
-    };
+          return {
+            ...player,
+            role: "wolf",
+            topic: topic.wolf
+          };
 
-  });
+        }
+
+        return {
+          ...player,
+          role: "citizen",
+          topic: topic.citizen
+        };
+
+      }
+    );
+
+  return {
+    category: result.category,
+    players: assignedPlayers
+  };
 
 }
 
-// 議論タイマー
+// タイマー
 export function startDiscussionTimer(
   seconds,
   onFinish
@@ -79,7 +140,9 @@ export function startDiscussionTimer(
 
   const timer = setInterval(() => {
 
-    console.log(`残り時間: ${time}秒`);
+    console.log(
+      `残り時間: ${time}秒`
+    );
 
     time--;
 
@@ -87,7 +150,9 @@ export function startDiscussionTimer(
 
       clearInterval(timer);
 
-      console.log("議論終了");
+      console.log(
+        "議論終了"
+      );
 
       if (onFinish) {
         onFinish();
@@ -98,21 +163,7 @@ export function startDiscussionTimer(
   }, 1000);
 
   return timer;
-}
 
-// ゲーム状態変更
-export function changeGameState(
-  roomData,
-  newState
-) {
-
-  roomData.gameState = newState;
-
-  console.log(
-    `ゲーム状態変更: ${newState}`
-  );
-
-  return roomData;
 }
 
 // 勝敗判定
@@ -120,68 +171,33 @@ export function judgeWinner(
   eliminatedPlayer
 ) {
 
-  if (eliminatedPlayer.role === "wolf") {
+  if (
+    eliminatedPlayer.role === "wolf"
+  ) {
 
     return {
       winner: "citizen",
-      message: "市民チームの勝利"
+      message:
+        "市民チームの勝利"
     };
 
   }
 
   return {
     winner: "wolf",
-    message: "ワードウルフの勝利"
+    message:
+      "ワードウルフの勝利"
   };
 
 }
 
-// 再投票でも同票ならウルフ勝利
+// 再投票同票
 export function judgeTieAfterRevote() {
 
   return {
     winner: "wolf",
     message:
       "再投票でも同票のためワードウルフ勝利"
-  };
-
+  }
 }
 
-// ウルフ取得
-export function getWolfPlayer(players) {
-
-  return players.find(
-    player => player.role === "wolf"
-  );
-
-}
-
-// =========================
-// 動作確認用サンプル
-// =========================
-
-export function testGame() {
-
-  const players = [
-    { uid: "1", name: "大類" },
-    { uid: "2", name: "早川" },
-    { uid: "3", name: "中村" }
-  ];
-
-  const assignedPlayers =
-    assignRoles(players);
-
-  console.log("===== 役職配布 =====");
-
-  console.table(assignedPlayers);
-
-  startDiscussionTimer(
-    10,
-    () => {
-      console.log(
-        "投票フェーズへ移動"
-      );
-    }
-  );
-
-}
