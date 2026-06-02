@@ -198,6 +198,6 @@ export function judgeTieAfterRevote() {
     winner: "wolf",
     message:
       "再投票でも同票のためワードウルフ勝利"
-  }
-}
+  };
 
+}
