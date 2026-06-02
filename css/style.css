@@ -57,3 +57,16 @@ button {
 
   margin-top: 10px;
 }
+
+#discussion-timer {
+
+  font-size: 100px;
+
+  font-weight: bold;
+
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
