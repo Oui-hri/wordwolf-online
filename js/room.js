@@ -14,6 +14,15 @@ const createRoomButton = document.getElementById("create-room-button");
 const joinRoomButton = document.getElementById("join-room-button");
 const roomCode = document.getElementById("room-code");
 const playerList = document.getElementById("player-list");
+const startGameButton = document.getElementById("start-game-button");
+
+//今操作している人の情報を一時的に覚えるための箱
+  //今いるルーム名を覚えます。
+let currentRoomName = "";
+  //今のプレイヤーIDを覚えます。
+let currentPlayerId = "";
+  //今の人がホストかどうかを覚えます。
+let currentIsHost = false;
 
 // ルーム作成ボタンが押されたときの処理
 createRoomButton.addEventListener("click", () => {
@@ -37,6 +46,10 @@ function createRoom() {
 
   const roomName = inputRoomName.trim();
   const playerId = crypto.randomUUID();
+
+  currentRoomName = roomName;
+  currentPlayerId = playerId;
+  currentIsHost = true;
 
   const roomRef = ref(database, "rooms/" + roomName);
 
@@ -88,6 +101,10 @@ function joinRoom() {
   const roomName = inputRoomName.trim();
   const playerId = crypto.randomUUID();
 
+  currentRoomName = roomName;
+  currentPlayerId = playerId;
+  currentIsHost = false;
+
   const roomRef = ref(database, "rooms/" + roomName);
   const playerRef = ref(database, "rooms/" + roomName + "/players/" + playerId);
 
@@ -128,6 +145,21 @@ function showWaitingRoom(roomName) {
   waitingScreen.classList.remove("hidden");
 
   roomCode.textContent = roomName;
+  updateStartGameButton();
+}
+// ホストだけゲーム開始ボタンを押せるようにする処理
+function updateStartGameButton() {
+  if (!startGameButton) {
+    return;
+  }
+
+  if (currentIsHost) {
+    startGameButton.style.display = "block";
+    startGameButton.disabled = false;
+  } else {
+    startGameButton.style.display = "none";
+    startGameButton.disabled = true;
+  }
 }
 
 // 参加者一覧をリアルタイムで表示する処理
