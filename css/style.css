@@ -147,32 +147,75 @@ button {
   transition: .3s;
 }
 
-button:hover {
-  transform: translateY(-3px);
-}
-
+/* オレンジのボタン */
 #create-room-button {
+
+  width: 280px;
+  padding: 16px;
   background:
     linear-gradient(180deg,
-      #ffd65a,
-      #f0b429);
-
-  color: #3a2200;
+      #f08a00 0%,
+      #e06d00 55%,
+      #c95a00 100%);
+  color: white;
+  border-radius: 20px;
+  box-shadow:
+    0 0 15px rgba(255, 140, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255,
+      180,
+      0,
+      0.5);
+  backdrop-filter: blur(4px);
+  transition: all 0.3s;
+  font-family: "Zen Kaku Gothic New",
+    sans-serif;
+  font-size: 1.125rem;
 
   position: relative;
-  top: -130px;
+  top: -100px;
 }
 
-#join-room-button {
-  background:
-    linear-gradient(180deg,
-      #8c6fff,
-      #6046e2);
+#create-room-button:hover {
+  box-shadow: 0 0 30px rgba(217, 119, 6, 0.6);
+}
 
-  color: white;
+/* 下のボタン */
+#join-room-button {
+  width: 280px;
+  padding: 16px;
+  background:
+    linear-gradient(135deg,
+      #4b2c78 0%,
+      #39205f 45%,
+      #23234a 100%);
+
+  color: #fff8e7;
+
+  border-radius: 20px;
+
+  border: 1px solid rgba(255, 140, 0, 0.25);
+
+  box-shadow:
+    0 0 15px rgba(111, 66, 193, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+  transition: all 0.3s;
+
+  font-family: "Zen Kaku Gothic New", sans-serif;
+
+  font-size: 1.125rem;
 
   position: relative;
-  top: -130px;
+  top: -100px;
+}
+
+#join-room-button:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 0 25px rgba(111, 66, 193, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .card {
