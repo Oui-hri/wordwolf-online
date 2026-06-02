@@ -216,7 +216,7 @@ export function startDiscussionTimer(
 
       time--;
 
-      if (time < 0) {
+      if (time <= 0) {
 
         clearInterval(timer);
 
