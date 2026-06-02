@@ -41,6 +41,27 @@ function startTopicCountdown() {
 
   }, 1000);
 
+  const chatButton =
+    document.getElementById(
+      "toggle-chat-button"
+    );
+
+  const chatContainer =
+    document.getElementById(
+      "chat-container"
+    );
+
+  chatButton.addEventListener(
+    "click",
+    () => {
+
+      chatContainer.classList.toggle(
+        "hidden"
+      );
+
+    }
+  );
+
 }
 
 showScreen("title-screen");
