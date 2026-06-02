@@ -56,9 +56,26 @@ export function getRandomTopic(category) {
     )
     ];
 
+  let citizenTopic;
+  let wolfTopic;
+
+  // どちらを市民にするかランダム
+  if (Math.random() < 0.5) {
+
+    citizenTopic = topic.word1;
+    wolfTopic = topic.word2;
+
+  } else {
+
+    citizenTopic = topic.word2;
+    wolfTopic = topic.word1;
+
+  }
+
   return {
     category: selectedCategory,
-    topic: topic
+    citizenTopic,
+    wolfTopic
   };
 
 }
@@ -66,8 +83,12 @@ export function getRandomTopic(category) {
 // ワードウルフ選出
 export function chooseWolf(players) {
 
-  if (players.length === 0) {
-    throw new Error("プレイヤーが存在しません");
+  if (!players || players.length === 0) {
+
+    throw new Error(
+      "プレイヤーが存在しません"
+    );
+
   }
 
   return Math.floor(
@@ -94,9 +115,6 @@ export function assignRoles(
   const result =
     getRandomTopic(category);
 
-  const topic =
-    result.topic;
-
   const wolfIndex =
     chooseWolf(players);
 
@@ -109,7 +127,8 @@ export function assignRoles(
           return {
             ...player,
             role: "wolf",
-            topic: topic.wolf
+            topic:
+              result.wolfTopic
           };
 
         }
@@ -117,7 +136,8 @@ export function assignRoles(
         return {
           ...player,
           role: "citizen",
-          topic: topic.citizen
+          topic:
+            result.citizenTopic
         };
 
       }
@@ -130,7 +150,7 @@ export function assignRoles(
 
 }
 
-// タイマー
+// 議論タイマー
 export function startDiscussionTimer(
   seconds,
   onFinish
@@ -166,13 +186,31 @@ export function startDiscussionTimer(
 
 }
 
+// ゲーム状態変更
+export function changeGameState(
+  roomData,
+  newState
+) {
+
+  roomData.gameState =
+    newState;
+
+  console.log(
+    `ゲーム状態変更: ${newState}`
+  );
+
+  return roomData;
+
+}
+
 // 勝敗判定
 export function judgeWinner(
   eliminatedPlayer
 ) {
 
   if (
-    eliminatedPlayer.role === "wolf"
+    eliminatedPlayer.role ===
+    "wolf"
   ) {
 
     return {
@@ -191,7 +229,7 @@ export function judgeWinner(
 
 }
 
-// 再投票同票
+// 再投票でも同票ならウルフ勝利
 export function judgeTieAfterRevote() {
 
   return {
@@ -199,5 +237,60 @@ export function judgeTieAfterRevote() {
     message:
       "再投票でも同票のためワードウルフ勝利"
   };
+
+}
+
+// ウルフ取得
+export function getWolfPlayer(
+  players
+) {
+
+  return players.find(
+    player =>
+      player.role === "wolf"
+  );
+
+}
+
+// =========================
+// テスト用
+// =========================
+
+export function testGame() {
+
+  const players = [
+    {
+      uid: "1",
+      name: "大類"
+    },
+    {
+      uid: "2",
+      name: "早川"
+    },
+    {
+      uid: "3",
+      name: "中村"
+    }
+  ];
+
+  const gameResult =
+    assignRoles(
+      players,
+      "random"
+    );
+
+  console.log(
+    "カテゴリー"
+  );
+  console.log(
+    gameResult.category
+  );
+
+  console.log(
+    "役職配布"
+  );
+  console.table(
+    gameResult.players
+  );
 
 }
