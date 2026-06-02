@@ -1,7 +1,8 @@
 import { database } from "./firebase.js";
 
 import {
-  assignRoles
+  assignRoles,
+  startDiscussionTimer
 } from "./game.js";
 
 import {
@@ -26,6 +27,14 @@ const topicCard = document.querySelector("#topic-screen .card");
 let currentRoomName = "";
 let currentPlayerId = "";
 let currentIsHost = false;
+
+// タイマー管理用
+let topicCountdownTimer = null;
+let discussionTimer = null;
+
+// 画面遷移の重複防止用
+let isTopicFlowStarted = false;
+let isDiscussionStarted = false;
 
 // ルーム作成ボタンが押されたときの処理
 createRoomButton.addEventListener("click", () => {
@@ -58,6 +67,9 @@ function createRoom() {
   currentRoomName = roomName;
   currentPlayerId = playerId;
   currentIsHost = true;
+
+  isTopicFlowStarted = false;
+  isDiscussionStarted = false;
 
   const roomRef = ref(database, "rooms/" + roomName);
 
@@ -114,6 +126,9 @@ function joinRoom() {
   currentPlayerId = playerId;
   currentIsHost = false;
 
+  isTopicFlowStarted = false;
+  isDiscussionStarted = false;
+
   const roomRef = ref(database, "rooms/" + roomName);
   const playerRef = ref(database, "rooms/" + roomName + "/players/" + playerId);
 
@@ -150,8 +165,12 @@ function joinRoom() {
 function showWaitingRoom(roomName) {
   const titleScreen = document.getElementById("title-screen");
   const waitingScreen = document.getElementById("waiting-screen");
+  const topicScreen = document.getElementById("topic-screen");
+  const discussionScreen = document.getElementById("discussion-screen");
 
   titleScreen.classList.add("hidden");
+  topicScreen.classList.add("hidden");
+  discussionScreen.classList.add("hidden");
   waitingScreen.classList.remove("hidden");
 
   roomCode.textContent = roomName;
@@ -222,13 +241,30 @@ function startGame() {
       });
 
       updates["game/category"] = assignedData.category;
-      updates["status"] = "discussion";
+
+      // まずは全員をお題確認画面へ進める
+      updates["status"] = "topic";
 
       return update(roomRef, updates);
     })
     .then(() => {
       console.log("ゲーム開始OK");
-      alert("ゲームを開始しました");
+
+      // ホストだけが10秒後にstatusをdiscussionへ変える
+      setTimeout(() => {
+        const statusRef = ref(
+          database,
+          "rooms/" + currentRoomName + "/status"
+        );
+
+        set(statusRef, "discussion")
+          .then(() => {
+            console.log("話し合い開始OK");
+          })
+          .catch((error) => {
+            console.error("話し合い開始エラー", error);
+          });
+      }, 10000);
     })
     .catch((error) => {
       console.error("ゲーム開始エラー", error);
@@ -245,28 +281,32 @@ function listenRoomStatus(roomName) {
 
     console.log("現在のステータス:", status);
 
-    if (status === "discussion") {
+    if (status === "topic" && !isTopicFlowStarted) {
+      isTopicFlowStarted = true;
       showTopicScreen();
     }
+
+    if (status === "discussion" && !isDiscussionStarted) {
+      isDiscussionStarted = true;
+      showDiscussionScreen();
+    }
   });
-}
-
-// 話し合い画面を表示する処理
-function showDiscussionScreen() {
-  const waitingScreen = document.getElementById("waiting-screen");
-  const discussionScreen = document.getElementById("discussion-screen");
-
-  waitingScreen.classList.add("hidden");
-  discussionScreen.classList.remove("hidden");
 }
 
 // お題確認画面を表示する処理
 function showTopicScreen() {
   const waitingScreen = document.getElementById("waiting-screen");
   const topicScreen = document.getElementById("topic-screen");
+  const discussionScreen = document.getElementById("discussion-screen");
+  const countdownElement = document.getElementById("countdown");
 
   waitingScreen.classList.add("hidden");
+  discussionScreen.classList.add("hidden");
   topicScreen.classList.remove("hidden");
+
+  if (topicCountdownTimer) {
+    clearInterval(topicCountdownTimer);
+  }
 
   const playerRef = ref(
     database,
@@ -285,11 +325,74 @@ function showTopicScreen() {
       if (topicCard) {
         topicCard.textContent = playerData.topic;
       }
+
+      startTopicCountdown(countdownElement);
     })
     .catch((error) => {
       console.error("お題取得エラー", error);
       alert("お題の取得に失敗しました");
     });
+}
+
+// お題確認画面のカウントダウン処理
+function startTopicCountdown(countdownElement) {
+  let countdown = 10;
+
+  if (countdownElement) {
+    countdownElement.textContent = countdown;
+  }
+
+  topicCountdownTimer = setInterval(() => {
+    countdown--;
+
+    if (countdownElement) {
+      countdownElement.textContent = countdown;
+    }
+
+    if (countdown <= 0) {
+      clearInterval(topicCountdownTimer);
+      topicCountdownTimer = null;
+
+      // ここでは画面遷移しない
+      // discussionへの遷移はFirebaseのstatus変更で全員同時に行う
+    }
+  }, 1000);
+}
+
+// 話し合い画面を表示する処理
+function showDiscussionScreen() {
+  const waitingScreen = document.getElementById("waiting-screen");
+  const topicScreen = document.getElementById("topic-screen");
+  const discussionScreen = document.getElementById("discussion-screen");
+  const timerElement = document.getElementById("discussion-timer");
+
+  waitingScreen.classList.add("hidden");
+  topicScreen.classList.add("hidden");
+  discussionScreen.classList.remove("hidden");
+
+  if (topicCountdownTimer) {
+    clearInterval(topicCountdownTimer);
+    topicCountdownTimer = null;
+  }
+
+  if (discussionTimer) {
+    clearInterval(discussionTimer);
+  }
+
+  discussionTimer = startDiscussionTimer(
+    120,
+    (time) => {
+      const minutes = String(Math.floor(time / 60)).padStart(2, "0");
+      const seconds = String(time % 60).padStart(2, "0");
+
+      if (timerElement) {
+        timerElement.textContent = `${minutes}:${seconds}`;
+      }
+    },
+    () => {
+      alert("議論終了");
+    }
+  );
 }
 
 // 参加者一覧をリアルタイムで表示する処理
