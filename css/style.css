@@ -35,9 +35,10 @@ body {
 
   text-align: center;
 
-  margin-top: 0;
-
   overflow: hidden;
+
+  width: 100%;
+  height: 550px;
 }
 
 .title {
@@ -54,6 +55,8 @@ body {
   font-size: 3rem;
 
   font-weight: 900;
+
+  z-index: 4
 }
 
 h1 {
@@ -66,12 +69,45 @@ h1 {
     0 0 30px rgba(255, 215, 0, .3);
 }
 
+.stars {
+  position: absolute;
+
+  top: 0;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: 1600px;
+  max-width: none;
+
+  z-index: 0;
+
+  pointer-events: none;
+}
+
 .moon {
   width: 500px;
 
   display: block;
 
   margin: -220px auto 0;
+
+  position: absolute;
+
+  z-index: 1
+}
+
+.rock {
+  width: 420px;
+
+  position: absolute;
+
+  left: 50%;
+  top: 135px;
+
+  transform: translateX(-50%);
+
+  z-index: 2;
 }
 
 .wolf {
@@ -85,7 +121,7 @@ h1 {
 
   transform: translateX(-50%);
 
-  z-index: 2;
+  z-index: 3;
 }
 
 .hidden {
@@ -122,6 +158,9 @@ button:hover {
       #f0b429);
 
   color: #3a2200;
+
+  position: relative;
+  top: -130px;
 }
 
 #join-room-button {
@@ -131,6 +170,9 @@ button:hover {
       #6046e2);
 
   color: white;
+
+  position: relative;
+  top: -130px;
 }
 
 .card {
