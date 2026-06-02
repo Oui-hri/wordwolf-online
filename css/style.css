@@ -70,3 +70,18 @@ button {
 .hidden {
   display: none;
 }
+
+#vote-list {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 15px;
+
+  margin: 20px 0;
+}
+
+.hidden {
+  display: none;
+}
