@@ -86,6 +86,7 @@ function createRoom() {
 
       showWaitingRoom(roomName);
       listenPlayers(roomName);
+      listenRoomStatus(roomName);
     })
     .catch((error) => {
       console.error("ルーム作成エラー", error);
@@ -134,6 +135,7 @@ function joinRoom() {
 
       showWaitingRoom(roomName);
       listenPlayers(roomName);
+      listenRoomStatus(roomName);
     })
     .catch((error) => {
       console.error("ルーム参加エラー", error);
@@ -190,6 +192,30 @@ function startGame() {
       console.error("ゲーム開始エラー", error);
       alert("ゲーム開始に失敗しました");
     });
+}
+
+// ルームの状態をリアルタイムで監視する処理
+function listenRoomStatus(roomName) {
+  const statusRef = ref(database, "rooms/" + roomName + "/status");
+
+  onValue(statusRef, (snapshot) => {
+    const status = snapshot.val();
+
+    console.log("現在のステータス:", status);
+
+    if (status === "discussion") {
+      showDiscussionScreen();
+    }
+  });
+}
+
+// 話し合い画面を表示する処理
+function showDiscussionScreen() {
+  const waitingScreen = document.getElementById("waiting-screen");
+  const discussionScreen = document.getElementById("discussion-screen");
+
+  waitingScreen.classList.add("hidden");
+  discussionScreen.classList.remove("hidden");
 }
 
 // 参加者一覧をリアルタイムで表示する処理
