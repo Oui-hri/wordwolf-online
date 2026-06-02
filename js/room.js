@@ -42,6 +42,10 @@ let discussionTimer = null;
 let isTopicFlowStarted = false;
 let isDiscussionStarted = false;
 let isVotingStarted = false;
+let isVoteResultShown = false;
+
+// 投票集計の重複防止用
+let isVoteCounted = false;
 
 // ルーム作成ボタンが押されたときの処理
 createRoomButton.addEventListener("click", () => {
@@ -87,6 +91,8 @@ function createRoom() {
   isTopicFlowStarted = false;
   isDiscussionStarted = false;
   isVotingStarted = false;
+  isVoteResultShown = false;
+  isVoteCounted = false;
 
   const roomRef = ref(database, "rooms/" + roomName);
 
@@ -148,6 +154,8 @@ function joinRoom() {
   isTopicFlowStarted = false;
   isDiscussionStarted = false;
   isVotingStarted = false;
+  isVoteResultShown = false;
+  isVoteCounted = false;
 
   const roomRef = ref(database, "rooms/" + roomName);
   const playerRef = ref(database, "rooms/" + roomName + "/players/" + playerId);
@@ -319,6 +327,11 @@ function listenRoomStatus(roomName) {
       isVotingStarted = true;
       showVoteScreen();
     }
+
+    if (status === "voteResult" && !isVoteResultShown) {
+      isVoteResultShown = true;
+      showVoteResult();
+    }
   });
 }
 
@@ -483,6 +496,8 @@ function showVoteScreen() {
 
   selectedVoteTargetId = "";
   hasVoted = false;
+  isVoteCounted = false;
+  isVoteResultShown = false;
 
   if (voteButton) {
     voteButton.disabled = false;
@@ -491,6 +506,10 @@ function showVoteScreen() {
   }
 
   renderVoteList();
+
+  if (currentIsHost) {
+    listenVotes();
+  }
 }
 
 // 投票候補を表示する処理
@@ -619,6 +638,172 @@ function showVoteWaiting() {
     voteButton.disabled = true;
     voteButton.style.display = "none";
   }
+}
+
+// 投票状況を監視する処理
+function listenVotes() {
+  if (!currentRoomName) {
+    return;
+  }
+
+  const votesRef = ref(
+    database,
+    "rooms/" + currentRoomName + "/votes"
+  );
+
+  onValue(votesRef, (snapshot) => {
+    if (isVoteCounted) {
+      return;
+    }
+
+    const votes = snapshot.val();
+
+    if (!votes) {
+      console.log("まだ投票はありません");
+      return;
+    }
+
+    checkAllVotesSubmitted(votes);
+  });
+}
+
+// 全員が投票したか確認する処理
+function checkAllVotesSubmitted(votes) {
+  const playersRef = ref(
+    database,
+    "rooms/" + currentRoomName + "/players"
+  );
+
+  get(playersRef)
+    .then((snapshot) => {
+      if (!snapshot.exists()) {
+        return;
+      }
+
+      const players = snapshot.val();
+      const playerCount = Object.keys(players).length;
+      const voteCount = Object.keys(votes).length;
+
+      console.log("投票数:", voteCount + "/" + playerCount);
+
+      if (voteCount === playerCount) {
+        isVoteCounted = true;
+        countVotes(players, votes);
+      }
+    })
+    .catch((error) => {
+      console.error("投票完了確認エラー", error);
+    });
+}
+
+// 投票を集計する処理
+function countVotes(players, votes) {
+  const voteCounts = {};
+
+  Object.keys(votes).forEach((voterId) => {
+    const targetId = votes[voterId];
+
+    if (!voteCounts[targetId]) {
+      voteCounts[targetId] = 0;
+    }
+
+    voteCounts[targetId]++;
+  });
+
+  console.log("投票集計結果:", voteCounts);
+
+  Object.keys(voteCounts).forEach((playerId) => {
+    const playerName = players[playerId]?.name || "不明なプレイヤー";
+    const count = voteCounts[playerId];
+
+    console.log(playerName + "：" + count + "票");
+  });
+
+  const roomRef = ref(
+    database,
+    "rooms/" + currentRoomName
+  );
+
+  update(roomRef, {
+    voteResult: {
+      voteCounts: voteCounts
+    },
+    status: "voteResult"
+  })
+    .then(() => {
+      console.log("投票結果保存OK");
+    })
+    .catch((error) => {
+      console.error("投票結果保存エラー", error);
+    });
+}
+
+// 投票結果を画面に表示する処理
+function showVoteResult() {
+  const titleScreen = document.getElementById("title-screen");
+  const waitingScreen = document.getElementById("waiting-screen");
+  const topicScreen = document.getElementById("topic-screen");
+  const discussionScreen = document.getElementById("discussion-screen");
+  const voteScreen = document.getElementById("vote-screen");
+  const resultScreen = document.getElementById("result-screen");
+
+  titleScreen.classList.add("hidden");
+  waitingScreen.classList.add("hidden");
+  topicScreen.classList.add("hidden");
+  discussionScreen.classList.add("hidden");
+  resultScreen.classList.add("hidden");
+  voteScreen.classList.remove("hidden");
+
+  const voteResultRef = ref(
+    database,
+    "rooms/" + currentRoomName + "/voteResult"
+  );
+
+  const playersRef = ref(
+    database,
+    "rooms/" + currentRoomName + "/players"
+  );
+
+  Promise.all([
+    get(voteResultRef),
+    get(playersRef)
+  ])
+    .then(([voteResultSnapshot, playersSnapshot]) => {
+      if (!voteResultSnapshot.exists() || !playersSnapshot.exists()) {
+        return;
+      }
+
+      const voteResult = voteResultSnapshot.val();
+      const players = playersSnapshot.val();
+      const voteCounts = voteResult.voteCounts;
+
+      if (!voteList) {
+        return;
+      }
+
+      voteList.innerHTML = "";
+
+      const title = document.createElement("h3");
+      title.textContent = "投票結果";
+      voteList.appendChild(title);
+
+      Object.keys(voteCounts).forEach((playerId) => {
+        const playerName = players[playerId]?.name || "不明なプレイヤー";
+        const count = voteCounts[playerId];
+
+        const p = document.createElement("p");
+        p.textContent = playerName + "：" + count + "票";
+        voteList.appendChild(p);
+      });
+
+      if (voteButton) {
+        voteButton.disabled = true;
+        voteButton.style.display = "none";
+      }
+    })
+    .catch((error) => {
+      console.error("投票結果表示エラー", error);
+    });
 }
 
 // 参加者一覧をリアルタイムで表示する処理
