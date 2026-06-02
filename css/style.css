@@ -46,3 +46,14 @@ button {
 
   font-size: 32px;
 }
+
+#countdown {
+
+  font-size: 60px;
+
+  font-weight: bold;
+
+  color: #ff9800;
+
+  margin-top: 10px;
+}
