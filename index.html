@@ -92,30 +92,18 @@
   <!-- 投票 -->
   <section id="vote-screen" class="screen hidden">
 
-    <h2>投票</h2>
+    <h2>投票タイム</h2>
 
-    <label>
-      <input type="radio" name="vote">
+    <p>
+            怪しい人を選んでください
+        </p>
 
-      田中
-    </label>
+    <div id="vote-list">
 
-    <label>
-      <input type="radio" name="vote">
+    </div>
 
-      佐藤
-    </label>
-
-    <label>
-      <input type="radio" name="vote">
-
-      鈴木
-    </label>
-
-    <button>
-
+    <button id="vote-button">
       投票する
-
     </button>
 
 
@@ -124,7 +112,31 @@
   <!-- 結果 -->
   <section id="result-screen" class="screen hidden">
 
-    <h2>結果</h2>
+    <div id="result-content">
+      <h2>🏆 市民チーム勝利！</h2>
+      <p>ワードウルフ：佐藤</p>
+    </div>
+
+    <!-- お題表示エリア -->
+    <div id="answer-area" class="hidden">
+      <h3>お題</h3>
+      <p>
+        市民のお題：犬
+      </p>
+
+      <p>
+        ワードウルフのお題：猫
+      </p>
+
+    </div>
+
+    <button id="answer-button">
+      お題を確認
+    </button>
+
+    <button id="restart-button">
+      もう一度遊ぶ
+    </button>
 
   </section>
 
