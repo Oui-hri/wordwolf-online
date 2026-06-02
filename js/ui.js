@@ -15,3 +15,32 @@ function showScreen(screenId) {
 }
 
 showScreen("title-screen");
+
+function startTopicCountdown() {
+
+  let time = 10;
+
+  const countdown =
+    document.getElementById("countdown");
+
+  countdown.textContent = time;
+
+  const timer = setInterval(() => {
+
+    time--;
+
+    countdown.textContent = time;
+
+    if (time <= 0) {
+
+      clearInterval(timer);
+
+      showScreen("discussion-screen");
+
+    }
+
+  }, 1000);
+
+}
+
+showScreen("title-screen");
