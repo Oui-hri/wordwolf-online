@@ -32,6 +32,7 @@ let currentIsHost = false;
 
 // 投票で選択中のプレイヤーID
 let selectedVoteTargetId = "";
+let hasVoted = false;
 
 // タイマー管理用
 let topicCountdownTimer = null;
@@ -60,13 +61,7 @@ startGameButton.addEventListener("click", () => {
 // 投票ボタンが押されたときの処理
 if (voteButton) {
   voteButton.addEventListener("click", () => {
-    if (!selectedVoteTargetId) {
-      alert("投票する相手を選んでください");
-      return;
-    }
-
-    console.log("選択中の投票先:", selectedVoteTargetId);
-    alert("投票先を選択しました。投票保存は次の工程で実装します。");
+    submitVote();
   });
 }
 
@@ -88,6 +83,7 @@ function createRoom() {
   currentIsHost = true;
 
   selectedVoteTargetId = "";
+  hasVoted = false;
   isTopicFlowStarted = false;
   isDiscussionStarted = false;
   isVotingStarted = false;
@@ -148,6 +144,7 @@ function joinRoom() {
   currentIsHost = false;
 
   selectedVoteTargetId = "";
+  hasVoted = false;
   isTopicFlowStarted = false;
   isDiscussionStarted = false;
   isVotingStarted = false;
@@ -485,9 +482,12 @@ function showVoteScreen() {
   }
 
   selectedVoteTargetId = "";
+  hasVoted = false;
 
   if (voteButton) {
+    voteButton.disabled = false;
     voteButton.style.display = "none";
+    voteButton.textContent = "投票する";
   }
 
   renderVoteList();
@@ -545,6 +545,10 @@ function renderVoteList() {
 
 // 投票先を選択する処理
 function selectVoteTarget(targetPlayerId) {
+  if (hasVoted) {
+    return;
+  }
+
   selectedVoteTargetId = targetPlayerId;
 
   const buttons = document.querySelectorAll(".vote-player-button");
@@ -565,6 +569,55 @@ function selectVoteTarget(targetPlayerId) {
 
   if (voteButton) {
     voteButton.style.display = "block";
+  }
+}
+
+// 投票内容をFirebaseに保存する処理
+function submitVote() {
+  if (hasVoted) {
+    return;
+  }
+
+  if (!selectedVoteTargetId) {
+    alert("投票する相手を選んでください");
+    return;
+  }
+
+  if (!currentRoomName || !currentPlayerId) {
+    alert("投票情報が見つかりません");
+    return;
+  }
+
+  const voteRef = ref(
+    database,
+    "rooms/" + currentRoomName + "/votes/" + currentPlayerId
+  );
+
+  set(voteRef, selectedVoteTargetId)
+    .then(() => {
+      console.log("投票保存OK");
+      hasVoted = true;
+      showVoteWaiting();
+    })
+    .catch((error) => {
+      console.error("投票保存エラー", error);
+      alert("投票に失敗しました");
+    });
+}
+
+// 投票後の待機表示
+function showVoteWaiting() {
+  if (voteList) {
+    voteList.innerHTML = "";
+
+    const message = document.createElement("p");
+    message.textContent = "投票しました。他の人の投票を待っています...";
+    voteList.appendChild(message);
+  }
+
+  if (voteButton) {
+    voteButton.disabled = true;
+    voteButton.style.display = "none";
   }
 }
 
