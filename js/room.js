@@ -30,6 +30,9 @@ let currentRoomName = "";
 let currentPlayerId = "";
 let currentIsHost = false;
 
+// 投票で選択中のプレイヤーID
+let selectedVoteTargetId = "";
+
 // タイマー管理用
 let topicCountdownTimer = null;
 let discussionTimer = null;
@@ -54,6 +57,19 @@ startGameButton.addEventListener("click", () => {
   startGame();
 });
 
+// 投票ボタンが押されたときの処理
+if (voteButton) {
+  voteButton.addEventListener("click", () => {
+    if (!selectedVoteTargetId) {
+      alert("投票する相手を選んでください");
+      return;
+    }
+
+    console.log("選択中の投票先:", selectedVoteTargetId);
+    alert("投票先を選択しました。投票保存は次の工程で実装します。");
+  });
+}
+
 // ルーム作成処理
 function createRoom() {
   const inputRoomName = prompt("ルーム名を入力してください");
@@ -71,6 +87,7 @@ function createRoom() {
   currentPlayerId = playerId;
   currentIsHost = true;
 
+  selectedVoteTargetId = "";
   isTopicFlowStarted = false;
   isDiscussionStarted = false;
   isVotingStarted = false;
@@ -130,6 +147,7 @@ function joinRoom() {
   currentPlayerId = playerId;
   currentIsHost = false;
 
+  selectedVoteTargetId = "";
   isTopicFlowStarted = false;
   isDiscussionStarted = false;
   isVotingStarted = false;
@@ -466,6 +484,12 @@ function showVoteScreen() {
     discussionTimer = null;
   }
 
+  selectedVoteTargetId = "";
+
+  if (voteButton) {
+    voteButton.style.display = "none";
+  }
+
   renderVoteList();
 }
 
@@ -503,6 +527,10 @@ function renderVoteList() {
         button.dataset.playerId = playerId;
         button.textContent = player.name;
 
+        button.addEventListener("click", () => {
+          selectVoteTarget(playerId);
+        });
+
         voteList.appendChild(button);
       });
 
@@ -513,6 +541,31 @@ function renderVoteList() {
     .catch((error) => {
       console.error("投票候補取得エラー", error);
     });
+}
+
+// 投票先を選択する処理
+function selectVoteTarget(targetPlayerId) {
+  selectedVoteTargetId = targetPlayerId;
+
+  const buttons = document.querySelectorAll(".vote-player-button");
+
+  buttons.forEach((button) => {
+    if (button.dataset.playerId === targetPlayerId) {
+      button.classList.add("selected");
+      button.style.opacity = "1";
+      button.style.border = "3px solid #ffcc00";
+      button.style.transform = "scale(1.05)";
+    } else {
+      button.classList.remove("selected");
+      button.style.opacity = "0.35";
+      button.style.border = "none";
+      button.style.transform = "scale(1)";
+    }
+  });
+
+  if (voteButton) {
+    voteButton.style.display = "block";
+  }
 }
 
 // 参加者一覧をリアルタイムで表示する処理
