@@ -719,6 +719,38 @@ function countVotes(players, votes) {
     console.log(playerName + "：" + count + "票");
   });
 
+  // 最多票数を調べる
+  let maxVoteCount = 0;
+
+  Object.keys(voteCounts).forEach((playerId) => {
+    if (voteCounts[playerId] > maxVoteCount) {
+      maxVoteCount = voteCounts[playerId];
+    }
+  });
+
+  // 最多票のプレイヤーを集める
+  const topVotedPlayerIds = Object.keys(voteCounts).filter((playerId) => {
+    return voteCounts[playerId] === maxVoteCount;
+  });
+
+  const isTie = topVotedPlayerIds.length >= 2;
+
+  if (isTie) {
+    console.log("同票です。再投票が必要です。");
+
+    topVotedPlayerIds.forEach((playerId) => {
+      const playerName = players[playerId]?.name || "不明なプレイヤー";
+      console.log("同票候補：" + playerName);
+    });
+  } else {
+    const eliminatedPlayerId = topVotedPlayerIds[0];
+    const eliminatedPlayerName =
+      players[eliminatedPlayerId]?.name || "不明なプレイヤー";
+
+    console.log("最多票：" + eliminatedPlayerName);
+    console.log("脱落候補：" + eliminatedPlayerName);
+  }
+
   const roomRef = ref(
     database,
     "rooms/" + currentRoomName
@@ -726,7 +758,10 @@ function countVotes(players, votes) {
 
   update(roomRef, {
     voteResult: {
-      voteCounts: voteCounts
+      voteCounts: voteCounts,
+      maxVoteCount: maxVoteCount,
+      topVotedPlayerIds: topVotedPlayerIds,
+      isTie: isTie
     },
     status: "voteResult"
   })
@@ -776,6 +811,8 @@ function showVoteResult() {
       const voteResult = voteResultSnapshot.val();
       const players = playersSnapshot.val();
       const voteCounts = voteResult.voteCounts;
+      const topVotedPlayerIds = voteResult.topVotedPlayerIds || [];
+      const isTie = voteResult.isTie;
 
       if (!voteList) {
         return;
@@ -795,6 +832,36 @@ function showVoteResult() {
         p.textContent = playerName + "：" + count + "票";
         voteList.appendChild(p);
       });
+
+      const resultMessage = document.createElement("h3");
+
+      if (isTie) {
+        resultMessage.textContent = "同票です。再投票が必要です";
+        voteList.appendChild(resultMessage);
+
+        const tieListTitle = document.createElement("p");
+        tieListTitle.textContent = "同票候補";
+        voteList.appendChild(tieListTitle);
+
+        topVotedPlayerIds.forEach((playerId) => {
+          const playerName = players[playerId]?.name || "不明なプレイヤー";
+
+          const p = document.createElement("p");
+          p.textContent = playerName;
+          voteList.appendChild(p);
+        });
+      } else {
+        const eliminatedPlayerId = topVotedPlayerIds[0];
+        const eliminatedPlayerName =
+          players[eliminatedPlayerId]?.name || "不明なプレイヤー";
+
+        resultMessage.textContent = "最多票：" + eliminatedPlayerName;
+        voteList.appendChild(resultMessage);
+
+        const p = document.createElement("p");
+        p.textContent = "脱落候補：" + eliminatedPlayerName;
+        voteList.appendChild(p);
+      }
 
       if (voteButton) {
         voteButton.disabled = true;
