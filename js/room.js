@@ -34,6 +34,11 @@ joinRoomButton.addEventListener("click", () => {
   joinRoom();
 });
 
+// ゲーム開始ボタンが押されたときの処理
+startGameButton.addEventListener("click", () => {
+  startGame();
+});
+
 // ルーム作成処理
 function createRoom() {
   const inputRoomName = prompt("ルーム名を入力してください");
@@ -160,6 +165,31 @@ function updateStartGameButton() {
     startGameButton.style.display = "none";
     startGameButton.disabled = true;
   }
+}
+
+// ゲーム開始処理
+function startGame() {
+  if (!currentIsHost) {
+    alert("ゲームを開始できるのはホストだけです");
+    return;
+  }
+
+  if (!currentRoomName) {
+    alert("ルーム情報が見つかりません");
+    return;
+  }
+
+  const statusRef = ref(database, "rooms/" + currentRoomName + "/status");
+
+  set(statusRef, "discussion")
+    .then(() => {
+      console.log("ゲーム開始OK");
+      alert("ゲームを開始しました");
+    })
+    .catch((error) => {
+      console.error("ゲーム開始エラー", error);
+      alert("ゲーム開始に失敗しました");
+    });
 }
 
 // 参加者一覧をリアルタイムで表示する処理
