@@ -22,6 +22,8 @@ const roomCode = document.getElementById("room-code");
 const playerList = document.getElementById("player-list");
 const startGameButton = document.getElementById("start-game-button");
 const topicCard = document.querySelector("#topic-screen .card");
+const voteList = document.getElementById("vote-list");
+const voteButton = document.getElementById("vote-button");
 
 // 今操作している人の情報を一時的に覚えるための変数
 let currentRoomName = "";
@@ -35,6 +37,7 @@ let discussionTimer = null;
 // 画面遷移の重複防止用
 let isTopicFlowStarted = false;
 let isDiscussionStarted = false;
+let isVotingStarted = false;
 
 // ルーム作成ボタンが押されたときの処理
 createRoomButton.addEventListener("click", () => {
@@ -70,6 +73,7 @@ function createRoom() {
 
   isTopicFlowStarted = false;
   isDiscussionStarted = false;
+  isVotingStarted = false;
 
   const roomRef = ref(database, "rooms/" + roomName);
 
@@ -128,6 +132,7 @@ function joinRoom() {
 
   isTopicFlowStarted = false;
   isDiscussionStarted = false;
+  isVotingStarted = false;
 
   const roomRef = ref(database, "rooms/" + roomName);
   const playerRef = ref(database, "rooms/" + roomName + "/players/" + playerId);
@@ -167,10 +172,14 @@ function showWaitingRoom(roomName) {
   const waitingScreen = document.getElementById("waiting-screen");
   const topicScreen = document.getElementById("topic-screen");
   const discussionScreen = document.getElementById("discussion-screen");
+  const voteScreen = document.getElementById("vote-screen");
+  const resultScreen = document.getElementById("result-screen");
 
   titleScreen.classList.add("hidden");
   topicScreen.classList.add("hidden");
   discussionScreen.classList.add("hidden");
+  voteScreen.classList.add("hidden");
+  resultScreen.classList.add("hidden");
   waitingScreen.classList.remove("hidden");
 
   roomCode.textContent = roomName;
@@ -290,18 +299,29 @@ function listenRoomStatus(roomName) {
       isDiscussionStarted = true;
       showDiscussionScreen();
     }
+
+    if (status === "voting" && !isVotingStarted) {
+      isVotingStarted = true;
+      showVoteScreen();
+    }
   });
 }
 
 // お題確認画面を表示する処理
 function showTopicScreen() {
+  const titleScreen = document.getElementById("title-screen");
   const waitingScreen = document.getElementById("waiting-screen");
   const topicScreen = document.getElementById("topic-screen");
   const discussionScreen = document.getElementById("discussion-screen");
+  const voteScreen = document.getElementById("vote-screen");
+  const resultScreen = document.getElementById("result-screen");
   const countdownElement = document.getElementById("countdown");
 
+  titleScreen.classList.add("hidden");
   waitingScreen.classList.add("hidden");
   discussionScreen.classList.add("hidden");
+  voteScreen.classList.add("hidden");
+  resultScreen.classList.add("hidden");
   topicScreen.classList.remove("hidden");
 
   if (topicCountdownTimer) {
@@ -361,13 +381,19 @@ function startTopicCountdown(countdownElement) {
 
 // 話し合い画面を表示する処理
 function showDiscussionScreen() {
+  const titleScreen = document.getElementById("title-screen");
   const waitingScreen = document.getElementById("waiting-screen");
   const topicScreen = document.getElementById("topic-screen");
   const discussionScreen = document.getElementById("discussion-screen");
+  const voteScreen = document.getElementById("vote-screen");
+  const resultScreen = document.getElementById("result-screen");
   const timerElement = document.getElementById("discussion-timer");
 
+  titleScreen.classList.add("hidden");
   waitingScreen.classList.add("hidden");
   topicScreen.classList.add("hidden");
+  voteScreen.classList.add("hidden");
+  resultScreen.classList.add("hidden");
   discussionScreen.classList.remove("hidden");
 
   if (topicCountdownTimer) {
@@ -390,9 +416,103 @@ function showDiscussionScreen() {
       }
     },
     () => {
-      alert("議論終了");
+      console.log("議論終了");
+
+      if (currentIsHost) {
+        changeStatusToVoting();
+      }
     }
   );
+}
+
+// 投票画面へ進める処理
+function changeStatusToVoting() {
+  if (!currentRoomName) {
+    return;
+  }
+
+  const statusRef = ref(
+    database,
+    "rooms/" + currentRoomName + "/status"
+  );
+
+  set(statusRef, "voting")
+    .then(() => {
+      console.log("投票開始OK");
+    })
+    .catch((error) => {
+      console.error("投票開始エラー", error);
+    });
+}
+
+// 投票画面を表示する処理
+function showVoteScreen() {
+  const titleScreen = document.getElementById("title-screen");
+  const waitingScreen = document.getElementById("waiting-screen");
+  const topicScreen = document.getElementById("topic-screen");
+  const discussionScreen = document.getElementById("discussion-screen");
+  const voteScreen = document.getElementById("vote-screen");
+  const resultScreen = document.getElementById("result-screen");
+
+  titleScreen.classList.add("hidden");
+  waitingScreen.classList.add("hidden");
+  topicScreen.classList.add("hidden");
+  discussionScreen.classList.add("hidden");
+  resultScreen.classList.add("hidden");
+  voteScreen.classList.remove("hidden");
+
+  if (discussionTimer) {
+    clearInterval(discussionTimer);
+    discussionTimer = null;
+  }
+
+  renderVoteList();
+}
+
+// 投票候補を表示する処理
+function renderVoteList() {
+  if (!voteList) {
+    return;
+  }
+
+  voteList.innerHTML = "";
+
+  const playersRef = ref(
+    database,
+    "rooms/" + currentRoomName + "/players"
+  );
+
+  get(playersRef)
+    .then((snapshot) => {
+      if (!snapshot.exists()) {
+        return;
+      }
+
+      const players = snapshot.val();
+
+      Object.keys(players).forEach((playerId) => {
+        if (playerId === currentPlayerId) {
+          return;
+        }
+
+        const player = players[playerId];
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.classList.add("vote-player-button");
+        button.dataset.playerId = playerId;
+        button.textContent = player.name;
+
+        voteList.appendChild(button);
+      });
+
+      if (voteButton) {
+        voteButton.style.display = "none";
+      }
+    })
+    .catch((error) => {
+      console.error("投票候補取得エラー", error);
+    });
 }
 
 // 参加者一覧をリアルタイムで表示する処理
