@@ -222,6 +222,195 @@ button {
     inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
+#waiting-screen {
+  position: relative;
+  top: -30px;
+}
+
+#waiting-screen h2 {
+  font-size: 2rem;
+  margin-top: 40px;
+}
+
+.ornament {
+  width: 180px;
+  display: block;
+  margin: -80px auto 30px;
+
+  opacity: 0.8;
+  filter: brightness(4);
+}
+
+.room-label {
+
+  font-size: 1.2rem;
+
+  letter-spacing: 4px;
+
+  color: #ffe7a3;
+  text-shadow:
+    0 0 5px rgba(255, 231, 163, .6),
+    0 0 15px rgba(255, 215, 90, .4);
+
+  margin: 0;
+
+  position: relative;
+  top: -90px;
+}
+
+.room-code {
+
+  width: fit-content;
+  min-width: 300px;
+
+  padding: 5px 40px;
+
+  display: flex;
+  justify-content: center;
+  /* 横中央 */
+  align-items: center;
+  /* 縦中央 */
+  text-align: center;
+
+  border-radius: 30px;
+
+  background:
+    linear-gradient(135deg,
+      rgba(60, 40, 150, .8),
+      rgba(40, 20, 100, .8));
+
+  border:
+    1px solid rgba(255, 255, 255, .08);
+
+  font-size: 4rem;
+
+  letter-spacing: 40px;
+
+  font-weight: 350;
+
+  position: relative;
+  top: -90px;
+}
+
+.room-card {
+  width: 500px;
+
+  text-shadow:
+    0 0 8px rgba(255, 231, 163, .5);
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 20px;
+
+
+}
+
+
+.player-card {
+
+  width: 420px;
+
+  background:
+    rgba(30, 20, 80, .6);
+
+  border-radius: 20px;
+
+  padding: 25px;
+
+  border:
+    1px solid rgba(255, 255, 255, .1);
+
+  backdrop-filter: blur(8px);
+
+  position: relative;
+  top: -90px;
+}
+
+.player-card h3 {
+  color: #ffe7a3;
+  text-shadow:
+    0 0 5px rgba(255, 231, 163, .6),
+    0 0 15px rgba(255, 215, 90, .4);
+
+  font-weight: 400;
+
+  position: relative;
+  top: -30px;
+}
+
+
+.player-card ul {
+
+  list-style: none;
+
+  padding: 0;
+
+  margin: 0;
+
+  position: relative;
+  top: -30px;
+}
+
+.player-card li {
+
+  padding: 12px;
+
+  border-radius: 12px;
+
+  margin-top: 10px;
+
+  background:
+    rgba(255, 255, 255, .05);
+}
+
+#start-game-button {
+
+  width: 420px;
+
+  padding: 10px 0;
+
+  border: 1px solid rgba(255, 255,
+      255,
+      0.15);
+
+  backdrop-filter: blur(6px);
+
+  border-radius: 20px;
+
+  font-size: 2rem;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+
+  color: white;
+
+  background:
+    linear-gradient(180deg,
+      rgba(255, 170, 50, 0.8),
+      rgba(230, 110, 0, 0.7));
+
+  box-shadow:
+    0 0 15px rgba(255, 140, 0, 0.2);
+
+  position: relative;
+  top: -10px;
+}
+
+#start-game-button:hover {
+
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 0 15px rgba(255, 165, 0, .4),
+    0 0 30px rgba(255, 165, 0, .2);
+}
+
 .card {
 
   color: #ff9800;
@@ -272,4 +461,12 @@ button {
 
 .hidden {
   display: none;
+}
+
+#title-screen {
+  display: none;
+}
+
+#waiting-screen {
+  display: flex;
 }
