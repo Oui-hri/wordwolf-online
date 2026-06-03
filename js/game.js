@@ -193,49 +193,47 @@ export function startGame(
 }
 
 // タイマー
+let currentTimer = null;
+
+// タイマー
 export function startDiscussionTimer(
   seconds,
   onTick,
   onFinish
 ) {
 
+  // 既にタイマーが動いていたら停止
+  if (currentTimer) {
+    clearInterval(currentTimer);
+  }
+
   let time = seconds;
 
-  const timer =
-    setInterval(() => {
+  currentTimer = setInterval(() => {
 
-      if (onTick) {
+    if (onTick) {
+      onTick(time);
+    }
 
-        onTick(time);
+    console.log(`残り時間: ${time}秒`);
 
+    time--;
+
+    if (time < 0) {
+
+      clearInterval(currentTimer);
+      currentTimer = null;
+
+      console.log("議論終了");
+
+      if (onFinish) {
+        onFinish();
       }
+    }
 
-      console.log(
-        `残り時間: ${time}秒`
-      );
+  }, 1000);
 
-      time--;
-
-      if (time <= 0) {
-
-        clearInterval(timer);
-
-        console.log(
-          "議論終了"
-        );
-
-        if (onFinish) {
-
-          onFinish();
-
-        }
-
-      }
-
-    }, 1000);
-
-  return timer;
-
+  return currentTimer;
 }
 
 // ゲーム状態変更
