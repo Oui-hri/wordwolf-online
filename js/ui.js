@@ -65,3 +65,11 @@ function startTopicCountdown() {
 }
 
 showScreen("title-screen");
+
+function showTopic(topic) {
+
+  document
+    .getElementById("topic-card")
+    .textContent = topic;
+
+}
