@@ -411,17 +411,93 @@ button {
     0 0 30px rgba(255, 165, 0, .2);
 }
 
-.card {
+#topic-screen {
 
-  color: #ff9800;
+  justify-content: center;
 
-  background: white;
+  gap: 40px;
 
-  padding: 30px;
+  background:
+    radial-gradient(circle at center,
+      #35276f 0%,
+      #0d0d3d 100%);
+}
 
-  border-radius: 10px;
+.word-title {
 
-  font-size: 32px;
+  font-size: 2rem;
+
+  font-weight: 700;
+
+  color: white;
+
+  margin: 0;
+}
+
+.word-card {
+
+  width: 80%;
+  max-width: 800px;
+  height: 300px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 35px;
+
+  background:
+    linear-gradient(135deg,
+      rgba(255, 255, 255, .08),
+      rgba(120, 80, 255, .12));
+
+  border: 1px solid rgba(255, 255, 255, .08);
+
+  backdrop-filter: blur(12px);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .05),
+    0 0 40px rgba(0, 0, 0, .2);
+
+  animation: fadeIn .8s ease;
+}
+
+@keyframes fadeIn {
+
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.word-text {
+
+  font-size: 6rem;
+
+  font-weight: 300;
+
+  color: #bfa8ff;
+
+  letter-spacing: 10px;
+
+  text-shadow:
+    0 0 20px rgba(191, 168, 255, .2);
+}
+
+.countdown-label {
+
+  margin: 0;
+
+  color: rgba(255, 255, 255, .5);
+
+  letter-spacing: 4px;
+
+  font-size: 1.5rem;
 }
 
 #countdown {
