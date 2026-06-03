@@ -21,7 +21,7 @@ const joinRoomButton = document.getElementById("join-room-button");
 const roomCode = document.getElementById("room-code");
 const playerList = document.getElementById("player-list");
 const startGameButton = document.getElementById("start-game-button");
-const topicCard = document.querySelector("#topic-screen .card");
+const topicCard = document.getElementById("player-word");
 const voteList = document.getElementById("vote-list");
 const voteButton = document.getElementById("vote-button");
 
