@@ -462,11 +462,3 @@ button {
 .hidden {
   display: none;
 }
-
-#title-screen {
-  display: none;
-}
-
-#waiting-screen {
-  display: flex;
-}
