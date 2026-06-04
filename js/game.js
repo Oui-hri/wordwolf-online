@@ -277,7 +277,6 @@ export function judgeWinner(
     message: "ワードウルフの勝利"
   };
 }
-
 // =========================
 // 結果データ作成
 // =========================
@@ -295,9 +294,37 @@ export function createResultData(
   return {
     winner: winnerResult.winner,
     message: winnerResult.message,
-    wolfPlayer: wolf,
-    eliminatedPlayer
+
+    wolfPlayerId: wolf.uid,
+    wolfName: wolf.name,
+    wolfTopic: wolf.topic,
+
+    eliminatedPlayerId:
+      eliminatedPlayer.uid,
+
+    eliminatedName:
+      eliminatedPlayer.name,
+
+    eliminatedRole:
+      eliminatedPlayer.role,
+
+    eliminatedTopic:
+      eliminatedPlayer.topic
   };
+}
+
+// =========================
+// 追放者取得
+// =========================
+
+export function getEliminatedPlayer(
+  players,
+  eliminatedPlayerId
+) {
+  return players.find(
+    player =>
+      player.uid === eliminatedPlayerId
+  );
 }
 
 // =========================
