@@ -7,7 +7,8 @@ import {
   set,
   get,
   onValue,
-  update
+  update,
+  remove
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
 
 console.log("room.js 読み込みOK");
@@ -21,6 +22,10 @@ const startGameButton = document.getElementById("start-game-button");
 const topicCard = document.getElementById("player-word");
 const voteList = document.getElementById("vote-list");
 const voteButton = document.getElementById("vote-button");
+const answerButton = document.getElementById("answer-button");
+const answerArea = document.getElementById("answer-area");
+const restartButton = document.getElementById("restart-button");
+const quitGameButton = document.getElementById("quit-game-button");
 
 // 今操作している人の情報を一時的に覚えるための変数
 let currentRoomName = "";
@@ -67,6 +72,22 @@ startGameButton.addEventListener("click", () => {
 if (voteButton) {
   voteButton.addEventListener("click", () => {
     submitVote();
+  });
+}
+if (answerButton) {
+  answerButton.addEventListener("click", () => {
+    showAnswerArea();
+  });
+}
+if (restartButton) {
+  restartButton.addEventListener("click", () => {
+    restartGame();
+  });
+}
+
+if (quitGameButton) {
+  quitGameButton.addEventListener("click", () => {
+    quitGame();
   });
 }
 
@@ -1333,6 +1354,127 @@ function showResultScreen() {
     })
     .catch((error) => {
       console.error("結果表示エラー", error);
+    });
+}
+
+// 結果画面でお題を表示する処理
+function showAnswerArea() {
+  if (!currentRoomName) {
+    alert("ルーム情報が見つかりません");
+    return;
+  }
+
+  if (!answerArea) {
+    alert("お題表示エリアが見つかりません");
+    return;
+  }
+
+  const gameRef = ref(
+    database,
+    "rooms/" + currentRoomName + "/game"
+  );
+
+  get(gameRef)
+    .then((snapshot) => {
+      if (!snapshot.exists()) {
+        alert("お題情報が見つかりません");
+        return;
+      }
+
+      const gameData = snapshot.val();
+
+      answerArea.innerHTML = `
+        <h3>お題</h3>
+        <p>市民のお題：${gameData.citizenTopic || "不明"}</p>
+        <p>ワードウルフのお題：${gameData.wolfTopic || "不明"}</p>
+      `;
+
+      answerArea.classList.remove("hidden");
+    })
+    .catch((error) => {
+      console.error("お題表示エラー", error);
+      alert("お題の表示に失敗しました");
+    });
+}
+// もう一度遊ぶ処理
+function restartGame() {
+  if (!currentIsHost) {
+    alert("もう一度遊ぶを押せるのはホストだけです");
+    return;
+  }
+
+  if (!currentRoomName) {
+    alert("ルーム情報が見つかりません");
+    return;
+  }
+
+  if (typeof game.createRestartData !== "function") {
+    alert("再スタート処理がまだ実装されていません");
+    return;
+  }
+
+  const roomRef =
+    ref(database, "rooms/" + currentRoomName);
+
+  const restartData =
+    game.createRestartData();
+
+  update(roomRef, restartData)
+    .then(() => {
+      selectedVoteTargetId = "";
+      hasVoted = false;
+
+      isTopicFlowStarted = false;
+      isDiscussionStarted = false;
+      isVotingStarted = false;
+      isVoteResultShown = false;
+      isResultShown = false;
+      isVoteCounted = false;
+
+      lastStatus = "";
+
+      if (answerArea) {
+        answerArea.classList.add("hidden");
+      }
+
+      console.log("再スタート準備OK");
+    })
+    .catch((error) => {
+      console.error("再スタートエラー", error);
+      alert("もう一度遊ぶ準備に失敗しました");
+    });
+}
+
+// ゲームをやめる処理
+function quitGame() {
+  if (!currentRoomName || !currentPlayerId) {
+    clearSession();
+    location.reload();
+    return;
+  }
+
+  const playerRef =
+    ref(
+      database,
+      "rooms/" +
+      currentRoomName +
+      "/players/" +
+      currentPlayerId
+    );
+
+  remove(playerRef)
+    .then(() => {
+      clearSession();
+
+      currentRoomName = "";
+      currentPlayerId = "";
+      currentIsHost = false;
+
+      location.reload();
+    })
+    .catch((error) => {
+      console.error("退出エラー", error);
+      alert("退出に失敗しました");
     });
 }
 
