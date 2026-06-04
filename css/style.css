@@ -511,13 +511,144 @@ button {
   margin-top: 10px;
 }
 
-#discussion-timer {
+/* 背景 */
+#discussion-screen {
+  min-height: 100vh;
 
-  font-size: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-  font-weight: bold;
+  background: #1c0d5c;
+}
+
+/* カード */
+.discussion-card {
+
+  width: 850px;
+  max-width: 90%;
+
+  padding: 70px;
+
+  border-radius: 40px;
+
+  background: rgba(255, 255, 255, 0.03);
+
+  border: 1px solid rgba(255, 255, 255, .08);
 
   text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* タイトル */
+.discussion-card h2 {
+
+  color: white;
+  font-size: 2rem;
+
+  margin-bottom: 30px;
+}
+
+.timer-ring {
+
+  width: 420px;
+  height: 420px;
+
+  border-radius: 50%;
+
+  background:
+    conic-gradient(#9b7cff calc(var(--progress) * 1%),
+      rgba(255, 255, 255, 0.08) 0);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow:
+    0 0 20px rgba(155, 124, 255, .5),
+    0 0 60px rgba(155, 124, 255, .3);
+}
+
+.timer-inner {
+
+  width: 360px;
+  height: 360px;
+
+  border-radius: 50%;
+
+  background: #24106d;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#discussion-timer {
+
+  color: white;
+
+  font-size: 7rem;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+}
+
+
+#toggle-chat-button {
+
+  margin-top: 50px;
+
+  width: 420px;
+
+  height: 80px;
+
+  border-radius: 25px;
+
+  border: 1px solid rgba(255, 255, 255, .15);
+
+  background: rgba(255, 255, 255, .05);
+
+  color: white;
+
+  font-size: 2rem;
+
+  backdrop-filter: blur(10px);
+}
+
+#toggle-chat-button:hover {
+
+  background: rgba(139, 108, 255, 0.35);
+
+  transform: translateY(-2px);
+}
+
+#discussion-screen::before {
+
+  content: "";
+
+  position: absolute;
+
+  width: 700px;
+  height: 700px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(rgba(130, 100, 255, 0.25),
+      transparent 70%);
+
+  filter: blur(50px);
+
+  z-index: 0;
+}
+
+.discussion-card {
+  z-index: 1;
 }
 
 .hidden {

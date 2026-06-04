@@ -433,6 +433,13 @@ function showDiscussionScreen() {
     clearInterval(discussionTimer);
   }
 
+  const ring = document.querySelector(".timer-ring");
+  const TOTAL_TIME = 120;
+
+  if (ring) {
+    ring.style.setProperty("--progress", 100);
+  }
+
   discussionTimer = startDiscussionTimer(
     120,
     (time) => {
@@ -441,6 +448,13 @@ function showDiscussionScreen() {
 
       if (timerElement) {
         timerElement.textContent = `${minutes}:${seconds}`;
+      }
+
+      // リング更新
+      const progress = (time / TOTAL_TIME) * 100;
+
+      if (ring) {
+        ring.style.setProperty("--progress", progress);
       }
     },
     () => {
