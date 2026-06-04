@@ -1,298 +1,392 @@
 // =========================
-// vote.js
-// ワードウルフ 投票処理
+// game.js
+// ワードウルフ ゲーム処理
 // =========================
 
-// 投票
-export function votePlayer(
-  votes,
-  voterId,
-  targetId
-) {
+import { TOPICS } from "./topics.js";
 
-  // 自分投票禁止
-  if (voterId === targetId) {
+// =========================
+// ゲーム状態
+// =========================
 
-    throw new Error(
-      "自分には投票できません"
-    );
+export const GAME_STATE = {
+  WAITING: "waiting",
+  DISCUSSION: "discussion",
+  VOTING: "voting",
+  REVOTE: "revote",
+  RESULT: "result"
+};
 
-  }
+// =========================
+// カテゴリー一覧
+// =========================
 
-  // 二重投票禁止
-  if (votes[voterId]) {
-
-    throw new Error(
-      "すでに投票済みです"
-    );
-
-  }
-
-  votes[voterId] = targetId;
-
-  return votes;
-
+export function getCategories() {
+  return [
+    ...Object.keys(TOPICS),
+    "random"
+  ];
 }
 
-// 投票集計
-export function countVotes(
-  votes
-) {
+// =========================
+// ランダムカテゴリー
+// =========================
 
-  const result = {};
+export function getRandomCategory() {
+  const categories = Object.keys(TOPICS);
 
-  Object.values(votes)
-    .forEach(targetId => {
-
-      if (!result[targetId]) {
-
-        result[targetId] = 0;
-
-      }
-
-      result[targetId]++;
-
-    });
-
-  return result;
-
+  return categories[
+    Math.floor(Math.random() * categories.length)
+  ];
 }
 
-// 最多票取得
-export function getMostVotedPlayers(
-  voteCount
+// =========================
+// お題取得
+// =========================
+
+export function getRandomTopic(category = "random") {
+  let selectedCategory = category;
+
+  if (category === "random") {
+    selectedCategory = getRandomCategory();
+  }
+
+  if (!TOPICS[selectedCategory]) {
+    throw new Error(
+      `存在しないカテゴリー: ${selectedCategory}`
+    );
+  }
+
+  const topics = TOPICS[selectedCategory];
+
+  const topic =
+    topics[
+    Math.floor(Math.random() * topics.length)
+    ];
+
+  let citizenTopic;
+  let wolfTopic;
+
+  if (Math.random() < 0.5) {
+    citizenTopic = topic.word1;
+    wolfTopic = topic.word2;
+  } else {
+    citizenTopic = topic.word2;
+    wolfTopic = topic.word1;
+  }
+
+  return {
+    category: selectedCategory,
+    citizenTopic,
+    wolfTopic
+  };
+}
+
+// =========================
+// ウルフ抽選
+// =========================
+
+export function chooseWolf(players) {
+  if (!Array.isArray(players)) {
+    throw new Error(
+      "playersが配列ではありません"
+    );
+  }
+
+  if (players.length === 0) {
+    throw new Error(
+      "プレイヤーが存在しません"
+    );
+  }
+
+  return Math.floor(
+    Math.random() * players.length
+  );
+}
+
+// =========================
+// 役職配布
+// =========================
+
+export function assignRoles(
+  players,
+  category = "random"
 ) {
+  if (!Array.isArray(players)) {
+    throw new Error(
+      "playersが配列ではありません"
+    );
+  }
 
-  let maxVote = 0;
+  if (players.length < 3) {
+    throw new Error(
+      "プレイヤーは3人以上必要です"
+    );
+  }
 
-  Object.values(voteCount)
-    .forEach(count => {
+  const topicData =
+    getRandomTopic(category);
 
-      if (count > maxVote) {
+  const wolfIndex =
+    chooseWolf(players);
 
-        maxVote = count;
+  const assignedPlayers =
+    players.map((player, index) => {
+      return {
+        ...player,
 
-      }
+        role:
+          index === wolfIndex
+            ? "wolf"
+            : "citizen",
 
+        topic:
+          index === wolfIndex
+            ? topicData.wolfTopic
+            : topicData.citizenTopic
+      };
     });
 
-  const players = [];
+  return {
+    category: topicData.category,
+    citizenTopic: topicData.citizenTopic,
+    wolfTopic: topicData.wolfTopic,
+    wolfIndex,
+    players: assignedPlayers
+  };
+}
 
-  Object.entries(voteCount)
-    .forEach(
-      ([uid, count]) => {
+// =========================
+// ゲーム開始
+// =========================
 
-        if (count === maxVote) {
+export function startGame(
+  players,
+  category = "random"
+) {
+  return assignRoles(
+    players,
+    category
+  );
+}
 
-          players.push(uid);
+// =========================
+// タイマー
+// =========================
 
+let currentTimer = null;
+
+export function startDiscussionTimer(
+  seconds,
+  onTick,
+  onFinish
+) {
+  if (currentTimer) {
+    clearInterval(currentTimer);
+  }
+
+  let time = seconds;
+
+  currentTimer =
+    setInterval(() => {
+      if (onTick) {
+        onTick(time);
+      }
+
+      time--;
+
+      if (time < 0) {
+        clearInterval(currentTimer);
+        currentTimer = null;
+
+        if (onFinish) {
+          onFinish();
         }
-
       }
-    );
+    }, 1000);
 
-  return players;
-
-}
-
-// 同票判定
-export function checkTie(
-  voteCount
-) {
-
-  const topPlayers =
-    getMostVotedPlayers(
-      voteCount
-    );
-
-  return (
-    topPlayers.length > 1
-  );
-
-}
-
-// 全員投票完了判定
-export function isVotingFinished(
-  votes,
-  playerCount
-) {
-
-  return (
-    Object.keys(votes)
-      .length === playerCount
-  );
-
-}
-
-// 再投票開始
-export function startRevote() {
-
-  console.log(
-    "同票のため再投票を開始します"
-  );
-
-  return {
-    gameState: "revote"
-  };
-
-}
-
-// 投票結果判定
-export function judgeVoteResult(
-  votes
-) {
-
-  const voteCount =
-    countVotes(votes);
-
-  const topPlayers =
-    getMostVotedPlayers(
-      voteCount
-    );
-
-  // 同票
-  if (
-    topPlayers.length > 1
-  ) {
-
-    return {
-      tie: true,
-      players: topPlayers
-    };
-
-  }
-
-  return {
-    tie: false,
-    eliminatedPlayerId:
-      topPlayers[0]
-  };
-
-}
-
-// 再投票結果判定
-export function judgeRevoteResult(
-  votes
-) {
-
-  const voteCount =
-    countVotes(votes);
-
-  const topPlayers =
-    getMostVotedPlayers(
-      voteCount
-    );
-
-  // 再投票でも同票
-  if (
-    topPlayers.length > 1
-  ) {
-
-    return {
-      winner: "wolf",
-      message:
-        "再投票でも同票のためワードウルフ勝利"
-    };
-
-  }
-
-  return {
-    winner: null,
-    eliminatedPlayerId:
-      topPlayers[0]
-  };
-
-}
-
-// 投票リセット
-export function resetVotes() {
-
-  return {};
-
-}
-
-// ランキング取得
-export function getRanking(
-  votes
-) {
-
-  const voteCount =
-    countVotes(votes);
-
-  return Object.entries(
-    voteCount
-  ).sort(
-    (a, b) =>
-      b[1] - a[1]
-  );
-
+  return currentTimer;
 }
 
 // =========================
-// テスト用
+// タイマー停止
 // =========================
 
-export function testVote() {
+export function stopTimer() {
+  if (currentTimer) {
+    clearInterval(currentTimer);
+    currentTimer = null;
+  }
+}
 
-  const votes = {};
+// =========================
+// ゲーム状態変更
+// =========================
 
-  votePlayer(
-    votes,
-    "uid1",
-    "uid2"
+export function changeGameState(
+  roomData,
+  newState
+) {
+  roomData.gameState = newState;
+
+  return roomData;
+}
+
+// =========================
+// ウルフ取得
+// =========================
+
+export function getWolfPlayer(players) {
+  return players.find(
+    player => player.role === "wolf"
   );
+}
 
-  votePlayer(
-    votes,
-    "uid2",
-    "uid3"
+// =========================
+// 市民取得
+// =========================
+
+export function getCitizenPlayers(players) {
+  return players.filter(
+    player => player.role === "citizen"
   );
+}
 
-  votePlayer(
-    votes,
-    "uid3",
-    "uid2"
-  );
+// =========================
+// 勝敗判定
+// =========================
 
-  console.log(
-    "投票内容"
-  );
+export function judgeWinner(
+  eliminatedPlayer
+) {
+  if (!eliminatedPlayer) {
+    throw new Error(
+      "追放されたプレイヤーが存在しません"
+    );
+  }
 
-  console.log(votes);
+  if (eliminatedPlayer.role === "wolf") {
+    return {
+      winner: "citizen",
+      message: "市民チームの勝利"
+    };
+  }
 
-  console.log(
-    "投票完了:"
-  );
+  return {
+    winner: "wolf",
+    message: "ワードウルフの勝利"
+  };
+}
 
-  console.log(
-    isVotingFinished(
-      votes,
-      3
-    )
-  );
+// =========================
+// 結果データ作成
+// =========================
 
-  console.log(
-    "票数"
-  );
+export function createResultData(
+  players,
+  eliminatedPlayer
+) {
+  const winnerResult =
+    judgeWinner(eliminatedPlayer);
 
-  console.log(
-    countVotes(votes)
-  );
+  const wolf =
+    getWolfPlayer(players);
 
-  console.log(
-    "ランキング"
-  );
+  return {
+    winner: winnerResult.winner,
+    message: winnerResult.message,
+    wolfPlayer: wolf,
+    eliminatedPlayer
+  };
+}
 
-  console.log(
-    getRanking(votes)
-  );
+// =========================
+// 再投票でも同票
+// =========================
 
-  console.log(
-    "結果"
-  );
+export function judgeTieAfterRevote() {
+  return {
+    winner: "wolf",
+    message:
+      "再投票でも同票のためワードウルフ勝利"
+  };
+}
 
-  console.log(
-    judgeVoteResult(votes)
-  );
+// =========================
+// 再討論開始
+// =========================
 
+export function startRevoteDiscussion() {
+  return {
+    gameState: GAME_STATE.DISCUSSION,
+    discussionTime: 60
+  };
+}
+
+// =========================
+// 再投票候補
+// =========================
+
+export function getRevoteCandidates(
+  voteResult
+) {
+  if (!voteResult.tie) {
+    return [];
+  }
+
+  return voteResult.players;
+}
+
+// =========================
+// 個人メモ
+// =========================
+
+let memoText = "";
+
+export function saveMemo(text) {
+  memoText = text;
+}
+
+export function getMemo() {
+  return memoText;
+}
+
+export function clearMemo() {
+  memoText = "";
+}
+
+// =========================
+// テスト
+// =========================
+
+export function testGame() {
+  const players = [
+    {
+      uid: "1",
+      name: "大類"
+    },
+    {
+      uid: "2",
+      name: "早川"
+    },
+    {
+      uid: "3",
+      name: "中村"
+    }
+  ];
+
+  const result =
+    startGame(players, "random");
+
+  console.log("カテゴリー");
+  console.log(result.category);
+
+  console.log("市民のお題");
+  console.log(result.citizenTopic);
+
+  console.log("ウルフのお題");
+  console.log(result.wolfTopic);
+
+  console.log("役職配布");
+  console.table(result.players);
 }
