@@ -1,9 +1,6 @@
 import { database } from "./firebase.js";
 
-import {
-  assignRoles,
-  startDiscussionTimer
-} from "./game.js";
+import * as game from "./game.js";
 
 import {
   ref,
@@ -43,9 +40,13 @@ let isTopicFlowStarted = false;
 let isDiscussionStarted = false;
 let isVotingStarted = false;
 let isVoteResultShown = false;
+let isResultShown = false;
 
 // 投票集計の重複防止用
 let isVoteCounted = false;
+
+// 同じstatusで何度も画面切り替えしないための変数
+let lastStatus = "";
 
 // ルーム作成ボタンが押されたときの処理
 createRoomButton.addEventListener("click", () => {
@@ -67,6 +68,62 @@ if (voteButton) {
   voteButton.addEventListener("click", () => {
     submitVote();
   });
+}
+
+// ページ更新後にルームへ復帰する処理
+restoreSession();
+
+// セッション情報を保存する処理
+function saveSession() {
+  sessionStorage.setItem("wordwolfRoomName", currentRoomName);
+  sessionStorage.setItem("wordwolfPlayerId", currentPlayerId);
+  sessionStorage.setItem("wordwolfIsHost", String(currentIsHost));
+}
+
+// セッション情報を削除する処理
+function clearSession() {
+  sessionStorage.removeItem("wordwolfRoomName");
+  sessionStorage.removeItem("wordwolfPlayerId");
+  sessionStorage.removeItem("wordwolfIsHost");
+}
+
+// ページ更新後にルームへ復帰する処理
+function restoreSession() {
+  const savedRoomName = sessionStorage.getItem("wordwolfRoomName");
+  const savedPlayerId = sessionStorage.getItem("wordwolfPlayerId");
+  const savedIsHost = sessionStorage.getItem("wordwolfIsHost");
+
+  if (!savedRoomName || !savedPlayerId) {
+    return;
+  }
+
+  currentRoomName = savedRoomName;
+  currentPlayerId = savedPlayerId;
+  currentIsHost = savedIsHost === "true";
+
+  const playerRef = ref(
+    database,
+    "rooms/" + currentRoomName + "/players/" + currentPlayerId
+  );
+
+  get(playerRef)
+    .then((snapshot) => {
+      if (!snapshot.exists()) {
+        console.log("復帰できるプレイヤー情報がありません");
+        clearSession();
+        return;
+      }
+
+      console.log("ルームへ復帰します");
+
+      listenPlayers(currentRoomName);
+      listenRoomStatus(currentRoomName);
+      updateStartGameButton();
+    })
+    .catch((error) => {
+      console.error("復帰エラー", error);
+      clearSession();
+    });
 }
 
 // ルーム作成処理
@@ -92,21 +149,27 @@ function createRoom() {
   isDiscussionStarted = false;
   isVotingStarted = false;
   isVoteResultShown = false;
+  isResultShown = false;
   isVoteCounted = false;
+  lastStatus = "";
 
   const roomRef = ref(database, "rooms/" + roomName);
 
   get(roomRef)
     .then((snapshot) => {
       if (snapshot.exists()) {
-        alert("このルーム名はすでに使われています");
-        return;
+        throw new Error("このルーム名はすでに使われています");
       }
 
       const roomData = {
         roomName: roomName,
         hostId: playerId,
         status: "waiting",
+        voteRound: 1,
+        discussionTime: 120,
+        revoteCandidates: null,
+        votes: null,
+        result: null,
         players: {
           [playerId]: {
             name: playerName,
@@ -120,6 +183,8 @@ function createRoom() {
     .then(() => {
       console.log("ルーム作成OK");
 
+      saveSession();
+
       alert("ルームを作成しました");
 
       showWaitingRoom(roomName);
@@ -127,9 +192,9 @@ function createRoom() {
       listenRoomStatus(roomName);
     })
     .catch((error) => {
-      console.error("ルーム作成エラー", error);
-      alert("ルーム作成に失敗しました");
-    });
+    console.error("ルーム作成エラー", error);
+    alert(error.message || "ルーム作成に失敗しました");
+});
 }
 
 // ルーム参加処理
@@ -155,7 +220,9 @@ function joinRoom() {
   isDiscussionStarted = false;
   isVotingStarted = false;
   isVoteResultShown = false;
+  isResultShown = false;
   isVoteCounted = false;
+  lastStatus = "";
 
   const roomRef = ref(database, "rooms/" + roomName);
   const playerRef = ref(database, "rooms/" + roomName + "/players/" + playerId);
@@ -163,8 +230,18 @@ function joinRoom() {
   get(roomRef)
     .then((snapshot) => {
       if (!snapshot.exists()) {
-        alert("そのルームは存在しません");
-        return;
+        throw new Error("そのルームは存在しません");
+      }
+
+      const roomData = snapshot.val();
+      const players = roomData.players || {};
+
+      const isDuplicateName = Object.values(players).some((player) => {
+        return player.name === playerName;
+      });
+
+      if (isDuplicateName) {
+        throw new Error("この名前はすでに使われています");
       }
 
       const playerData = {
@@ -177,6 +254,8 @@ function joinRoom() {
     .then(() => {
       console.log("ルーム参加OK");
 
+      saveSession();
+
       alert("ルームに参加しました");
 
       showWaitingRoom(roomName);
@@ -185,7 +264,7 @@ function joinRoom() {
     })
     .catch((error) => {
       console.error("ルーム参加エラー", error);
-      alert("ルーム参加に失敗しました");
+      alert(error.message || "ルーム参加に失敗しました");
     });
 }
 
@@ -254,6 +333,7 @@ function startGame() {
       const players = Object.keys(playersData).map((playerId) => {
         return {
           uid: playerId,
+          id: playerId,
           name: playersData[playerId].name,
           isHost: playersData[playerId].isHost
         };
@@ -263,16 +343,41 @@ function startGame() {
         throw new Error("ゲーム開始には3人以上必要です");
       }
 
-      const assignedData = assignRoles(players, "random");
+      const category = "random";
+
+      let startResult;
+
+      if (typeof game.startGame === "function") {
+        startResult = game.startGame(players, category);
+      } else if (typeof game.assignRoles === "function") {
+        startResult = game.assignRoles(players, category);
+      } else {
+        throw new Error("game.jsにゲーム開始処理がありません");
+      }
+
+      const normalizedStartResult = normalizeStartGameResult(
+        startResult,
+        category
+      );
 
       const updates = {};
 
-      assignedData.players.forEach((player) => {
-        updates["players/" + player.uid + "/role"] = player.role;
-        updates["players/" + player.uid + "/topic"] = player.topic;
+      normalizedStartResult.players.forEach((player) => {
+        const playerId = player.uid || player.id;
+
+        updates["players/" + playerId + "/role"] = player.role;
+        updates["players/" + playerId + "/topic"] = player.topic;
       });
 
-      updates["game/category"] = assignedData.category;
+      updates["game/category"] = normalizedStartResult.category;
+      updates["game/citizenTopic"] = normalizedStartResult.citizenTopic;
+      updates["game/wolfTopic"] = normalizedStartResult.wolfTopic;
+      updates["voteRound"] = 1;
+      updates["revoteCandidates"] = null;
+      updates["votes"] = null;
+      updates["voteResult"] = null;
+      updates["result"] = null;
+      updates["discussionTime"] = 120;
 
       // まずは全員をお題確認画面へ進める
       updates["status"] = "topic";
@@ -284,12 +389,15 @@ function startGame() {
 
       // ホストだけが10秒後にstatusをdiscussionへ変える
       setTimeout(() => {
-        const statusRef = ref(
+        const roomRef = ref(
           database,
-          "rooms/" + currentRoomName + "/status"
+          "rooms/" + currentRoomName
         );
 
-        set(statusRef, "discussion")
+        update(roomRef, {
+          status: "discussion",
+          discussionTime: 120
+        })
           .then(() => {
             console.log("話し合い開始OK");
           })
@@ -304,6 +412,47 @@ function startGame() {
     });
 }
 
+// game.jsのゲーム開始結果をroom.js側で扱いやすい形に整える処理
+function normalizeStartGameResult(startResult, fallbackCategory) {
+  const players = startResult.players || [];
+  const category = startResult.category || fallbackCategory;
+
+  let citizenTopic =
+    startResult.citizenTopic ||
+    startResult.word1 ||
+    "";
+
+  let wolfTopic =
+    startResult.wolfTopic ||
+    startResult.word2 ||
+    "";
+
+  if (!citizenTopic || !wolfTopic) {
+    const citizenPlayer = players.find((player) => {
+      return player.role !== "wolf";
+    });
+
+    const wolfPlayer = players.find((player) => {
+      return player.role === "wolf";
+    });
+
+    if (citizenPlayer) {
+      citizenTopic = citizenPlayer.topic;
+    }
+
+    if (wolfPlayer) {
+      wolfTopic = wolfPlayer.topic;
+    }
+  }
+
+  return {
+    players: players,
+    category: category,
+    citizenTopic: citizenTopic,
+    wolfTopic: wolfTopic
+  };
+}
+
 // ルームの状態をリアルタイムで監視する処理
 function listenRoomStatus(roomName) {
   const statusRef = ref(database, "rooms/" + roomName + "/status");
@@ -311,26 +460,45 @@ function listenRoomStatus(roomName) {
   onValue(statusRef, (snapshot) => {
     const status = snapshot.val();
 
+    if (!status) {
+      return;
+    }
+
+    if (status === lastStatus) {
+      return;
+    }
+
+    lastStatus = status;
+
     console.log("現在のステータス:", status);
 
-    if (status === "topic" && !isTopicFlowStarted) {
+    if (status === "waiting") {
+      showWaitingRoom(roomName);
+    }
+
+    if (status === "topic") {
       isTopicFlowStarted = true;
       showTopicScreen();
     }
 
-    if (status === "discussion" && !isDiscussionStarted) {
+    if (status === "discussion") {
       isDiscussionStarted = true;
       showDiscussionScreen();
     }
 
-    if (status === "voting" && !isVotingStarted) {
+    if (status === "voting") {
       isVotingStarted = true;
       showVoteScreen();
     }
 
-    if (status === "voteResult" && !isVoteResultShown) {
+    if (status === "voteResult") {
       isVoteResultShown = true;
       showVoteResult();
+    }
+
+    if (status === "result") {
+      isResultShown = true;
+      showResultScreen();
     }
   });
 }
@@ -400,9 +568,6 @@ function startTopicCountdown(countdownElement) {
     if (countdown <= 0) {
       clearInterval(topicCountdownTimer);
       topicCountdownTimer = null;
-
-      // ここでは画面遷移しない
-      // discussionへの遷移はFirebaseのstatus変更で全員同時に行う
     }
   }, 1000);
 }
@@ -433,38 +598,61 @@ function showDiscussionScreen() {
     clearInterval(discussionTimer);
   }
 
-  const ring = document.querySelector(".timer-ring");
-  const TOTAL_TIME = 120;
-
-  if (ring) {
-    ring.style.setProperty("--progress", 100);
-  }
-
-  discussionTimer = startDiscussionTimer(
-    120,
-    (time) => {
-      const minutes = String(Math.floor(time / 60)).padStart(2, "0");
-      const seconds = String(time % 60).padStart(2, "0");
-
-      if (timerElement) {
-        timerElement.textContent = `${minutes}:${seconds}`;
-      }
-
-      // リング更新
-      const progress = (time / TOTAL_TIME) * 100;
+  getDiscussionTime()
+    .then((discussionTime) => {
+      const ring = document.querySelector(".timer-ring");
+      const totalTime = discussionTime || 120;
 
       if (ring) {
-        ring.style.setProperty("--progress", progress);
+        ring.style.setProperty("--progress", 100);
       }
-    },
-    () => {
-      console.log("議論終了");
 
-      if (currentIsHost) {
-        changeStatusToVoting();
-      }
-    }
+      discussionTimer = game.startDiscussionTimer(
+        totalTime,
+        (time) => {
+          const minutes = String(Math.floor(time / 60)).padStart(2, "0");
+          const seconds = String(time % 60).padStart(2, "0");
+
+          if (timerElement) {
+            timerElement.textContent = `${minutes}:${seconds}`;
+          }
+
+          const progress = (time / totalTime) * 100;
+
+          if (ring) {
+            ring.style.setProperty("--progress", progress);
+          }
+        },
+        () => {
+          console.log("議論終了");
+
+          if (currentIsHost) {
+            changeStatusToVoting();
+          }
+        }
+      );
+    });
+}
+
+// Firebaseから話し合い時間を取得する処理
+function getDiscussionTime() {
+  const discussionTimeRef = ref(
+    database,
+    "rooms/" + currentRoomName + "/discussionTime"
   );
+
+  return get(discussionTimeRef)
+    .then((snapshot) => {
+      if (!snapshot.exists()) {
+        return 120;
+      }
+
+      return snapshot.val() || 120;
+    })
+    .catch((error) => {
+      console.error("話し合い時間取得エラー", error);
+      return 120;
+    });
 }
 
 // 投票画面へ進める処理
@@ -473,12 +661,16 @@ function changeStatusToVoting() {
     return;
   }
 
-  const statusRef = ref(
+  const roomRef = ref(
     database,
-    "rooms/" + currentRoomName + "/status"
+    "rooms/" + currentRoomName
   );
 
-  set(statusRef, "voting")
+  update(roomRef, {
+    status: "voting",
+    votes: null,
+    voteResult: null
+  })
     .then(() => {
       console.log("投票開始OK");
     })
@@ -512,6 +704,7 @@ function showVoteScreen() {
   hasVoted = false;
   isVoteCounted = false;
   isVoteResultShown = false;
+  isResultShown = false;
 
   if (voteButton) {
     voteButton.disabled = false;
@@ -534,44 +727,46 @@ function renderVoteList() {
 
   voteList.innerHTML = "";
 
-  const playersRef = ref(
+  const roomRef = ref(
     database,
-    "rooms/" + currentRoomName + "/players"
+    "rooms/" + currentRoomName
   );
 
-  get(playersRef)
+  get(roomRef)
     .then((snapshot) => {
       if (!snapshot.exists()) {
         return;
       }
 
-      const players = snapshot.val();
+      const roomData = snapshot.val();
+      const players = roomData.players || {};
+      const revoteCandidates = roomData.revoteCandidates || null;
 
       Object.keys(players).forEach((playerId) => {
         if (playerId === currentPlayerId) {
           return;
         }
 
+
         const player = players[playerId];
 
-const button = document.createElement("button");
-button.type = "button";
-button.classList.add("vote-player-button");
-button.dataset.playerId = playerId;
-button.innerHTML = `
-  <div class="player-left">
-    <div class="player-icon">
-      👤
-    </div>
-    <div class="player-name">
-      ${player.name}
-    </div>
-  </div>
-  <div class="check">
-    ✓
-  </div>
-`;
-
+        const button = document.createElement("button");
+        button.type = "button";
+        button.classList.add("vote-player-button");
+        button.dataset.playerId = playerId;
+        button.innerHTML = `
+          <div class="player-left">
+            <div class="player-icon">
+              👤
+            </div>
+            <div class="player-name">
+              ${player.name}
+            </div>
+          </div>
+          <div class="check">
+            ✓
+          </div>
+        `;
 
         button.addEventListener("click", () => {
           selectVoteTarget(playerId);
@@ -587,6 +782,19 @@ button.innerHTML = `
     .catch((error) => {
       console.error("投票候補取得エラー", error);
     });
+}
+
+// 再投票候補かどうかを判定する処理
+function isVoteCandidate(playerId, revoteCandidates) {
+  if (!revoteCandidates) {
+    return true;
+  }
+
+  if (Array.isArray(revoteCandidates)) {
+    return revoteCandidates.includes(playerId);
+  }
+
+  return revoteCandidates[playerId] === true;
 }
 
 // 投票先を選択する処理
@@ -696,26 +904,30 @@ function listenVotes() {
 
 // 全員が投票したか確認する処理
 function checkAllVotesSubmitted(votes) {
-  const playersRef = ref(
+  const roomRef = ref(
     database,
-    "rooms/" + currentRoomName + "/players"
+    "rooms/" + currentRoomName
   );
 
-  get(playersRef)
+  get(roomRef)
     .then((snapshot) => {
       if (!snapshot.exists()) {
         return;
       }
 
-      const players = snapshot.val();
-      const playerCount = Object.keys(players).length;
+      const roomData = snapshot.val();
+      const players = roomData.players || {};
+      const revoteCandidates = roomData.revoteCandidates || null;
+      const voteRound = roomData.voteRound || 1;
+
+      const voterCount = getVoterCount(players, revoteCandidates);
       const voteCount = Object.keys(votes).length;
 
-      console.log("投票数:", voteCount + "/" + playerCount);
+      console.log("投票数:", voteCount + "/" + voterCount);
 
-      if (voteCount === playerCount) {
+      if (voteCount === voterCount) {
         isVoteCounted = true;
-        countVotes(players, votes);
+        handleVoteFinished(players, votes, voteRound);
       }
     })
     .catch((error) => {
@@ -723,8 +935,188 @@ function checkAllVotesSubmitted(votes) {
     });
 }
 
-// 投票を集計する処理
-function countVotes(players, votes) {
+// 投票者数を取得する処理
+function getVoterCount(players, revoteCandidates) {
+  if (!revoteCandidates) {
+    return Object.keys(players).length;
+  }
+
+  // 再投票時も全員が投票する想定。
+  // もし同票候補だけが投票する仕様にする場合は、ここを候補数に変更する。
+  return Object.keys(players).length;
+}
+
+// 投票終了時の処理
+function handleVoteFinished(players, votes, voteRound) {
+  const roomRef = ref(
+    database,
+    "rooms/" + currentRoomName
+  );
+
+  const fallbackVoteResult = createFallbackVoteResult(votes);
+  let voteResult = fallbackVoteResult;
+
+  if (voteRound >= 2 && typeof game.judgeRevoteResult === "function") {
+    voteResult = normalizeVoteResult(
+      game.judgeRevoteResult(votes),
+      fallbackVoteResult
+    );
+  } else if (typeof game.judgeVoteResult === "function") {
+    voteResult = normalizeVoteResult(
+      game.judgeVoteResult(votes),
+      fallbackVoteResult
+    );
+  }
+
+  console.log("投票結果:", voteResult);
+
+  if (voteResult.isTie) {
+    if (voteRound >= 3) {
+      const resultData = {
+        winner: "wolf",
+        message: "再投票でも同票のためワードウルフ勝利",
+        reason: "tieLimit",
+        voteResult: voteResult
+      };
+
+      update(roomRef, {
+        status: "result",
+        result: resultData,
+        voteResult: voteResult
+      })
+        .then(() => {
+          console.log("同票上限による結果保存OK");
+        })
+        .catch((error) => {
+          console.error("結果保存エラー", error);
+        });
+
+      return;
+    }
+
+    let tieResult;
+
+    if (typeof game.handleTie === "function") {
+      tieResult = game.handleTie(voteResult);
+    } else {
+      tieResult = {
+        gameState: "discussion",
+        discussionTime: 60,
+        revoteCandidates: voteResult.topVotedPlayerIds
+      };
+    }
+
+    const revoteCandidates = convertCandidatesToObject(
+      tieResult.revoteCandidates || voteResult.topVotedPlayerIds
+    );
+
+    update(roomRef, {
+      status: tieResult.gameState || "discussion",
+      voteResult: voteResult,
+      voteRound: voteRound + 1,
+      revoteCandidates: revoteCandidates,
+      discussionTime: tieResult.discussionTime || 60,
+      votes: null
+    })
+      .then(() => {
+        console.log("同票処理保存OK");
+      })
+      .catch((error) => {
+        console.error("同票処理保存エラー", error);
+      });
+
+    return;
+  }
+
+  const eliminatedPlayerId =
+    voteResult.eliminatedPlayerId ||
+    voteResult.eliminatedPlayer ||
+    voteResult.topVotedPlayerIds?.[0];
+
+  let resultData;
+
+const playersArray = Object.keys(players).map((playerId) => {
+  return {
+    uid: playerId,
+    ...players[playerId]
+  };
+});
+
+if (
+  typeof game.getEliminatedPlayer === "function" &&
+  typeof game.createResultData === "function"
+) {
+  const eliminatedPlayer = game.getEliminatedPlayer(
+    playersArray,
+    eliminatedPlayerId
+  );
+
+  resultData = game.createResultData(
+    playersArray,
+    eliminatedPlayer
+  );
+} else {
+  resultData = createFallbackResultData(
+    players,
+    eliminatedPlayerId
+  );
+}
+
+  update(roomRef, {
+    status: "result",
+    result: resultData,
+    voteResult: voteResult
+  })
+    .then(() => {
+      console.log("結果保存OK");
+    })
+    .catch((error) => {
+      console.error("結果保存エラー", error);
+    });
+}
+
+// 候補配列をFirebase保存しやすいオブジェクトに変換する処理
+function convertCandidatesToObject(candidates) {
+  const candidateObject = {};
+
+  candidates.forEach((playerId) => {
+    candidateObject[playerId] = true;
+  });
+
+  return candidateObject;
+}
+
+// game.js側の投票結果をroom.jsで扱いやすい形に整える処理
+function normalizeVoteResult(gameVoteResult, fallbackVoteResult) {
+  if (!gameVoteResult) {
+    return fallbackVoteResult;
+  }
+
+  return {
+    voteCounts:
+      gameVoteResult.voteCounts ||
+      fallbackVoteResult.voteCounts,
+    maxVoteCount:
+      gameVoteResult.maxVoteCount ||
+      fallbackVoteResult.maxVoteCount,
+    topVotedPlayerIds:
+      gameVoteResult.topVotedPlayerIds ||
+      gameVoteResult.revoteCandidates ||
+      fallbackVoteResult.topVotedPlayerIds,
+    isTie:
+      typeof gameVoteResult.isTie === "boolean"
+        ? gameVoteResult.isTie
+        : fallbackVoteResult.isTie,
+    eliminatedPlayerId:
+      gameVoteResult.eliminatedPlayerId ||
+      gameVoteResult.eliminatedPlayer ||
+      fallbackVoteResult.eliminatedPlayerId,
+    raw: gameVoteResult
+  };
+}
+
+// room.jsだけでも動くようにするための投票結果処理
+function createFallbackVoteResult(votes) {
   const voteCounts = {};
 
   Object.keys(votes).forEach((voterId) => {
@@ -737,16 +1129,6 @@ function countVotes(players, votes) {
     voteCounts[targetId]++;
   });
 
-  console.log("投票集計結果:", voteCounts);
-
-  Object.keys(voteCounts).forEach((playerId) => {
-    const playerName = players[playerId]?.name || "不明なプレイヤー";
-    const count = voteCounts[playerId];
-
-    console.log(playerName + "：" + count + "票");
-  });
-
-  // 最多票数を調べる
   let maxVoteCount = 0;
 
   Object.keys(voteCounts).forEach((playerId) => {
@@ -755,54 +1137,38 @@ function countVotes(players, votes) {
     }
   });
 
-  // 最多票のプレイヤーを集める
   const topVotedPlayerIds = Object.keys(voteCounts).filter((playerId) => {
     return voteCounts[playerId] === maxVoteCount;
   });
 
   const isTie = topVotedPlayerIds.length >= 2;
 
-  if (isTie) {
-    console.log("同票です。再投票が必要です。");
-
-    topVotedPlayerIds.forEach((playerId) => {
-      const playerName = players[playerId]?.name || "不明なプレイヤー";
-      console.log("同票候補：" + playerName);
-    });
-  } else {
-    const eliminatedPlayerId = topVotedPlayerIds[0];
-    const eliminatedPlayerName =
-      players[eliminatedPlayerId]?.name || "不明なプレイヤー";
-
-    console.log("最多票：" + eliminatedPlayerName);
-    console.log("脱落候補：" + eliminatedPlayerName);
-  }
-
-  const roomRef = ref(
-    database,
-    "rooms/" + currentRoomName
-  );
-
-  update(roomRef, {
-  voteResult: {
+  return {
     voteCounts: voteCounts,
     maxVoteCount: maxVoteCount,
     topVotedPlayerIds: topVotedPlayerIds,
-    isTie: isTie
-  },
-  status: "voteResult"
-})
-  .then(() => {
-    console.log("投票結果保存OK");
+    isTie: isTie,
+    eliminatedPlayerId: isTie ? "" : topVotedPlayerIds[0]
+  };
+}
 
-    if (!isVoteResultShown) {
-      isVoteResultShown = true;
-      showVoteResult();
-    }
-  })
-  .catch((error) => {
-    console.error("投票結果保存エラー", error);
-  });
+// room.jsだけでも動くようにするための結果作成処理
+function createFallbackResultData(players, eliminatedPlayerId) {
+  const eliminatedPlayer = players[eliminatedPlayerId];
+  const eliminatedRole = eliminatedPlayer?.role || "";
+
+  const winner = eliminatedRole === "wolf" ? "citizen" : "wolf";
+
+  return {
+    winner: winner,
+    eliminatedPlayerId: eliminatedPlayerId,
+    eliminatedPlayerName: eliminatedPlayer?.name || "不明なプレイヤー",
+    eliminatedRole: eliminatedRole,
+    message:
+      winner === "citizen"
+        ? "市民チームの勝利"
+        : "ワードウルフの勝利"
+  };
 }
 
 // 投票結果を画面に表示する処理
@@ -902,6 +1268,71 @@ function showVoteResult() {
     })
     .catch((error) => {
       console.error("投票結果表示エラー", error);
+    });
+}
+
+// 結果画面を表示する処理
+function showResultScreen() {
+  const titleScreen = document.getElementById("title-screen");
+  const waitingScreen = document.getElementById("waiting-screen");
+  const topicScreen = document.getElementById("topic-screen");
+  const discussionScreen = document.getElementById("discussion-screen");
+  const voteScreen = document.getElementById("vote-screen");
+  const resultScreen = document.getElementById("result-screen");
+  const resultContent = document.getElementById("result-content");
+
+  titleScreen.classList.add("hidden");
+  waitingScreen.classList.add("hidden");
+  topicScreen.classList.add("hidden");
+  discussionScreen.classList.add("hidden");
+  voteScreen.classList.add("hidden");
+  resultScreen.classList.remove("hidden");
+
+  const resultRef = ref(
+    database,
+    "rooms/" + currentRoomName + "/result"
+  );
+
+  get(resultRef)
+    .then((snapshot) => {
+      if (!snapshot.exists()) {
+        return;
+      }
+
+      const resultData = snapshot.val();
+
+      if (!resultContent) {
+        return;
+      }
+
+      resultContent.innerHTML = "";
+
+      const title = document.createElement("h2");
+      title.textContent = resultData.message || "結果";
+      resultContent.appendChild(title);
+
+      const eliminatedName =
+      resultData.eliminatedPlayerName ||
+      resultData.eliminatedName;
+
+      if (eliminatedName) {
+         const eliminated = document.createElement("p");
+         eliminated.textContent =
+         "追放者：" + eliminatedName;
+         resultContent.appendChild(eliminated);
+      }
+
+      if (resultData.winner) {
+        const winner = document.createElement("p");
+        winner.textContent =
+          resultData.winner === "citizen"
+            ? "市民チーム勝利"
+            : "ワードウルフ勝利";
+        resultContent.appendChild(winner);
+      }
+    })
+    .catch((error) => {
+      console.error("結果表示エラー", error);
     });
 }
 
