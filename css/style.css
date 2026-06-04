@@ -526,10 +526,10 @@ button {
 /* カード */
 .discussion-card {
 
-  width: 850px;
+  width: 700px;
   max-width: 90%;
 
-  padding: 70px;
+  padding: 10px 40px 40px;
 
   border-radius: 40px;
 
@@ -542,21 +542,32 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  transform: scale(0.85);
+  transform: translateY(-50px);
 }
+
 
 /* タイトル */
 .discussion-card h2 {
 
-  color: white;
-  font-size: 2rem;
+  color: rgba(255, 255, 255, 0.9);
 
-  margin-bottom: 30px;
+  font-size: 1.3rem;
+
+  font-weight: 600;
+
+  letter-spacing: 4px;
+  margin-top: 0px;
+  margin-bottom: 20px;
+
+  text-transform: uppercase;
 }
 
 .timer-ring {
 
-  width: 420px;
-  height: 420px;
+  width: 300px;
+  height: 300px;
 
   border-radius: 50%;
 
@@ -575,8 +586,8 @@ button {
 
 .timer-inner {
 
-  width: 360px;
-  height: 360px;
+  width: 280px;
+  height: 280px;
 
   border-radius: 50%;
 
@@ -591,40 +602,58 @@ button {
 
   color: white;
 
-  font-size: 7rem;
+  font-size: 5rem;
 
   font-weight: 700;
 
   letter-spacing: 2px;
 }
 
+.memo-container {
 
-#toggle-chat-button {
+  width: 100%;
 
-  margin-top: 50px;
+  max-width: 500px;
 
-  width: 420px;
+  margin-top: 30px;
+}
 
-  height: 80px;
+.memo-title {
 
-  border-radius: 25px;
+  color: white;
 
-  border: 1px solid rgba(255, 255, 255, .15);
+  font-size: 1rem;
+
+  text-align: left;
+
+  margin-bottom: 10px;
+
+  padding-left: 15px;
+}
+
+#memo-area {
+
+  width: 100%;
+
+  height: 120px;
+
+  padding: 15px;
+
+  border-radius: 20px;
+
+  border: 1px solid rgba(255, 255, 255, .1);
 
   background: rgba(255, 255, 255, .05);
 
   color: white;
 
-  font-size: 2rem;
+  resize: none;
+
+  outline: none;
 
   backdrop-filter: blur(10px);
-}
 
-#toggle-chat-button:hover {
-
-  background: rgba(139, 108, 255, 0.35);
-
-  transform: translateY(-2px);
+  font-size: 1rem;
 }
 
 #discussion-screen::before {
