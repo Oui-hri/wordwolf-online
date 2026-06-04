@@ -554,13 +554,6 @@ function renderVoteList() {
 
         const player = players[playerId];
 
-        この部分を
-const button = document.createElement("button");
-button.type = "button";
-button.classList.add("vote-player-button");
-button.dataset.playerId = playerId;
-button.textContent = player.name;
-これに変更
 const button = document.createElement("button");
 button.type = "button";
 button.classList.add("vote-player-button");
