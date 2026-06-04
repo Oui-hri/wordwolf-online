@@ -213,9 +213,9 @@ function createRoom() {
       listenRoomStatus(roomName);
     })
     .catch((error) => {
-    console.error("ルーム作成エラー", error);
-    alert(error.message || "ルーム作成に失敗しました");
-});
+      console.error("ルーム作成エラー", error);
+      alert(error.message || "ルーム作成に失敗しました");
+    });
 }
 
 // ルーム参加処理
@@ -621,12 +621,26 @@ function showDiscussionScreen() {
 
   getDiscussionTime()
     .then((discussionTime) => {
-      const ring = document.querySelector(".timer-ring");
-      const totalTime = discussionTime || 120;
+      const circle =
+        document.getElementById("progress-ring");
 
-      if (ring) {
-        ring.style.setProperty("--progress", 100);
-      }
+      const radius = 150;
+
+      const circumference =
+        2 * Math.PI * radius;
+
+      circle.setAttribute(
+        "stroke-dasharray",
+        circumference
+      );
+
+      circle.setAttribute(
+        "stroke-dashoffset",
+        0
+      );
+
+      const totalTime =
+        discussionTime || 120;
 
       discussionTimer = game.startDiscussionTimer(
         totalTime,
@@ -638,11 +652,14 @@ function showDiscussionScreen() {
             timerElement.textContent = `${minutes}:${seconds}`;
           }
 
-          const progress = (time / totalTime) * 100;
+          const offset =
+            circumference *
+            (1 - time / totalTime);
 
-          if (ring) {
-            ring.style.setProperty("--progress", progress);
-          }
+          circle.setAttribute(
+            "stroke-dashoffset",
+            offset
+          );
         },
         () => {
           console.log("議論終了");
@@ -1056,32 +1073,32 @@ function handleVoteFinished(players, votes, voteRound) {
 
   let resultData;
 
-const playersArray = Object.keys(players).map((playerId) => {
-  return {
-    uid: playerId,
-    ...players[playerId]
-  };
-});
+  const playersArray = Object.keys(players).map((playerId) => {
+    return {
+      uid: playerId,
+      ...players[playerId]
+    };
+  });
 
-if (
-  typeof game.getEliminatedPlayer === "function" &&
-  typeof game.createResultData === "function"
-) {
-  const eliminatedPlayer = game.getEliminatedPlayer(
-    playersArray,
-    eliminatedPlayerId
-  );
+  if (
+    typeof game.getEliminatedPlayer === "function" &&
+    typeof game.createResultData === "function"
+  ) {
+    const eliminatedPlayer = game.getEliminatedPlayer(
+      playersArray,
+      eliminatedPlayerId
+    );
 
-  resultData = game.createResultData(
-    playersArray,
-    eliminatedPlayer
-  );
-} else {
-  resultData = createFallbackResultData(
-    players,
-    eliminatedPlayerId
-  );
-}
+    resultData = game.createResultData(
+      playersArray,
+      eliminatedPlayer
+    );
+  } else {
+    resultData = createFallbackResultData(
+      players,
+      eliminatedPlayerId
+    );
+  }
 
   update(roomRef, {
     status: "result",
@@ -1333,14 +1350,14 @@ function showResultScreen() {
       resultContent.appendChild(title);
 
       const eliminatedName =
-      resultData.eliminatedPlayerName ||
-      resultData.eliminatedName;
+        resultData.eliminatedPlayerName ||
+        resultData.eliminatedName;
 
       if (eliminatedName) {
-         const eliminated = document.createElement("p");
-         eliminated.textContent =
-         "追放者：" + eliminatedName;
-         resultContent.appendChild(eliminated);
+        const eliminated = document.createElement("p");
+        eliminated.textContent =
+          "追放者：" + eliminatedName;
+        resultContent.appendChild(eliminated);
       }
 
       if (resultData.winner) {

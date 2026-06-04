@@ -568,14 +568,12 @@ button {
 
 .timer-ring {
 
-  width: 300px;
-  height: 300px;
+  position: relative;
+
+  width: 340px;
+  height: 340px;
 
   border-radius: 50%;
-
-  background:
-    conic-gradient(#9b7cff calc(var(--progress) * 1%),
-      rgba(255, 255, 255, 0.08) 0);
 
   display: flex;
   align-items: center;
@@ -586,7 +584,20 @@ button {
     0 0 60px rgba(155, 124, 255, .3);
 }
 
+.timer-ring svg {
+
+  position: absolute;
+
+  width: 340px;
+  height: 340px;
+
+  top: 0;
+  left: 0;
+}
+
 .timer-inner {
+
+  position: absolute;
 
   width: 280px;
   height: 280px;
@@ -598,6 +609,37 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.ring-bg {
+
+  fill: none;
+
+  stroke: rgba(255, 255, 255, .08);
+
+  stroke-width: 12;
+}
+
+.ring-progress {
+
+  fill: none;
+
+  stroke: #9b7cff;
+
+  stroke-width: 12;
+
+  stroke-linecap: round;
+
+  filter:
+    drop-shadow(0 0 6px #9b7cff) drop-shadow(0 0 16px #9b7cff);
+
+  transform-origin: center;
+
+  transform: rotate(-90deg);
+
+  transform-box: fill-box;
+
+  transition: stroke-dashoffset 1s linear;
 }
 
 #discussion-timer {
