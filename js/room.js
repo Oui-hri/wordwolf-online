@@ -554,11 +554,31 @@ function renderVoteList() {
 
         const player = players[playerId];
 
-        const button = document.createElement("button");
-        button.type = "button";
-        button.classList.add("vote-player-button");
-        button.dataset.playerId = playerId;
-        button.textContent = player.name;
+        この部分を
+const button = document.createElement("button");
+button.type = "button";
+button.classList.add("vote-player-button");
+button.dataset.playerId = playerId;
+button.textContent = player.name;
+これに変更
+const button = document.createElement("button");
+button.type = "button";
+button.classList.add("vote-player-button");
+button.dataset.playerId = playerId;
+button.innerHTML = `
+  <div class="player-left">
+    <div class="player-icon">
+      👤
+    </div>
+    <div class="player-name">
+      ${player.name}
+    </div>
+  </div>
+  <div class="check">
+    ✓
+  </div>
+`;
+
 
         button.addEventListener("click", () => {
           selectVoteTarget(playerId);
