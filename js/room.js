@@ -757,20 +757,25 @@ function countVotes(players, votes) {
   );
 
   update(roomRef, {
-    voteResult: {
-      voteCounts: voteCounts,
-      maxVoteCount: maxVoteCount,
-      topVotedPlayerIds: topVotedPlayerIds,
-      isTie: isTie
-    },
-    status: "voteResult"
+  voteResult: {
+    voteCounts: voteCounts,
+    maxVoteCount: maxVoteCount,
+    topVotedPlayerIds: topVotedPlayerIds,
+    isTie: isTie
+  },
+  status: "voteResult"
+})
+  .then(() => {
+    console.log("投票結果保存OK");
+
+    if (!isVoteResultShown) {
+      isVoteResultShown = true;
+      showVoteResult();
+    }
   })
-    .then(() => {
-      console.log("投票結果保存OK");
-    })
-    .catch((error) => {
-      console.error("投票結果保存エラー", error);
-    });
+  .catch((error) => {
+    console.error("投票結果保存エラー", error);
+  });
 }
 
 // 投票結果を画面に表示する処理
