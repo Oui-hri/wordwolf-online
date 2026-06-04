@@ -11,6 +11,7 @@ import { TOPICS } from "./topics.js";
 
 export const GAME_STATE = {
   WAITING: "waiting",
+  TOPIC: "topic",
   DISCUSSION: "discussion",
   VOTING: "voting",
   REVOTE: "revote",
@@ -33,10 +34,14 @@ export function getCategories() {
 // =========================
 
 export function getRandomCategory() {
-  const categories = Object.keys(TOPICS);
+  const categories =
+    Object.keys(TOPICS);
 
   return categories[
-    Math.floor(Math.random() * categories.length)
+    Math.floor(
+      Math.random() *
+      categories.length
+    )
   ];
 }
 
@@ -44,11 +49,15 @@ export function getRandomCategory() {
 // お題取得
 // =========================
 
-export function getRandomTopic(category = "random") {
-  let selectedCategory = category;
+export function getRandomTopic(
+  category = "random"
+) {
+  let selectedCategory =
+    category;
 
   if (category === "random") {
-    selectedCategory = getRandomCategory();
+    selectedCategory =
+      getRandomCategory();
   }
 
   if (!TOPICS[selectedCategory]) {
@@ -57,11 +66,15 @@ export function getRandomTopic(category = "random") {
     );
   }
 
-  const topics = TOPICS[selectedCategory];
+  const topics =
+    TOPICS[selectedCategory];
 
   const topic =
     topics[
-    Math.floor(Math.random() * topics.length)
+    Math.floor(
+      Math.random() *
+      topics.length
+    )
     ];
 
   let citizenTopic;
@@ -100,7 +113,8 @@ export function chooseWolf(players) {
   }
 
   return Math.floor(
-    Math.random() * players.length
+    Math.random() *
+    players.length
   );
 }
 
@@ -187,23 +201,22 @@ export function startDiscussionTimer(
 
   let time = seconds;
 
-  currentTimer =
-    setInterval(() => {
-      if (onTick) {
-        onTick(time);
+  currentTimer = setInterval(() => {
+    if (onTick) {
+      onTick(time);
+    }
+
+    time--;
+
+    if (time < 0) {
+      clearInterval(currentTimer);
+      currentTimer = null;
+
+      if (onFinish) {
+        onFinish();
       }
-
-      time--;
-
-      if (time < 0) {
-        clearInterval(currentTimer);
-        currentTimer = null;
-
-        if (onFinish) {
-          onFinish();
-        }
-      }
-    }, 1000);
+    }
+  }, 1000);
 
   return currentTimer;
 }
@@ -228,7 +241,6 @@ export function changeGameState(
   newState
 ) {
   roomData.gameState = newState;
-
   return roomData;
 }
 
@@ -238,7 +250,8 @@ export function changeGameState(
 
 export function getWolfPlayer(players) {
   return players.find(
-    player => player.role === "wolf"
+    player =>
+      player.role === "wolf"
   );
 }
 
@@ -248,7 +261,23 @@ export function getWolfPlayer(players) {
 
 export function getCitizenPlayers(players) {
   return players.filter(
-    player => player.role === "citizen"
+    player =>
+      player.role === "citizen"
+  );
+}
+
+// =========================
+// 追放者取得
+// =========================
+
+export function getEliminatedPlayer(
+  players,
+  eliminatedPlayerId
+) {
+  return players.find(
+    player =>
+      player.uid === eliminatedPlayerId ||
+      player.id === eliminatedPlayerId
   );
 }
 
@@ -277,6 +306,7 @@ export function judgeWinner(
     message: "ワードウルフの勝利"
   };
 }
+
 // =========================
 // 結果データ作成
 // =========================
@@ -295,36 +325,24 @@ export function createResultData(
     winner: winnerResult.winner,
     message: winnerResult.message,
 
-    wolfPlayerId: wolf.uid,
-    wolfName: wolf.name,
-    wolfTopic: wolf.topic,
+    wolfPlayerId: wolf?.uid || wolf?.id || "",
+    wolfName: wolf?.name || "不明",
+    wolfTopic: wolf?.topic || "",
 
     eliminatedPlayerId:
-      eliminatedPlayer.uid,
+      eliminatedPlayer.uid ||
+      eliminatedPlayer.id ||
+      "",
 
     eliminatedName:
-      eliminatedPlayer.name,
+      eliminatedPlayer.name || "不明",
 
     eliminatedRole:
-      eliminatedPlayer.role,
+      eliminatedPlayer.role || "",
 
     eliminatedTopic:
-      eliminatedPlayer.topic
+      eliminatedPlayer.topic || ""
   };
-}
-
-// =========================
-// 追放者取得
-// =========================
-
-export function getEliminatedPlayer(
-  players,
-  eliminatedPlayerId
-) {
-  return players.find(
-    player =>
-      player.uid === eliminatedPlayerId
-  );
 }
 
 // =========================
@@ -357,11 +375,60 @@ export function startRevoteDiscussion() {
 export function getRevoteCandidates(
   voteResult
 ) {
-  if (!voteResult.tie) {
+  if (!voteResult || !voteResult.tie) {
     return [];
   }
 
-  return voteResult.players;
+  return (
+    voteResult.players ||
+    voteResult.revoteCandidates ||
+    voteResult.topVotedPlayerIds ||
+    []
+  );
+}
+
+// =========================
+// 投票開始データ
+// =========================
+
+export function createVoteStartData() {
+  return {
+    status: GAME_STATE.VOTING,
+    votes: null,
+    voteResult: null
+  };
+}
+
+// =========================
+// もう一度遊ぶ用データ
+// =========================
+
+export function createRestartData() {
+  return {
+    status: GAME_STATE.WAITING,
+    voteRound: 1,
+    votes: null,
+    voteResult: null,
+    result: null,
+    revoteCandidates: null,
+    discussionTime: 120
+  };
+}
+
+// =========================
+// ゲーム終了用データ
+// =========================
+
+export function createQuitData() {
+  return {
+    status: GAME_STATE.WAITING,
+    voteRound: 1,
+    votes: null,
+    voteResult: null,
+    result: null,
+    revoteCandidates: null,
+    discussionTime: 120
+  };
 }
 
 // =========================

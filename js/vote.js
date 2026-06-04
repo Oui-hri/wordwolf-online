@@ -3,21 +3,32 @@
 // ワードウルフ 投票処理
 // =========================
 
+// =========================
 // 投票回数
+// =========================
+
 let voteRound = 1;
 
 // =========================
-// 投票回数管理
+// 投票回数取得
 // =========================
 
 export function getVoteRound() {
   return voteRound;
 }
 
+// =========================
+// 投票回数を進める
+// =========================
+
 export function nextVoteRound() {
   voteRound++;
   return voteRound;
 }
+
+// =========================
+// 投票回数リセット
+// =========================
 
 export function resetVoteRound() {
   voteRound = 1;
@@ -134,6 +145,10 @@ export function isVotingFinished(
   votes,
   playerCount
 ) {
+  if (!votes) {
+    return false;
+  }
+
   return (
     Object.keys(votes).length ===
     playerCount
@@ -154,21 +169,39 @@ export function judgeVoteResult(votes) {
   if (topPlayers.length === 0) {
     return {
       tie: false,
-      eliminatedPlayerId: null
+      isTie: false,
+      players: [],
+      topVotedPlayerIds: [],
+      eliminatedPlayerId: null,
+      voteCounts: voteCount,
+      maxVoteCount: 0
     };
   }
+
+  const maxVoteCount =
+    voteCount[topPlayers[0]];
 
   if (topPlayers.length > 1) {
     return {
       tie: true,
+      isTie: true,
       players: topPlayers,
-      revoteCandidates: topPlayers
+      revoteCandidates: topPlayers,
+      topVotedPlayerIds: topPlayers,
+      eliminatedPlayerId: null,
+      voteCounts: voteCount,
+      maxVoteCount
     };
   }
 
   return {
     tie: false,
-    eliminatedPlayerId: topPlayers[0]
+    isTie: false,
+    players: topPlayers,
+    topVotedPlayerIds: topPlayers,
+    eliminatedPlayerId: topPlayers[0],
+    voteCounts: voteCount,
+    maxVoteCount
   };
 }
 
@@ -179,11 +212,20 @@ export function judgeVoteResult(votes) {
 export function getRevoteCandidates(
   voteResult
 ) {
-  if (!voteResult.tie) {
+  if (!voteResult) {
     return [];
   }
 
-  return voteResult.players;
+  if (!voteResult.tie && !voteResult.isTie) {
+    return [];
+  }
+
+  return (
+    voteResult.players ||
+    voteResult.revoteCandidates ||
+    voteResult.topVotedPlayerIds ||
+    []
+  );
 }
 
 // =========================
@@ -191,15 +233,25 @@ export function getRevoteCandidates(
 // =========================
 
 export function handleTie(voteResult) {
-  if (!voteResult.tie) {
+  if (!voteResult) {
+    return null;
+  }
+
+  const isTie =
+    voteResult.tie || voteResult.isTie;
+
+  if (!isTie) {
     return null;
   }
 
   if (voteRound >= 3) {
     return {
+      status: "result",
+      gameState: "result",
       winner: "wolf",
       message:
-        "再投票を2回しても同票のためワードウルフ勝利"
+        "再投票を2回しても同票のためワードウルフ勝利",
+      reason: "tieLimit"
     };
   }
 
@@ -207,11 +259,13 @@ export function handleTie(voteResult) {
 
   return {
     tie: true,
+    isTie: true,
+    status: "discussion",
     gameState: "discussion",
     voteRound,
     discussionTime: 60,
     revoteCandidates:
-      voteResult.players,
+      getRevoteCandidates(voteResult),
     votes: resetVotes()
   };
 }
@@ -224,14 +278,21 @@ export function judgeRevoteResult(votes) {
   const voteResult =
     judgeVoteResult(votes);
 
-  if (voteResult.tie) {
+  if (voteResult.tie || voteResult.isTie) {
     return handleTie(voteResult);
   }
 
   return {
     tie: false,
+    isTie: false,
     eliminatedPlayerId:
-      voteResult.eliminatedPlayerId
+      voteResult.eliminatedPlayerId,
+    topVotedPlayerIds:
+      voteResult.topVotedPlayerIds,
+    voteCounts:
+      voteResult.voteCounts,
+    maxVoteCount:
+      voteResult.maxVoteCount
   };
 }
 
@@ -265,12 +326,41 @@ export function getPlayerName(
 ) {
   const player =
     players.find(
-      p => p.uid === playerId
+      p =>
+        p.uid === playerId ||
+        p.id === playerId
     );
 
   return player
     ? player.name
     : "不明";
+}
+
+// =========================
+// 投票開始用データ
+// =========================
+
+export function createVoteStartData() {
+  return {
+    status: "voting",
+    votes: null,
+    voteResult: null
+  };
+}
+
+// =========================
+// 投票状態リセット用データ
+// =========================
+
+export function createVoteResetData() {
+  resetVoteRound();
+
+  return {
+    voteRound: 1,
+    votes: null,
+    voteResult: null,
+    revoteCandidates: null
+  };
 }
 
 // =========================
