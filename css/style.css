@@ -698,3 +698,7 @@ button {
 .hidden {
   display: none;
 }
+
+.screen.hidden {
+  display: none !important;
+}
