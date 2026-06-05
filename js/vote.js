@@ -4,37 +4,6 @@
 // =========================
 
 // =========================
-// 投票回数
-// =========================
-
-let voteRound = 1;
-
-// =========================
-// 投票回数取得
-// =========================
-
-export function getVoteRound() {
-  return voteRound;
-}
-
-// =========================
-// 投票回数を進める
-// =========================
-
-export function nextVoteRound() {
-  voteRound++;
-  return voteRound;
-}
-
-// =========================
-// 投票回数リセット
-// =========================
-
-export function resetVoteRound() {
-  voteRound = 1;
-}
-
-// =========================
 // 投票
 // =========================
 
@@ -44,27 +13,19 @@ export function votePlayer(
   targetId
 ) {
   if (!votes) {
-    throw new Error(
-      "votesが存在しません"
-    );
+    throw new Error("votesが存在しません");
   }
 
   if (!voterId || !targetId) {
-    throw new Error(
-      "投票者または投票先が不正です"
-    );
+    throw new Error("投票者または投票先が不正です");
   }
 
   if (voterId === targetId) {
-    throw new Error(
-      "自分には投票できません"
-    );
+    throw new Error("自分には投票できません");
   }
 
   if (votes[voterId]) {
-    throw new Error(
-      "すでに投票済みです"
-    );
+    throw new Error("すでに投票済みです");
   }
 
   votes[voterId] = targetId;
@@ -77,64 +38,56 @@ export function votePlayer(
 // =========================
 
 export function countVotes(votes) {
-  const result = {};
+  const voteCounts = {};
 
   if (!votes) {
-    return result;
+    return voteCounts;
   }
 
-  Object.values(votes).forEach(
-    targetId => {
-      if (!result[targetId]) {
-        result[targetId] = 0;
-      }
-
-      result[targetId]++;
+  Object.values(votes).forEach((targetId) => {
+    if (!voteCounts[targetId]) {
+      voteCounts[targetId] = 0;
     }
-  );
 
-  return result;
+    voteCounts[targetId]++;
+  });
+
+  return voteCounts;
 }
 
 // =========================
 // 最多票取得
 // =========================
 
-export function getMostVotedPlayers(
-  voteCount
-) {
-  let maxVote = 0;
+export function getMostVotedPlayers(voteCounts) {
+  let maxVoteCount = 0;
 
-  Object.values(voteCount).forEach(
-    count => {
-      if (count > maxVote) {
-        maxVote = count;
-      }
+  Object.values(voteCounts).forEach((count) => {
+    if (count > maxVoteCount) {
+      maxVoteCount = count;
     }
-  );
+  });
 
-  const players = [];
+  const topVotedPlayerIds =
+    Object.keys(voteCounts).filter((playerId) => {
+      return voteCounts[playerId] === maxVoteCount;
+    });
 
-  Object.entries(voteCount).forEach(
-    ([uid, count]) => {
-      if (count === maxVote) {
-        players.push(uid);
-      }
-    }
-  );
-
-  return players;
+  return {
+    maxVoteCount,
+    topVotedPlayerIds
+  };
 }
 
 // =========================
 // 同票判定
 // =========================
 
-export function checkTie(voteCount) {
-  const topPlayers =
-    getMostVotedPlayers(voteCount);
+export function checkTie(voteCounts) {
+  const result =
+    getMostVotedPlayers(voteCounts);
 
-  return topPlayers.length > 1;
+  return result.topVotedPlayerIds.length > 1;
 }
 
 // =========================
@@ -149,10 +102,7 @@ export function isVotingFinished(
     return false;
   }
 
-  return (
-    Object.keys(votes).length ===
-    playerCount
-  );
+  return Object.keys(votes).length === playerCount;
 }
 
 // =========================
@@ -160,58 +110,63 @@ export function isVotingFinished(
 // =========================
 
 export function judgeVoteResult(votes) {
-  const voteCount =
+  const voteCounts =
     countVotes(votes);
 
-  const topPlayers =
-    getMostVotedPlayers(voteCount);
+  const mostVotedResult =
+    getMostVotedPlayers(voteCounts);
 
-  if (topPlayers.length === 0) {
+  const topVotedPlayerIds =
+    mostVotedResult.topVotedPlayerIds;
+
+  const maxVoteCount =
+    mostVotedResult.maxVoteCount;
+
+  if (topVotedPlayerIds.length === 0) {
     return {
       tie: false,
       isTie: false,
       players: [],
+      revoteCandidates: [],
       topVotedPlayerIds: [],
       eliminatedPlayerId: null,
-      voteCounts: voteCount,
+      voteCounts,
       maxVoteCount: 0
     };
   }
 
-  const maxVoteCount =
-    voteCount[topPlayers[0]];
-
-  if (topPlayers.length > 1) {
-    return {
-      tie: true,
-      isTie: true,
-      players: topPlayers,
-      revoteCandidates: topPlayers,
-      topVotedPlayerIds: topPlayers,
-      eliminatedPlayerId: null,
-      voteCounts: voteCount,
-      maxVoteCount
-    };
-  }
+  const isTie =
+    topVotedPlayerIds.length > 1;
 
   return {
-    tie: false,
-    isTie: false,
-    players: topPlayers,
-    topVotedPlayerIds: topPlayers,
-    eliminatedPlayerId: topPlayers[0],
-    voteCounts: voteCount,
+    tie: isTie,
+    isTie,
+    players: topVotedPlayerIds,
+    revoteCandidates: isTie
+      ? topVotedPlayerIds
+      : [],
+    topVotedPlayerIds,
+    eliminatedPlayerId: isTie
+      ? null
+      : topVotedPlayerIds[0],
+    voteCounts,
     maxVoteCount
   };
+}
+
+// =========================
+// 再投票結果判定
+// =========================
+
+export function judgeRevoteResult(votes) {
+  return judgeVoteResult(votes);
 }
 
 // =========================
 // 再投票候補取得
 // =========================
 
-export function getRevoteCandidates(
-  voteResult
-) {
+export function getRevoteCandidates(voteResult) {
   if (!voteResult) {
     return [];
   }
@@ -221,119 +176,52 @@ export function getRevoteCandidates(
   }
 
   return (
-    voteResult.players ||
     voteResult.revoteCandidates ||
+    voteResult.players ||
     voteResult.topVotedPlayerIds ||
     []
   );
 }
 
 // =========================
-// 同票時の処理
+// 再討論データ作成
 // =========================
 
-export function handleTie(voteResult) {
-  if (!voteResult) {
-    return null;
-  }
+export function createRevoteDiscussionData(
+  voteResult,
+  voteRound
+) {
+  return {
+    status: "discussion",
+    voteResult,
+    voteRound: voteRound + 1,
+    revoteCandidates:
+      convertCandidatesToObject(
+        getRevoteCandidates(voteResult)
+      ),
+    discussionTime: 60,
+    votes: null
+  };
+}
 
-  const isTie =
-    voteResult.tie || voteResult.isTie;
+// =========================
+// 再投票2回でも同票の場合
+// =========================
 
-  if (!isTie) {
-    return null;
-  }
-
-  if (voteRound >= 3) {
-    return {
-      status: "result",
-      gameState: "result",
+export function createTieLimitResultData(
+  voteResult
+) {
+  return {
+    status: "result",
+    result: {
       winner: "wolf",
       message:
         "再投票を2回しても同票のためワードウルフ勝利",
-      reason: "tieLimit"
-    };
-  }
-
-  nextVoteRound();
-
-  return {
-    tie: true,
-    isTie: true,
-    status: "discussion",
-    gameState: "discussion",
-    voteRound,
-    discussionTime: 60,
-    revoteCandidates:
-      getRevoteCandidates(voteResult),
-    votes: resetVotes()
+      reason: "tieLimit",
+      voteResult
+    },
+    voteResult
   };
-}
-
-// =========================
-// 再投票結果判定
-// =========================
-
-export function judgeRevoteResult(votes) {
-  const voteResult =
-    judgeVoteResult(votes);
-
-  if (voteResult.tie || voteResult.isTie) {
-    return handleTie(voteResult);
-  }
-
-  return {
-    tie: false,
-    isTie: false,
-    eliminatedPlayerId:
-      voteResult.eliminatedPlayerId,
-    topVotedPlayerIds:
-      voteResult.topVotedPlayerIds,
-    voteCounts:
-      voteResult.voteCounts,
-    maxVoteCount:
-      voteResult.maxVoteCount
-  };
-}
-
-// =========================
-// 投票リセット
-// =========================
-
-export function resetVotes() {
-  return {};
-}
-
-// =========================
-// ランキング取得
-// =========================
-
-export function getRanking(votes) {
-  const voteCount =
-    countVotes(votes);
-
-  return Object.entries(voteCount)
-    .sort((a, b) => b[1] - a[1]);
-}
-
-// =========================
-// プレイヤー名取得
-// =========================
-
-export function getPlayerName(
-  players,
-  playerId
-) {
-  const player =
-    players.find(
-      p =>
-        p.uid === playerId ||
-        p.id === playerId
-    );
-
-  return player
-    ? player.name
-    : "不明";
 }
 
 // =========================
@@ -353,8 +241,6 @@ export function createVoteStartData() {
 // =========================
 
 export function createVoteResetData() {
-  resetVoteRound();
-
   return {
     voteRound: 1,
     votes: null,
@@ -364,12 +250,65 @@ export function createVoteResetData() {
 }
 
 // =========================
+// 投票リセット
+// =========================
+
+export function resetVotes() {
+  return {};
+}
+
+// =========================
+// 候補配列をFirebase用に変換
+// =========================
+
+export function convertCandidatesToObject(candidates) {
+  const candidateObject = {};
+
+  candidates.forEach((playerId) => {
+    candidateObject[playerId] = true;
+  });
+
+  return candidateObject;
+}
+
+// =========================
+// ランキング取得
+// =========================
+
+export function getRanking(votes) {
+  const voteCounts =
+    countVotes(votes);
+
+  return Object.entries(voteCounts)
+    .sort((a, b) => b[1] - a[1]);
+}
+
+// =========================
+// プレイヤー名取得
+// =========================
+
+export function getPlayerName(
+  players,
+  playerId
+) {
+  const player =
+    players.find((p) => {
+      return (
+        p.uid === playerId ||
+        p.id === playerId
+      );
+    });
+
+  return player
+    ? player.name
+    : "不明";
+}
+
+// =========================
 // テスト
 // =========================
 
 export function testVote() {
-  resetVoteRound();
-
   const votes = {};
 
   votePlayer(votes, "1", "2");
