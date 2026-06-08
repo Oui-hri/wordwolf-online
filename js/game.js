@@ -347,16 +347,24 @@ export function createRestartData() {
 export function createQuitData() {
   return {
     status: GAME_STATE.WAITING,
+
     voteRound: 1,
     votes: null,
     voteResult: null,
-    result: null,
     revoteCandidates: null,
     tiePlayers: null,
+
+    result: null,
+
+    category: null,
+
+    citizenTopic: null,
+    wolfTopic: null,
+    wolfIndex: null,
+
     discussionTime: 120
   };
 }
-
 // =========================
 // 個人メモ
 // =========================
