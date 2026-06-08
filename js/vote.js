@@ -142,13 +142,18 @@ export function judgeVoteResult(votes) {
     tie: isTie,
     isTie,
     players: topVotedPlayerIds,
+
+    // 表示用として同票者は残す
     revoteCandidates: isTie
       ? topVotedPlayerIds
       : [],
+
     topVotedPlayerIds,
+
     eliminatedPlayerId: isTie
       ? null
       : topVotedPlayerIds[0],
+
     voteCounts,
     maxVoteCount
   };
@@ -164,6 +169,7 @@ export function judgeRevoteResult(votes) {
 
 // =========================
 // 再投票候補取得
+// ※表示用。投票制限には使わない
 // =========================
 
 export function getRevoteCandidates(voteResult) {
@@ -193,13 +199,22 @@ export function createRevoteDiscussionData(
 ) {
   return {
     status: "discussion",
+
     voteResult,
-    voteRound: voteRound + 1,
-    revoteCandidates:
-      convertCandidatesToObject(
-        getRevoteCandidates(voteResult)
-      ),
+
+    voteRound:
+      voteRound + 1,
+
+    // 再投票でも全員に投票できるようにする
+    // null にすることで room.js 側で制限しない
+    revoteCandidates: null,
+
+    // 同票者の表示用データ
+    tiePlayers:
+      getRevoteCandidates(voteResult),
+
     discussionTime: 60,
+
     votes: null
   };
 }
@@ -213,6 +228,7 @@ export function createTieLimitResultData(
 ) {
   return {
     status: "result",
+
     result: {
       winner: "wolf",
       message:
@@ -220,6 +236,7 @@ export function createTieLimitResultData(
       reason: "tieLimit",
       voteResult
     },
+
     voteResult
   };
 }
@@ -245,7 +262,8 @@ export function createVoteResetData() {
     voteRound: 1,
     votes: null,
     voteResult: null,
-    revoteCandidates: null
+    revoteCandidates: null,
+    tiePlayers: null
   };
 }
 
@@ -259,6 +277,7 @@ export function resetVotes() {
 
 // =========================
 // 候補配列をFirebase用に変換
+// ※今は投票制限しないので基本未使用
 // =========================
 
 export function convertCandidatesToObject(candidates) {
