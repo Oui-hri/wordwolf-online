@@ -949,8 +949,16 @@ function showResultScreen() {
 
         resultContent.innerHTML = `
     <h2 class="result-title wolf-win">
-      🐺 ワードウルフの勝利
-    </h2>
+
+  <img
+    src="images/ookam_red.png"
+    class="result-icon"
+    alt="wolf"
+  >
+
+  ワードウルフの勝利
+
+</h2>
 
     <div class="eliminated-card">
 
