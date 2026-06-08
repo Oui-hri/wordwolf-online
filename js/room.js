@@ -916,27 +916,58 @@ function showResultScreen() {
 
       resultContent.innerHTML = "";
 
-      const title = document.createElement("h2");
-      title.textContent = resultData.message || "結果";
-      resultContent.appendChild(title);
-
       const eliminatedName =
         resultData.eliminatedPlayerName ||
-        resultData.eliminatedName;
+        resultData.eliminatedName ||
+        "不明";
 
-      if (eliminatedName) {
-        const eliminated = document.createElement("p");
-        eliminated.textContent = "追放者：" + eliminatedName;
-        resultContent.appendChild(eliminated);
-      }
+      if (resultData.winner === "citizen") {
 
-      if (resultData.winner) {
-        const winner = document.createElement("p");
-        winner.textContent =
-          resultData.winner === "citizen"
-            ? "市民チーム勝利"
-            : "ワードウルフ勝利";
-        resultContent.appendChild(winner);
+        resultContent.innerHTML = `
+    <h2 class="result-title citizen-win">
+      👑 市民チームの勝利
+    </h2>
+
+    <div class="eliminated-card">
+
+      <div class="eliminated-label">
+        追放者
+      </div>
+
+      <div class="eliminated-player">
+        👤 ${eliminatedName}
+      </div>
+
+    </div>
+
+    <p class="result-message">
+      市民たちはワードウルフを見抜いた
+    </p>
+  `;
+
+      } else {
+
+        resultContent.innerHTML = `
+    <h2 class="result-title wolf-win">
+      🐺 ワードウルフの勝利
+    </h2>
+
+    <div class="eliminated-card">
+
+      <div class="eliminated-label">
+        追放者
+      </div>
+
+      <div class="eliminated-player">
+        👤 ${eliminatedName}
+      </div>
+
+    </div>
+
+    <p class="result-message">
+      ワードウルフは正体を隠し通した
+    </p>
+  `;
       }
     })
     .catch((error) => {
