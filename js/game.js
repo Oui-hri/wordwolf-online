@@ -60,7 +60,9 @@ export function getRandomTopic(category = "random") {
   const topics = TOPICS[selectedCategory];
 
   const topic =
-    topics[Math.floor(Math.random() * topics.length)];
+    topics[
+    Math.floor(Math.random() * topics.length)
+    ];
 
   let citizenTopic;
   let wolfTopic;
@@ -305,6 +307,23 @@ export function startRevoteDiscussion() {
 }
 
 // =========================
+// 同票時の説明文
+// =========================
+
+export function getTieMessage() {
+  return `
+同票です！
+
+まだワードウルフを特定できていません。
+
+60秒間の再討論を行います。
+
+再討論終了後、
+全員でもう一度投票してください。
+`;
+}
+
+// =========================
 // もう一度遊ぶ用データ
 // =========================
 
@@ -316,6 +335,7 @@ export function createRestartData() {
     voteResult: null,
     result: null,
     revoteCandidates: null,
+    tiePlayers: null,
     discussionTime: 120
   };
 }
@@ -332,6 +352,7 @@ export function createQuitData() {
     voteResult: null,
     result: null,
     revoteCandidates: null,
+    tiePlayers: null,
     discussionTime: 120
   };
 }
