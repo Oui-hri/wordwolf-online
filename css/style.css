@@ -1037,17 +1037,3 @@ button {
 .screen.hidden {
   display: none !important;
 }
-
-/* ===== 結果画面テスト ===== */
-
-#title-screen,
-#waiting-screen,
-#topic-screen,
-#discussion-screen,
-#vote-screen {
-  display: none !important;
-}
-
-#result-screen {
-  display: flex !important;
-}
