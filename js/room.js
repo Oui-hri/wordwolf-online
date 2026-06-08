@@ -924,25 +924,43 @@ function showResultScreen() {
       if (resultData.winner === "citizen") {
 
         resultContent.innerHTML = `
-    <h2 class="result-title citizen-win">
-      👑 市民チームの勝利
-    </h2>
+  <img src="images/gold.png"
+       class="result-icon citizen-icon">
 
-    <p class="result-message">
-      市民たちはワードウルフを見抜いた
-    </p>
-  `;
+  <h2 class="result-banner citizen-banner">
+    <span></span>
+    CITIZEN WIN
+    <span></span>
+  </h2>
+
+  <h2 class="result-title citizen-win">
+    市民チームの勝利
+  </h2>
+
+  <p class="result-message">
+    市民たちはワードウルフを見抜いた
+  </p>
+
+  <div class="vote-result-card citizen-card">
+
+    <div class="vote-result-title">
+      <span></span>
+      投票結果
+      <span></span>
+    </div>
+
+    <div id="vote-result-list"></div>
+
+  </div>
+`;
+
+        renderVoteResult();
 
       } else {
 
         resultContent.innerHTML = `
-  <h2 class="result-title wolf-win">
-
-    <img
-    src="images/ookam_red.png"
-    class="result-icon"
-    alt="wolf"
-  >
+  <img src="images/ookam_red.png"
+       class="result-icon">
 
   <h2 class="result-banner">
     <span></span>
@@ -961,13 +979,9 @@ function showResultScreen() {
   <div class="vote-result-card">
 
     <div class="vote-result-title">
-
       <span></span>
-
       投票結果
-
       <span></span>
-
     </div>
 
     <div id="vote-result-list"></div>

@@ -1188,26 +1188,98 @@ button {
   overflow-y: auto;
 }
 
-.citizen-win {
+.citizen-icon {
 
-  color: #ffd54f;
+  width: 180px;
+
+  height: 140px;
+
+  object-fit: contain;
+
+  filter:
+    drop-shadow(0 0 10px rgba(255, 220, 80, .8)) drop-shadow(0 0 25px rgba(255, 200, 50, .5));
+
+  margin-top: -10px;
+
+  margin-bottom: 80px;
 }
 
 .citizen-banner {
 
-  color: #ffd54f;
+  color: #ffd95e;
+
+  text-shadow:
+    0 0 10px rgba(255, 210, 80, .8);
+
+  letter-spacing: 6px;
 }
 
 .citizen-banner span {
 
   background:
-    linear-gradient(to right,
+    linear-gradient(90deg,
+      transparent,
+      #ffd95e,
+      transparent);
+}
+
+.citizen-win {
+
+  font-size: 3rem;
+
+  font-weight: bold;
+
+  background: linear-gradient(180deg,
+      #fff8d6 0%,
+      #ffd54f 50%,
+      #ffb300 100%);
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  display: inline-block;
+
+  position: relative;
+
+  top: -25px;
+}
+
+.citizen-card .vote-result-title span {
+
+  background:
+    linear-gradient(90deg,
       transparent,
       #ffd54f,
       transparent);
 
   box-shadow:
-    0 0 12px rgba(255, 213, 79, .5);
+    0 0 10px rgba(255, 215, 0, .7);
+}
+
+.citizen-card {
+
+  background:
+    linear-gradient(135deg,
+      rgba(80, 55, 0, .95),
+      rgba(45, 30, 0, .95));
+
+  border: 3px solid #ffd54f;
+
+  box-shadow:
+    0 0 10px rgba(255, 215, 0, .6),
+    0 0 25px rgba(255, 215, 0, .3);
+
+  border-radius: 25px;
+}
+
+.vote-result-title {
+
+  color: #ffd54f;
+
+  text-shadow:
+    0 0 8px rgba(255, 215, 80, .7);
+
+  font-weight: bold;
 }
 
 #result-content {
