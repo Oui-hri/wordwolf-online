@@ -943,18 +943,49 @@ function showResultScreen() {
 
   <div class="vote-result-card citizen-card">
 
-    <div class="vote-result-title">
-      <span></span>
-      投票結果
-      <span></span>
-    </div>
-
-    <div id="vote-result-list"></div>
-
+  <div class="vote-result-title">
+    <span></span>
+    投票結果
+    <span></span>
   </div>
-`;
 
+  <div id="vote-result-list"></div>
+
+</div>
+
+<div class="result-buttons">
+
+  <button class="result-btn citizen-btn"
+          id="result-answer-button">
+    お題を確認
+  </button>
+
+  <button class="result-btn citizen-btn"
+          id="result-restart-button">
+    もう一度遊ぶ
+  </button>
+
+  <button class="result-btn citizen-btn"
+          id="result-quit-button">
+    ゲームをやめる
+  </button>
+
+</div>
+`;
         renderVoteResult();
+        const restartBtn =
+          document.getElementById(
+            "result-restart-button"
+          );
+
+        if (restartBtn) {
+
+          restartBtn.addEventListener(
+            "click",
+            restartGame
+          );
+
+        }
 
       } else {
 
@@ -978,20 +1009,54 @@ function showResultScreen() {
 
   <div class="vote-result-card">
 
-    <div class="vote-result-title">
-      <span></span>
-      投票結果
-      <span></span>
-    </div>
-
-    <div id="vote-result-list"></div>
-
+  <div class="vote-result-title">
+    <span></span>
+    投票結果
+    <span></span>
   </div>
+
+  <div id="vote-result-list"></div>
+
+</div>
+
+<div class="result-buttons">
+
+  <button class="result-btn wolf-btn"
+          id="result-answer-button">
+    お題を確認
+  </button>
+
+  <button class="result-btn wolf-btn"
+          id="result-restart-button">
+    もう一度遊ぶ
+  </button>
+
+  <button class="result-btn wolf-btn"
+          id="result-quit-button">
+    ゲームをやめる
+  </button>
+
+</div>
 `;
 
         renderVoteResult();
+        const restartBtn =
+          document.getElementById(
+            "result-restart-button"
+          );
+
+        if (restartBtn) {
+
+          restartBtn.addEventListener(
+            "click",
+            restartGame
+          );
+
+        }
       }
     })
+
+
     .catch((error) => {
       console.error("結果表示エラー", error);
     });
