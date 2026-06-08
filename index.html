@@ -168,8 +168,44 @@
   <section id="result-screen" class="screen hidden">
 
     <div id="result-content">
-      <h2>🏆 市民チーム勝利！</h2>
-      <p>ワードウルフ：佐藤</p>
+
+      <h2 class="result-title wolf-win">
+        🐺 ワードウルフの勝利
+      </h2>
+
+      <div class="eliminated-card">
+
+        <div class="eliminated-label">
+          追放者
+        </div>
+
+        <div class="eliminated-player">
+          👤 う
+        </div>
+
+      </div>
+
+      <p class="result-message">
+        ワードウルフは正体を隠し通した
+      </p>
+
+    </div>
+
+    <div id="result-content">
+
+      <h2 id="result-title"></h2>
+
+      <div class="eliminated-card">
+        <div class="eliminated-label">
+          追放者
+        </div>
+
+        <div id="eliminated-player" class="eliminated-player">
+        </div>
+      </div>
+
+      <p id="result-message"></p>
+
     </div>
 
     <!-- お題表示エリア -->
