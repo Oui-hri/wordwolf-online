@@ -95,7 +95,7 @@ if (quitGameButton) {
 
 restoreSession();
 
-// =========================
+// ========================
 // セッション保存
 // =========================
 
@@ -928,18 +928,6 @@ function showResultScreen() {
       👑 市民チームの勝利
     </h2>
 
-    <div class="eliminated-card">
-
-      <div class="eliminated-label">
-        追放者
-      </div>
-
-      <div class="eliminated-player">
-        👤 ${eliminatedName}
-      </div>
-
-    </div>
-
     <p class="result-message">
       市民たちはワードウルフを見抜いた
     </p>
@@ -948,38 +936,129 @@ function showResultScreen() {
       } else {
 
         resultContent.innerHTML = `
-    <h2 class="result-title wolf-win">
+  <h2 class="result-title wolf-win">
 
-  <img
+    <img
     src="images/ookam_red.png"
     class="result-icon"
     alt="wolf"
   >
 
-  ワードウルフの勝利
+  <h2 class="result-banner">
+    <span></span>
+    WOLF WIN
+    <span></span>
+  </h2>
 
-</h2>
+  <h2 class="result-title wolf-win">
+    ワードウルフの勝利
+  </h2>
 
-    <div class="eliminated-card">
+  <p class="result-message">
+    ワードウルフは正体を隠し通した
+  </p>
 
-      <div class="eliminated-label">
-        追放者
-      </div>
+  <div class="vote-result-card">
 
-      <div class="eliminated-player">
-        👤 ${eliminatedName}
-      </div>
+    <div class="vote-result-title">
+
+      <span></span>
+
+      投票結果
+
+      <span></span>
 
     </div>
 
-    <p class="result-message">
-      ワードウルフは正体を隠し通した
-    </p>
-  `;
+    <div id="vote-result-list"></div>
+
+  </div>
+`;
+
+        renderVoteResult();
       }
     })
     .catch((error) => {
       console.error("結果表示エラー", error);
+    });
+}
+
+function renderVoteResult() {
+
+  const roomRef = ref(
+    database,
+    "rooms/" + currentRoomName
+  );
+
+  get(roomRef)
+    .then((snapshot) => {
+
+      if (!snapshot.exists()) {
+        return;
+      }
+
+      const roomData = snapshot.val();
+
+      const players = roomData.players || {};
+      const votes = roomData.votes || {};
+
+      const voteResultList =
+        document.getElementById(
+          "vote-result-list"
+        );
+
+      if (!voteResultList) {
+        return;
+      }
+
+      voteResultList.innerHTML = "";
+
+      const voteCounts = {};
+
+      Object.values(votes).forEach(
+        (targetPlayerId) => {
+
+          voteCounts[targetPlayerId] =
+            (voteCounts[targetPlayerId] || 0) + 1;
+        }
+      );
+
+      const sortedPlayers =
+        Object.keys(players)
+          .map((playerId) => {
+
+            return {
+              playerId,
+              name: players[playerId].name,
+              votes: voteCounts[playerId] || 0
+            };
+          })
+          .sort((a, b) => b.votes - a.votes);
+
+      sortedPlayers.forEach(
+        (player) => {
+
+          voteResultList.innerHTML += `
+      <div class="vote-row">
+        <span>
+          👤 ${player.name}
+        </span>
+
+        <span>
+          ${player.votes}票
+        </span>
+      </div>
+    `;
+        }
+      );
+
+    })
+    .catch((error) => {
+
+      console.error(
+        "投票結果表示エラー",
+        error
+      );
     });
 }
 
