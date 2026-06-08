@@ -305,6 +305,39 @@ export function startRevoteDiscussion() {
     discussionTime: 60
   };
 }
+// =========================
+// 話し合い時間を追加
+// =========================
+
+export function addDiscussionTime(
+  currentTime,
+  addSeconds = 60
+) {
+  return {
+    discussionTime:
+      currentTime + addSeconds
+  };
+}
+
+// =========================
+// 話し合い中のお題表示用データ
+// =========================
+
+export function createDiscussionTopicData(
+  player
+) {
+  return {
+    topic:
+      player.topic || "",
+
+    role:
+      player.role || "",
+
+    message:
+      "あなたのお題：" +
+      (player.topic || "不明")
+  };
+}
 
 // =========================
 // 同票時の説明文
@@ -330,12 +363,20 @@ export function getTieMessage() {
 export function createRestartData() {
   return {
     status: GAME_STATE.WAITING,
+
     voteRound: 1,
     votes: null,
     voteResult: null,
-    result: null,
     revoteCandidates: null,
     tiePlayers: null,
+
+    result: null,
+
+    category: null,
+    citizenTopic: null,
+    wolfTopic: null,
+    wolfIndex: null,
+
     discussionTime: 120
   };
 }
