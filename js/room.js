@@ -426,15 +426,21 @@ function showWaitingRoom(roomName) {
 
 function updateStartGameButton() {
   if (startGameButton) {
-    startGameButton.style.display =
-      currentIsHost ? "block" : "none";
+    if (currentIsHost) {
+      startGameButton.classList.remove("hidden");
+    } else {
+      startGameButton.classList.add("hidden");
+    }
 
     startGameButton.disabled = !currentIsHost;
   }
 
   if (categoryArea) {
-    categoryArea.style.display =
-      currentIsHost ? "block" : "none";
+    if (currentIsHost) {
+      categoryArea.classList.remove("hidden");
+    } else {
+      categoryArea.classList.add("hidden");
+    }
   }
 }
 
@@ -550,6 +556,7 @@ function startGame() {
       alert(error.message || "ゲーム開始に失敗しました");
     });
 }
+
 // =========================
 // ステータス監視
 // =========================
@@ -697,13 +704,19 @@ function showDiscussionScreen() {
   showDiscussionTopic();
 
   if (addTimeButton) {
-    addTimeButton.style.display =
-      currentIsHost ? "block" : "none";
+    if (currentIsHost) {
+      addTimeButton.classList.remove("hidden");
+    } else {
+      addTimeButton.classList.add("hidden");
+    }
   }
 
   if (goVoteButton) {
-    goVoteButton.style.display =
-      currentIsHost ? "block" : "none";
+    if (currentIsHost) {
+      goVoteButton.classList.remove("hidden");
+    } else {
+      goVoteButton.classList.add("hidden");
+    }
   }
 
   getDiscussionTime()
@@ -900,7 +913,7 @@ function showVoteScreen() {
 
   if (voteButton) {
     voteButton.disabled = false;
-    voteButton.style.display = "none";
+    voteButton.classList.add("hidden");
     voteButton.textContent = "投票する";
   }
 
@@ -977,19 +990,13 @@ function selectVoteTarget(targetPlayerId) {
   buttons.forEach((button) => {
     if (button.dataset.playerId === targetPlayerId) {
       button.classList.add("selected");
-      button.style.opacity = "1";
-      button.style.border = "3px solid #ffcc00";
-      button.style.transform = "scale(1.05)";
     } else {
       button.classList.remove("selected");
-      button.style.opacity = "0.35";
-      button.style.border = "none";
-      button.style.transform = "scale(1)";
     }
   });
 
   if (voteButton) {
-    voteButton.style.display = "block";
+    voteButton.classList.remove("hidden");
   }
 }
 
@@ -1037,7 +1044,7 @@ function showVoteWaiting() {
 
   if (voteButton) {
     voteButton.disabled = true;
-    voteButton.style.display = "none";
+    voteButton.classList.add("hidden");
   }
 }
 
