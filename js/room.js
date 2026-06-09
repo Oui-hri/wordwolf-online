@@ -166,6 +166,44 @@ if (goVoteButton) {
 restoreSession();
 
 // =========================
+// 共通UI補助
+// =========================
+
+function setHidden(element, shouldHide) {
+  if (!element) {
+    return;
+  }
+
+  if (shouldHide) {
+    element.classList.add("hidden");
+  } else {
+    element.classList.remove("hidden");
+  }
+}
+
+function getOrCreateElement(parent, id, tagName) {
+  let element =
+    document.getElementById(id);
+
+  if (element) {
+    return element;
+  }
+
+  if (!parent) {
+    return null;
+  }
+
+  element =
+    document.createElement(tagName);
+
+  element.id = id;
+
+  parent.appendChild(element);
+
+  return element;
+}
+
+// =========================
 // セッション
 // =========================
 
@@ -405,9 +443,7 @@ function showWaitingRoom(roomName) {
   const waitingScreen =
     document.getElementById("waiting-screen");
 
-  if (waitingScreen) {
-    waitingScreen.classList.remove("hidden");
-  }
+  setHidden(waitingScreen, false);
 
   if (roomCode) {
     roomCode.textContent = roomName;
@@ -417,31 +453,19 @@ function showWaitingRoom(roomName) {
     topicCard.textContent = "";
   }
 
-  if (answerArea) {
-    answerArea.classList.add("hidden");
-  }
+  setHidden(answerArea, true);
 
   updateStartGameButton();
 }
 
 function updateStartGameButton() {
-  if (startGameButton) {
-    if (currentIsHost) {
-      startGameButton.classList.remove("hidden");
-    } else {
-      startGameButton.classList.add("hidden");
-    }
+  setHidden(startGameButton, !currentIsHost);
 
+  if (startGameButton) {
     startGameButton.disabled = !currentIsHost;
   }
 
-  if (categoryArea) {
-    if (currentIsHost) {
-      categoryArea.classList.remove("hidden");
-    } else {
-      categoryArea.classList.add("hidden");
-    }
-  }
+  setHidden(categoryArea, !currentIsHost);
 }
 
 // =========================
@@ -613,9 +637,7 @@ function showTopicScreen() {
   const countdownElement =
     document.getElementById("countdown");
 
-  if (topicScreen) {
-    topicScreen.classList.remove("hidden");
-  }
+  setHidden(topicScreen, false);
 
   if (topicCountdownTimer) {
     clearInterval(topicCountdownTimer);
@@ -688,9 +710,7 @@ function showDiscussionScreen() {
   const timerElement =
     document.getElementById("discussion-timer");
 
-  if (discussionScreen) {
-    discussionScreen.classList.remove("hidden");
-  }
+  setHidden(discussionScreen, false);
 
   if (topicCountdownTimer) {
     clearInterval(topicCountdownTimer);
@@ -703,21 +723,8 @@ function showDiscussionScreen() {
 
   showDiscussionTopic();
 
-  if (addTimeButton) {
-    if (currentIsHost) {
-      addTimeButton.classList.remove("hidden");
-    } else {
-      addTimeButton.classList.add("hidden");
-    }
-  }
-
-  if (goVoteButton) {
-    if (currentIsHost) {
-      goVoteButton.classList.remove("hidden");
-    } else {
-      goVoteButton.classList.add("hidden");
-    }
-  }
+  setHidden(addTimeButton, !currentIsHost);
+  setHidden(goVoteButton, !currentIsHost);
 
   getDiscussionTime()
     .then((discussionTime) => {
@@ -898,9 +905,7 @@ function showVoteScreen() {
   const voteScreen =
     document.getElementById("vote-screen");
 
-  if (voteScreen) {
-    voteScreen.classList.remove("hidden");
-  }
+  setHidden(voteScreen, false);
 
   if (discussionTimer) {
     clearInterval(discussionTimer);
@@ -913,8 +918,8 @@ function showVoteScreen() {
 
   if (voteButton) {
     voteButton.disabled = false;
-    voteButton.classList.add("hidden");
     voteButton.textContent = "投票する";
+    setHidden(voteButton, true);
   }
 
   renderVoteList();
@@ -956,14 +961,7 @@ function renderVoteList() {
         button.type = "button";
         button.classList.add("vote-player-button");
         button.dataset.playerId = playerId;
-
-        button.innerHTML = `
-          <div class="player-left">
-            <div class="player-icon">👤</div>
-            <div class="player-name">${player.name}</div>
-          </div>
-          <div class="check">✓</div>
-        `;
+        button.textContent = player.name;
 
         button.addEventListener("click", () => {
           selectVoteTarget(playerId);
@@ -995,9 +993,7 @@ function selectVoteTarget(targetPlayerId) {
     }
   });
 
-  if (voteButton) {
-    voteButton.classList.remove("hidden");
-  }
+  setHidden(voteButton, false);
 }
 
 function submitVote() {
@@ -1044,7 +1040,7 @@ function showVoteWaiting() {
 
   if (voteButton) {
     voteButton.disabled = true;
-    voteButton.classList.add("hidden");
+    setHidden(voteButton, true);
   }
 }
 
@@ -1185,9 +1181,7 @@ function showResultScreen() {
   const resultContent =
     document.getElementById("result-content");
 
-  if (resultScreen) {
-    resultScreen.classList.remove("hidden");
-  }
+  setHidden(resultScreen, false);
 
   const resultRef = ref(
     database,
@@ -1213,75 +1207,69 @@ function showResultScreen() {
           ? game.getResultViewData(resultData.winner)
           : null;
 
-      if (viewData) {
-        resultContent.innerHTML = `
-          <img src="${viewData.image}"
-               class="result-icon ${viewData.className}-icon">
+      const hasStaticResultParts =
+        document.getElementById("result-title") ||
+        document.getElementById("result-message") ||
+        document.getElementById("result-eliminated");
 
-          <h2 class="result-banner ${viewData.className}-banner">
-            ${viewData.banner}
-          </h2>
-
-          <h2 class="result-title ${viewData.className}-win">
-            ${viewData.title}
-          </h2>
-
-          <p class="result-message">
-            ${viewData.message}
-          </p>
-
-          <p>
-            追放者：${resultData.eliminatedName || "不明"}
-          </p>
-
-          <div class="vote-result-card">
-            <div class="vote-result-title">
-              投票結果
-            </div>
-
-            <div id="vote-result-list"></div>
-          </div>
-
-          <div class="result-buttons">
-            <button class="result-btn"
-                    id="result-answer-button">
-              お題を確認
-            </button>
-
-            <button class="result-btn"
-                    id="result-restart-button">
-              もう一度遊ぶ
-            </button>
-
-            <button class="result-btn"
-                    id="result-quit-button">
-              ゲームをやめる
-            </button>
-          </div>
-        `;
-      } else {
-        resultContent.innerHTML = `
-          <h2>${resultData.message || "結果"}</h2>
-          <p>追放者：${resultData.eliminatedName || "不明"}</p>
-
-          <button id="result-answer-button">
-            お題を確認
-          </button>
-
-          <button id="result-restart-button">
-            もう一度遊ぶ
-          </button>
-
-          <button id="result-quit-button">
-            ゲームをやめる
-          </button>
-
-          <div id="vote-result-list"></div>
-        `;
+      if (!hasStaticResultParts) {
+        resultContent.innerHTML = "";
       }
 
-      renderVoteResult();
+      const resultTitle =
+        getOrCreateElement(
+          resultContent,
+          "result-title",
+          "h2"
+        );
+
+      const resultMessage =
+        getOrCreateElement(
+          resultContent,
+          "result-message",
+          "p"
+        );
+
+      const resultEliminated =
+        getOrCreateElement(
+          resultContent,
+          "result-eliminated",
+          "p"
+        );
+
+      const voteResultList =
+        getOrCreateElement(
+          resultContent,
+          "vote-result-list",
+          "div"
+        );
+
+      if (resultTitle) {
+        resultTitle.textContent =
+          viewData?.title ||
+          resultData.message ||
+          "結果";
+      }
+
+      if (resultMessage) {
+        resultMessage.textContent =
+          viewData?.message ||
+          resultData.message ||
+          "";
+      }
+
+      if (resultEliminated) {
+        resultEliminated.textContent =
+          "追放者：" +
+          (resultData.eliminatedName || "不明");
+      }
+
+      if (voteResultList) {
+        voteResultList.textContent = "";
+      }
+
       setupResultButtons();
+      renderVoteResult();
     })
     .catch((error) => {
       console.error("結果表示エラー", error);
@@ -1363,12 +1351,27 @@ function renderVoteResult() {
           .sort((a, b) => b.votes - a.votes);
 
       sortedPlayers.forEach((player) => {
-        voteResultList.innerHTML += `
-          <div class="vote-row">
-            <span>👤 ${player.name}</span>
-            <span>${player.votes}票</span>
-          </div>
-        `;
+        const row =
+          document.createElement("div");
+
+        const name =
+          document.createElement("span");
+
+        const count =
+          document.createElement("span");
+
+        row.classList.add("vote-row");
+
+        name.textContent =
+          "👤 " + player.name;
+
+        count.textContent =
+          player.votes + "票";
+
+        row.appendChild(name);
+        row.appendChild(count);
+
+        voteResultList.appendChild(row);
       });
     })
     .catch((error) => {
@@ -1400,13 +1403,32 @@ function showAnswerArea() {
 
       const gameData = snapshot.val();
 
-      answerArea.innerHTML = `
-        <h3>お題</h3>
-        <p>市民のお題：${gameData.citizenTopic || "不明"}</p>
-        <p>ワードウルフのお題：${gameData.wolfTopic || "不明"}</p>
-      `;
+      answerArea.innerHTML = "";
 
-      answerArea.classList.remove("hidden");
+      const title =
+        document.createElement("h3");
+
+      const citizenTopic =
+        document.createElement("p");
+
+      const wolfTopic =
+        document.createElement("p");
+
+      title.textContent = "お題";
+
+      citizenTopic.textContent =
+        "市民のお題：" +
+        (gameData.citizenTopic || "不明");
+
+      wolfTopic.textContent =
+        "ワードウルフのお題：" +
+        (gameData.wolfTopic || "不明");
+
+      answerArea.appendChild(title);
+      answerArea.appendChild(citizenTopic);
+      answerArea.appendChild(wolfTopic);
+
+      setHidden(answerArea, false);
     })
     .catch((error) => {
       console.error("お題表示エラー", error);
@@ -1449,9 +1471,7 @@ function restartGame() {
         topicCard.textContent = "";
       }
 
-      if (answerArea) {
-        answerArea.classList.add("hidden");
-      }
+      setHidden(answerArea, true);
 
       showWaitingRoom(currentRoomName);
     })
