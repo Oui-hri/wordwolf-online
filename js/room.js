@@ -488,6 +488,10 @@ function listenRoomStatus(roomName) {
       showDiscussionScreen();
     }
 
+    if (status === "tie") {
+      showTieScreen();
+    }
+
     if (status === "voting") {
       showVoteScreen();
     }
@@ -587,6 +591,39 @@ function showDiscussionScreen() {
   setHidden(goVoteButton, !currentIsHost);
 
   listenDiscussionTime();
+}
+
+// =========================
+// 同票説明画面
+// =========================
+
+function showTieScreen() {
+  hideAllScreens();
+
+  const tieScreen =
+    document.getElementById("tie-screen");
+
+  if (tieScreen) {
+    tieScreen.classList.remove("hidden");
+  }
+
+  if (discussionTimer) {
+    clearInterval(discussionTimer);
+    discussionTimer = null;
+  }
+
+  if (!currentIsHost) {
+    return;
+  }
+
+  setTimeout(() => {
+    const roomRef =
+      ref(database, "rooms/" + currentRoomName);
+
+    update(roomRef, {
+      status: "discussion"
+    });
+  }, 3000);
 }
 
 function listenDiscussionTime() {
@@ -979,13 +1016,15 @@ function handleVoteFinished(players, votes, voteRound) {
       return;
     }
 
-    alert(game.getTieMessage());
-
     const revoteData =
-      vote.createRevoteDiscussionData(voteResult, voteRound);
+  vote.createRevoteDiscussionData(voteResult, voteRound);
 
-    update(roomRef, revoteData);
-    return;
+update(roomRef, {
+  ...revoteData,
+  status: "tie"
+});
+
+return;
   }
 
   const eliminatedPlayerId = voteResult.eliminatedPlayerId;
@@ -1412,6 +1451,7 @@ function hideAllScreens() {
     "topic-screen",
     "discussion-screen",
     "vote-screen",
+    "tie-screen",
     "result-screen"
   ];
 
