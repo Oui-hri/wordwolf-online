@@ -355,7 +355,9 @@ button {
 }
 
 .player-card li {
-
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 12px;
 
   border-radius: 12px;
@@ -364,6 +366,55 @@ button {
 
   background:
     rgba(255, 255, 255, .05);
+}
+
+.kick-button {
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 120px;
+  height: 42px;
+
+  margin-left: auto;
+  /* 右寄せ */
+
+  background: linear-gradient(180deg,
+      rgba(78, 46, 132, 0.95),
+      rgba(48, 28, 92, 0.95));
+
+  border: 1px solid rgba(255, 220, 150, 0.4);
+  border-radius: 15px;
+
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.kick-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 0 15px rgba(255, 220, 150, 0.3),
+    0 0 30px rgba(255, 220, 150, 0.15);
+}
+
+#category-area p {
+  font-size: 1.2rem;
+
+  letter-spacing: 4px;
+
+  color: #ffe7a3;
+
+  text-shadow:
+    0 0 5px rgba(255, 231, 163, .6),
+    0 0 15px rgba(255, 215, 90, .4);
+
+  margin: 0;
 }
 
 #start-game-button {
@@ -728,7 +779,7 @@ button {
   display: none;
 }
 
-#add-time-button{
+#add-time-button {
   color: red;
 }
 
@@ -799,9 +850,9 @@ button {
   font-size: 15px;
   font-weight: bold;
 }
+
 /* =========================
    同票説明画面
-========================= */
 
 #tie-screen {
   min-height: 100vh;
