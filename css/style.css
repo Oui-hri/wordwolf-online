@@ -732,6 +732,7 @@ button {
   color: red;
 }
 
+/*変更箇所--ここから--*/
 /* ヒントボタン */
 .hint-button {
   margin-top: 20px;
@@ -772,7 +773,7 @@ button {
   text-align: center;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
 }
-/*変更箇所--ここから--*/
+
 /* タイトル */
 .hint-title {
   margin-bottom: 18px;
