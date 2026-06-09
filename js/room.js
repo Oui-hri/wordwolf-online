@@ -276,7 +276,35 @@ function showJoinRoomScreen() {
 
   setHidden(joinRoomScreen, false);
 }
+function watchMyPlayerStatus() {
+  if (!currentRoomName || !currentPlayerId) {
+    return;
+  }
 
+  const myPlayerRef = ref(
+    database,
+    "rooms/" +
+    currentRoomName +
+    "/players/" +
+    currentPlayerId
+  );
+
+  onValue(myPlayerRef, (snapshot) => {
+    if (snapshot.exists()) {
+      return;
+    }
+
+    alert("ホストにより退出させられました");
+
+    clearSession();
+
+    currentRoomName = "";
+    currentPlayerId = "";
+    currentIsHost = false;
+
+    location.reload();
+  });
+}
 // =========================
 // セッション
 // =========================
@@ -339,6 +367,7 @@ function restoreSession() {
 
       listenPlayers(currentRoomName);
       listenRoomStatus(currentRoomName);
+      watchMyPlayerStatus();
       updateStartGameButton();
     })
     .catch((error) => {
@@ -429,7 +458,9 @@ function createRoom() {
       showWaitingRoom(roomName);
       listenPlayers(roomName);
       listenRoomStatus(roomName);
+      watchMyPlayerStatus();
     })
+
     .catch((error) => {
       console.error("ルーム作成エラー", error);
 
@@ -516,6 +547,7 @@ function joinRoom() {
       showWaitingRoom(roomName);
       listenPlayers(roomName);
       listenRoomStatus(roomName);
+      watchMyPlayerStatus();
     })
     .catch((error) => {
       console.error("ルーム参加エラー", error);
