@@ -487,25 +487,28 @@ function startGame() {
         );
       }
 
+      const startResult =
+        game.startGame(players, selectedCategory);
+
       const playersWithHints = assignHints(
-  startResult.players,
-  startResult.category
-);
+        startResult.players,
+        startResult.category
+      );
 
-const updates = {};
+      const updates = {};
 
-playersWithHints.forEach((player) => {
-  const playerId = player.uid || player.id;
+      playersWithHints.forEach((player) => {
+        const playerId = player.uid || player.id;
 
-  updates["players/" + playerId + "/role"] =
-    player.role;
+        updates["players/" + playerId + "/role"] =
+          player.role;
 
-  updates["players/" + playerId + "/topic"] =
-    player.topic;
+        updates["players/" + playerId + "/topic"] =
+          player.topic;
 
-  updates["players/" + playerId + "/hint"] =
-    player.hint;
-});
+        updates["players/" + playerId + "/hint"] =
+          player.hint;
+      });
 
       updates["game/category"] =
         startResult.category;
@@ -547,7 +550,6 @@ playersWithHints.forEach((player) => {
       alert(error.message || "ゲーム開始に失敗しました");
     });
 }
-
 // =========================
 // ステータス監視
 // =========================
