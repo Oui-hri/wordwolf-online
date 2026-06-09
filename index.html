@@ -5,28 +5,25 @@
   <title>ワードウルフ</title>
 
   <link rel="stylesheet" href="css/style.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
   <!-- タイトル -->
   <section id="title-screen" class="screen">
 
     <div class="hero">
-
       <img src="images/hosi2.png" class="stars">
-
       <img src="images/tuki.png" class="moon">
-
       <img src="images/iwa.png" class="rock">
-
       <img src="images/ookami.png" class="wolf">
-
     </div>
+
     <h1 class="title">
       ワードウルフONLINE
     </h1>
-
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
 
     <button id="create-room-button">
       ルーム作成
@@ -46,29 +43,37 @@
     <img src="images/frame.png" class="ornament">
 
     <div class="room-card">
-
       <p class="room-label">
-            ルームコード
-        </p>
+        ルームコード
+      </p>
 
       <div id="room-code" class="room-code">
         ABC123
       </div>
     </div>
 
-    <!-- 参加者 -->
     <div class="player-card">
 
       <h3>参加者</h3>
 
-      <ul id="player-list">
+      <ul id="player-list"></ul>
 
-      </ul>
+      <!-- カテゴリー選択 -->
+      <div id="category-area">
+        <p>カテゴリー選択</p>
+
+        <select id="category-select">
+          <option value="random">ランダム</option>
+        
+        </select>
+      </div>
 
       <button id="start-game-button">
         ゲーム開始
       </button>
+
     </div>
+
   </section>
 
   <!-- お題 -->
@@ -79,7 +84,6 @@
     </h2>
 
     <div class="word-card">
-
       <div id="player-word" class="word-text"></div>
     </div>
 
@@ -97,53 +101,47 @@
   <section id="discussion-screen" class="screen hidden">
 
     <div class="discussion-card">
+
       <h2>話し合いタイム</h2>
+
+      <div id="discussion-topic" class="discussion-topic"></div>
 
       <div class="timer-ring">
 
         <svg width="340" height="340">
-
-          <circle class="ring-bg" cx="170" cy="170" r="150">
-          </circle>
-
-          <circle id="progress-ring" class="ring-progress" cx="170" cy="170" r="150">
-          </circle>
-
+          <circle class="ring-bg" cx="170" cy="170" r="150"></circle>
+          <circle id="progress-ring" class="ring-progress" cx="170" cy="170" r="150"></circle>
         </svg>
 
         <div class="timer-inner">
-
           <div id="discussion-timer">
             02:00
           </div>
-
         </div>
 
       </div>
 
-      <div class="memo-container">
+      <button id="add-time-button" class="hidden">
+        ＋1分
+      </button>
 
+      <button id="go-vote-button" class="hidden">
+        投票へ移動
+      </button>
+
+      <div class="memo-container">
         <div class="memo-title">
           メモ
         </div>
 
         <textarea id="memo-area" placeholder="自由にメモを書こう..."></textarea>
-        <button id="go-vote-button" class="hidden">
-          投票へ移動
-        </button>
-
       </div>
 
     </div>
 
-    </div>
-
     <div id="chat-container" class="hidden">
-
       <div id="chat-box"></div>
-
       <input type="text" placeholder="入力">
-
     </div>
 
   </section>
@@ -151,19 +149,19 @@
   <!-- 投票 -->
   <section id="vote-screen" class="screen hidden">
 
-    <h2 class="vote-title">投票タイム</h2>
+    <h2 class="vote-title">
+      投票タイム
+    </h2>
 
     <p>
-            最も怪しい人物に投票してください
-        </p>
+      最も怪しい人物に投票してください
+    </p>
 
-    <div id="vote-list">
-    </div>
+    <div id="vote-list"></div>
 
     <button id="vote-button">
       投票する
     </button>
-
 
   </section>
 
@@ -172,37 +170,37 @@
 
     <div id="result-content"></div>
 
-  </section>
+    <div id="answer-area" class="hidden">
+      <h3>お題</h3>
 
-  <!-- お題表示エリア -->
-  <div id="answer-area" class="hidden">
-    <h3>お題</h3>
-    <p>
-        市民のお題：犬
+      <p>
+        市民のお題：
+        <span id="citizen-answer"></span>
       </p>
 
-    <p>
-        ワードウルフのお題：猫
+      <p>
+        ワードウルフのお題：
+        <span id="wolf-answer"></span>
       </p>
+    </div>
 
-  </div>
+    <button id="answer-button">
+      お題を確認
+    </button>
 
-  <button id="answer-button">
-    お題を確認
-  </button>
+    <button id="restart-button">
+      もう一度遊ぶ
+    </button>
 
-  <button id="restart-button">
-    もう一度遊ぶ
-  </button>
-
-  <button id="quit-game-button">
-    ゲームをやめる
-  </button>
+    <button id="quit-game-button">
+      ゲームをやめる
+    </button>
 
   </section>
 
   <script src="js/ui.js"></script>
   <script type="module" src="./js/firebase.js"></script>
   <script type="module" src="./js/room.js"></script>
+
 </body>
 </html>
