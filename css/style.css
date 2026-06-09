@@ -1575,3 +1575,55 @@ button {
   box-shadow:
     0 0 15px rgba(255, 215, 0, .5);
 }
+
+
+/* =========================
+   結果画面：お題確認カード
+========================= */
+
+.answer-card {
+  width: min(90%, 520px);
+  margin: 28px auto 0;
+  padding: 22px 24px;
+
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+
+  color: #fff;
+  text-align: center;
+}
+
+.answer-card.hidden {
+  display: none;
+}
+
+.answer-card-title {
+  margin-bottom: 18px;
+  font-size: 20px;
+  letter-spacing: 3px;
+}
+
+.answer-topic-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+
+  padding: 12px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.answer-topic-row:first-of-type {
+  border-top: none;
+}
+
+.answer-topic-label {
+  font-weight: bold;
+  opacity: 0.8;
+}
+
+.answer-topic-text {
+  font-weight: bold;
+}
