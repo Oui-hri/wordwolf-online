@@ -1469,19 +1469,27 @@ function showResultScreen() {
             <div id="vote-result-list"></div>
           </div>
 
-          <div class="result-buttons">
-            <button class="result-btn citizen-btn" id="result-answer-button">
-              お題を確認
-            </button>
+         <div class="result-buttons">
+  <button class="result-btn citizen-btn"
+          id="result-answer-button">
+    お題を確認
+  </button>
 
-            <button class="result-btn citizen-btn" id="result-restart-button">
-              もう一度遊ぶ
-            </button>
+  <div id="answer-area" class="answer-card hidden"></div>
 
-            <button class="result-btn citizen-btn" id="result-quit-button">
-              ゲームをやめる
-            </button>
-          </div>
+  <button class="result-btn citizen-btn"
+          id="result-restart-button">
+    もう一度遊ぶ
+  </button>
+</div>
+
+<div class="result-buttons">
+  <button class="result-btn citizen-btn"
+          id="result-quit-button">
+    ゲームをやめる
+  </button>
+</div>
+
         `;
       } else {
         resultContent.innerHTML = `
@@ -1516,18 +1524,26 @@ function showResultScreen() {
           </div>
 
           <div class="result-buttons">
-            <button class="result-btn wolf-btn" id="result-answer-button">
-              お題を確認
-            </button>
+  <button class="result-btn wolf-btn"
+          id="result-answer-button">
+    お題を確認
+  </button>
 
-            <button class="result-btn wolf-btn" id="result-restart-button">
-              もう一度遊ぶ
-            </button>
+  <div id="answer-area" class="answer-card hidden"></div>
 
-            <button class="result-btn wolf-btn" id="result-quit-button">
-              ゲームをやめる
-            </button>
-          </div>
+  <button class="result-btn wolf-btn"
+          id="result-restart-button">
+    もう一度遊ぶ
+  </button>
+</div>
+
+
+<div class="result-buttons">
+  <button class="result-btn wolf-btn"
+          id="result-quit-button">
+    ゲームをやめる
+  </button>
+</div>
         `;
       }
 
@@ -1628,7 +1644,10 @@ function renderVoteResult() {
 }
 
 function showAnswerArea() {
-  if (!answerArea) {
+  const currentAnswerArea =
+    document.getElementById("answer-area");
+
+  if (!currentAnswerArea) {
     return;
   }
 
@@ -1638,42 +1657,50 @@ function showAnswerArea() {
   get(gameRef)
     .then((snapshot) => {
       if (!snapshot.exists()) {
-        alert("お題情報が見つかりません");
+        currentAnswerArea.textContent =
+          "お題情報が見つかりません";
+
+        currentAnswerArea.classList.remove("hidden");
         return;
       }
 
       const gameData = snapshot.val();
 
-      answerArea.innerHTML = "";
+      currentAnswerArea.innerHTML = `
+        <h3 class="answer-card-title">
+          お題
+        </h3>
 
-      const title =
-        document.createElement("h3");
+        <div class="answer-topic-row">
+          <span class="answer-topic-label">
+            市民のお題
+          </span>
 
-      const citizenTopic =
-        document.createElement("p");
+          <span class="answer-topic-text">
+            ${gameData.citizenTopic || "不明"}
+          </span>
+        </div>
 
-      const wolfTopic =
-        document.createElement("p");
+        <div class="answer-topic-row">
+          <span class="answer-topic-label">
+            ワードウルフのお題
+          </span>
 
-      title.textContent = "お題";
+          <span class="answer-topic-text">
+            ${gameData.wolfTopic || "不明"}
+          </span>
+        </div>
+      `;
 
-      citizenTopic.textContent =
-        "市民のお題：" +
-        (gameData.citizenTopic || "不明");
-
-      wolfTopic.textContent =
-        "ワードウルフのお題：" +
-        (gameData.wolfTopic || "不明");
-
-      answerArea.appendChild(title);
-      answerArea.appendChild(citizenTopic);
-      answerArea.appendChild(wolfTopic);
-
-      setHidden(answerArea, false);
+      currentAnswerArea.classList.remove("hidden");
     })
     .catch((error) => {
       console.error("お題表示エラー", error);
-      alert("お題の表示に失敗しました");
+
+      currentAnswerArea.textContent =
+        "お題の表示に失敗しました";
+
+      currentAnswerArea.classList.remove("hidden");
     });
 }
 
