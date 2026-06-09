@@ -7,6 +7,7 @@ import { database } from "./firebase.js";
 
 import * as game from "./game.js";
 import * as vote from "./vote.js";
+import { assignHints } from "./hints.js";
 
 import {
   ref,
@@ -486,20 +487,25 @@ function startGame() {
         );
       }
 
-      const startResult =
-        game.startGame(players, selectedCategory);
+      const playersWithHints = assignHints(
+  startResult.players,
+  startResult.category
+);
 
-      const updates = {};
+const updates = {};
 
-      startResult.players.forEach((player) => {
-        const playerId = player.uid || player.id;
+playersWithHints.forEach((player) => {
+  const playerId = player.uid || player.id;
 
-        updates["players/" + playerId + "/role"] =
-          player.role;
+  updates["players/" + playerId + "/role"] =
+    player.role;
 
-        updates["players/" + playerId + "/topic"] =
-          player.topic;
-      });
+  updates["players/" + playerId + "/topic"] =
+    player.topic;
+
+  updates["players/" + playerId + "/hint"] =
+    player.hint;
+});
 
       updates["game/category"] =
         startResult.category;
