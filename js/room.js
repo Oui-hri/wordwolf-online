@@ -24,68 +24,27 @@ console.log("room.js 読み込みOK");
 // HTML要素取得
 // =========================
 
-const createRoomButton =
-  document.getElementById("create-room-button");
-
-const joinRoomButton =
-  document.getElementById("join-room-button");
-
-const roomCode =
-  document.getElementById("room-code");
-
-const playerList =
-  document.getElementById("player-list");
-
-const startGameButton =
-  document.getElementById("start-game-button");
-
-const categoryArea =
-  document.getElementById("category-area");
-
-const categorySelect =
-  document.getElementById("category-select");
-
-const topicCard =
-  document.getElementById("player-word");
-
-const voteList =
-  document.getElementById("vote-list");
-
-const voteButton =
-  document.getElementById("vote-button");
-
-const answerButton =
-  document.getElementById("answer-button");
-
-const answerArea =
-  document.getElementById("answer-area");
-
-const restartButton =
-  document.getElementById("restart-button");
-
-const quitGameButton =
-  document.getElementById("quit-game-button");
-
-const addTimeButton =
-  document.getElementById("add-time-button");
-
-const goVoteButton =
-  document.getElementById("go-vote-button");
-
-const discussionTopic =
-  document.getElementById("discussion-topic");
-
-const hintButton =
-  document.getElementById("hint-button");
-
-const hintModal =
-  document.getElementById("hint-modal");
-
-const hintText =
-  document.getElementById("hint-text");
-
-const hintCloseButton =
-  document.getElementById("hint-close-button");
+const createRoomButton = document.getElementById("create-room-button");
+const joinRoomButton = document.getElementById("join-room-button");
+const roomCode = document.getElementById("room-code");
+const playerList = document.getElementById("player-list");
+const startGameButton = document.getElementById("start-game-button");
+const categoryArea = document.getElementById("category-area");
+const categorySelect = document.getElementById("category-select");
+const topicCard = document.getElementById("player-word");
+const voteList = document.getElementById("vote-list");
+const voteButton = document.getElementById("vote-button");
+const answerButton = document.getElementById("answer-button");
+const answerArea = document.getElementById("answer-area");
+const restartButton = document.getElementById("restart-button");
+const quitGameButton = document.getElementById("quit-game-button");
+const addTimeButton = document.getElementById("add-time-button");
+const goVoteButton = document.getElementById("go-vote-button");
+const discussionTopic = document.getElementById("discussion-topic");
+const hintButton = document.getElementById("hint-button");
+const hintModal = document.getElementById("hint-modal");
+const hintText = document.getElementById("hint-text");
+const hintCloseButton = document.getElementById("hint-close-button");
 
 // =========================
 // 状態管理
@@ -100,6 +59,7 @@ let hasVoted = false;
 
 let topicCountdownTimer = null;
 let discussionTimer = null;
+let lastDiscussionTime = null;
 
 let isVoteCounted = false;
 let lastStatus = "";
@@ -109,59 +69,35 @@ let lastStatus = "";
 // =========================
 
 if (createRoomButton) {
-  createRoomButton.addEventListener(
-    "click",
-    createRoom
-  );
+  createRoomButton.addEventListener("click", createRoom);
 }
 
 if (joinRoomButton) {
-  joinRoomButton.addEventListener(
-    "click",
-    joinRoom
-  );
+  joinRoomButton.addEventListener("click", joinRoom);
 }
 
 if (startGameButton) {
-  startGameButton.addEventListener(
-    "click",
-    startGame
-  );
+  startGameButton.addEventListener("click", startGame);
 }
 
 if (voteButton) {
-  voteButton.addEventListener(
-    "click",
-    submitVote
-  );
+  voteButton.addEventListener("click", submitVote);
 }
 
 if (answerButton) {
-  answerButton.addEventListener(
-    "click",
-    showAnswerArea
-  );
+  answerButton.addEventListener("click", showAnswerArea);
 }
 
 if (restartButton) {
-  restartButton.addEventListener(
-    "click",
-    restartGame
-  );
+  restartButton.addEventListener("click", restartGame);
 }
 
 if (quitGameButton) {
-  quitGameButton.addEventListener(
-    "click",
-    quitGame
-  );
+  quitGameButton.addEventListener("click", quitGame);
 }
 
 if (addTimeButton) {
-  addTimeButton.addEventListener(
-    "click",
-    addOneMinute
-  );
+  addTimeButton.addEventListener("click", addOneMinute);
 }
 
 if (goVoteButton) {
@@ -174,18 +110,13 @@ if (goVoteButton) {
     changeStatusToVoting();
   });
 }
+
 if (hintButton) {
-  hintButton.addEventListener(
-    "click",
-    showHintModal
-  );
+  hintButton.addEventListener("click", showHintModal);
 }
 
 if (hintCloseButton) {
-  hintCloseButton.addEventListener(
-    "click",
-    closeHintModal
-  );
+  hintCloseButton.addEventListener("click", closeHintModal);
 }
 
 restoreSession();
@@ -195,9 +126,7 @@ restoreSession();
 // =========================
 
 function setHidden(element, shouldHide) {
-  if (!element) {
-    return;
-  }
+  if (!element) return;
 
   if (shouldHide) {
     element.classList.add("hidden");
@@ -206,47 +135,14 @@ function setHidden(element, shouldHide) {
   }
 }
 
-function getOrCreateElement(parent, id, tagName) {
-  let element =
-    document.getElementById(id);
-
-  if (element) {
-    return element;
-  }
-
-  if (!parent) {
-    return null;
-  }
-
-  element =
-    document.createElement(tagName);
-
-  element.id = id;
-
-  parent.appendChild(element);
-
-  return element;
-}
-
 // =========================
 // セッション
 // =========================
 
 function saveSession() {
-  sessionStorage.setItem(
-    "wordwolfRoomName",
-    currentRoomName
-  );
-
-  sessionStorage.setItem(
-    "wordwolfPlayerId",
-    currentPlayerId
-  );
-
-  sessionStorage.setItem(
-    "wordwolfIsHost",
-    String(currentIsHost)
-  );
+  sessionStorage.setItem("wordwolfRoomName", currentRoomName);
+  sessionStorage.setItem("wordwolfPlayerId", currentPlayerId);
+  sessionStorage.setItem("wordwolfIsHost", String(currentIsHost));
 }
 
 function clearSession() {
@@ -256,14 +152,9 @@ function clearSession() {
 }
 
 function restoreSession() {
-  const savedRoomName =
-    sessionStorage.getItem("wordwolfRoomName");
-
-  const savedPlayerId =
-    sessionStorage.getItem("wordwolfPlayerId");
-
-  const savedIsHost =
-    sessionStorage.getItem("wordwolfIsHost");
+  const savedRoomName = sessionStorage.getItem("wordwolfRoomName");
+  const savedPlayerId = sessionStorage.getItem("wordwolfPlayerId");
+  const savedIsHost = sessionStorage.getItem("wordwolfIsHost");
 
   if (!savedRoomName || !savedPlayerId) {
     return;
@@ -275,10 +166,7 @@ function restoreSession() {
 
   const playerRef = ref(
     database,
-    "rooms/" +
-    currentRoomName +
-    "/players/" +
-    currentPlayerId
+    "rooms/" + currentRoomName + "/players/" + currentPlayerId
   );
 
   get(playerRef)
@@ -307,6 +195,7 @@ function resetLocalState() {
   hasVoted = false;
   isVoteCounted = false;
   lastStatus = "";
+  lastDiscussionTime = null;
 }
 
 // =========================
@@ -314,11 +203,8 @@ function resetLocalState() {
 // =========================
 
 function createRoom() {
-  const inputRoomName =
-    prompt("ルーム名を入力してください");
-
-  const playerName =
-    prompt("あなたの名前を入力してください");
+  const inputRoomName = prompt("ルーム名を入力してください");
+  const playerName = prompt("あなたの名前を入力してください");
 
   if (!inputRoomName || !playerName) {
     alert("ルーム名と名前を入力してください");
@@ -334,18 +220,15 @@ function createRoom() {
 
   resetLocalState();
 
-  const roomRef =
-    ref(database, "rooms/" + roomName);
+  const roomRef = ref(database, "rooms/" + roomName);
 
   get(roomRef)
     .then((snapshot) => {
       if (snapshot.exists()) {
-        throw new Error(
-          "このルーム名はすでに使われています"
-        );
+        throw new Error("このルーム名はすでに使われています");
       }
 
-      const roomData = {
+      return set(roomRef, {
         roomName,
         hostId: playerId,
         status: "waiting",
@@ -363,13 +246,10 @@ function createRoom() {
             isHost: true
           }
         }
-      };
-
-      return set(roomRef, roomData);
+      });
     })
     .then(() => {
       saveSession();
-
       alert("ルームを作成しました");
 
       showWaitingRoom(roomName);
@@ -387,11 +267,8 @@ function createRoom() {
 // =========================
 
 function joinRoom() {
-  const inputRoomName =
-    prompt("参加するルーム名を入力してください");
-
-  const playerName =
-    prompt("あなたの名前を入力してください");
+  const inputRoomName = prompt("参加するルーム名を入力してください");
+  const playerName = prompt("あなたの名前を入力してください");
 
   if (!inputRoomName || !playerName) {
     alert("ルーム名と名前を入力してください");
@@ -407,15 +284,10 @@ function joinRoom() {
 
   resetLocalState();
 
-  const roomRef =
-    ref(database, "rooms/" + roomName);
-
+  const roomRef = ref(database, "rooms/" + roomName);
   const playerRef = ref(
     database,
-    "rooms/" +
-    roomName +
-    "/players/" +
-    playerId
+    "rooms/" + roomName + "/players/" + playerId
   );
 
   get(roomRef)
@@ -433,9 +305,7 @@ function joinRoom() {
         });
 
       if (isDuplicateName) {
-        throw new Error(
-          "この名前はすでに使われています"
-        );
+        throw new Error("この名前はすでに使われています");
       }
 
       return set(playerRef, {
@@ -445,7 +315,6 @@ function joinRoom() {
     })
     .then(() => {
       saveSession();
-
       alert("ルームに参加しました");
 
       showWaitingRoom(roomName);
@@ -465,8 +334,7 @@ function joinRoom() {
 function showWaitingRoom(roomName) {
   hideAllScreens();
 
-  const waitingScreen =
-    document.getElementById("waiting-screen");
+  const waitingScreen = document.getElementById("waiting-screen");
 
   setHidden(waitingScreen, false);
 
@@ -514,8 +382,7 @@ function startGame() {
       ? categorySelect.value
       : "random";
 
-  const roomRef =
-    ref(database, "rooms/" + currentRoomName);
+  const roomRef = ref(database, "rooms/" + currentRoomName);
 
   get(roomRef)
     .then((snapshot) => {
@@ -537,42 +404,33 @@ function startGame() {
         });
 
       if (players.length < 3) {
-        throw new Error(
-          "ゲーム開始には3人以上必要です"
-        );
+        throw new Error("ゲーム開始には3人以上必要です");
       }
 
       const startResult =
         game.startGame(players, selectedCategory);
 
-      const playersWithHints = assignHints(
-        startResult.players,
-        startResult.category
-      );
+      const playersWithHints =
+        typeof assignHints === "function"
+          ? assignHints(startResult.players, startResult.category)
+          : startResult.players;
 
       const updates = {};
 
       playersWithHints.forEach((player) => {
         const playerId = player.uid || player.id;
 
-        updates["players/" + playerId + "/role"] =
-          player.role;
+        updates["players/" + playerId + "/role"] = player.role;
+        updates["players/" + playerId + "/topic"] = player.topic;
 
-        updates["players/" + playerId + "/topic"] =
-          player.topic;
-
-        updates["players/" + playerId + "/hint"] =
-          player.hint;
+        if (player.hint) {
+          updates["players/" + playerId + "/hint"] = player.hint;
+        }
       });
 
-      updates["game/category"] =
-        startResult.category;
-
-      updates["game/citizenTopic"] =
-        startResult.citizenTopic;
-
-      updates["game/wolfTopic"] =
-        startResult.wolfTopic;
+      updates["game/category"] = startResult.category;
+      updates["game/citizenTopic"] = startResult.citizenTopic;
+      updates["game/wolfTopic"] = startResult.wolfTopic;
 
       updates["status"] = "topic";
       updates["voteRound"] = 1;
@@ -587,12 +445,9 @@ function startGame() {
     })
     .then(() => {
       setTimeout(() => {
-        if (!currentIsHost) {
-          return;
-        }
+        if (!currentIsHost) return;
 
-        const roomRef =
-          ref(database, "rooms/" + currentRoomName);
+        const roomRef = ref(database, "rooms/" + currentRoomName);
 
         update(roomRef, {
           status: "discussion",
@@ -611,19 +466,13 @@ function startGame() {
 // =========================
 
 function listenRoomStatus(roomName) {
-  const statusRef =
-    ref(database, "rooms/" + roomName + "/status");
+  const statusRef = ref(database, "rooms/" + roomName + "/status");
 
   onValue(statusRef, (snapshot) => {
     const status = snapshot.val();
 
-    if (!status) {
-      return;
-    }
-
-    if (status === lastStatus) {
-      return;
-    }
+    if (!status) return;
+    if (status === lastStatus) return;
 
     lastStatus = status;
 
@@ -656,11 +505,8 @@ function listenRoomStatus(roomName) {
 function showTopicScreen() {
   hideAllScreens();
 
-  const topicScreen =
-    document.getElementById("topic-screen");
-
-  const countdownElement =
-    document.getElementById("countdown");
+  const topicScreen = document.getElementById("topic-screen");
+  const countdownElement = document.getElementById("countdown");
 
   setHidden(topicScreen, false);
 
@@ -674,10 +520,7 @@ function showTopicScreen() {
 
   const playerRef = ref(
     database,
-    "rooms/" +
-    currentRoomName +
-    "/players/" +
-    currentPlayerId
+    "rooms/" + currentRoomName + "/players/" + currentPlayerId
   );
 
   get(playerRef)
@@ -729,11 +572,7 @@ function startTopicCountdown(countdownElement) {
 function showDiscussionScreen() {
   hideAllScreens();
 
-  const discussionScreen =
-    document.getElementById("discussion-screen");
-
-  const timerElement =
-    document.getElementById("discussion-timer");
+  const discussionScreen = document.getElementById("discussion-screen");
 
   setHidden(discussionScreen, false);
 
@@ -742,103 +581,101 @@ function showDiscussionScreen() {
     topicCountdownTimer = null;
   }
 
-  if (discussionTimer) {
-    clearInterval(discussionTimer);
-  }
-
   showDiscussionTopic();
 
   setHidden(addTimeButton, !currentIsHost);
   setHidden(goVoteButton, !currentIsHost);
 
-  getDiscussionTime()
-    .then((discussionTime) => {
-      const totalTime = discussionTime || 120;
-      const circle =
-        document.getElementById("progress-ring");
+  listenDiscussionTime();
+}
 
-      let circumference = 0;
+function listenDiscussionTime() {
+  const discussionTimeRef = ref(
+    database,
+    "rooms/" + currentRoomName + "/discussionTime"
+  );
 
-      if (circle) {
-        const radius = 150;
-        circumference = 2 * Math.PI * radius;
+  onValue(discussionTimeRef, (snapshot) => {
+    const discussionTime = snapshot.val();
 
-        circle.setAttribute(
-          "stroke-dasharray",
-          circumference
-        );
+    if (!discussionTime) return;
 
-        circle.setAttribute(
-          "stroke-dashoffset",
-          0
-        );
-      }
+    if (discussionTime === lastDiscussionTime) return;
 
-      discussionTimer = game.startDiscussionTimer(
-        totalTime,
-        (time) => {
-          const minutes =
-            String(Math.floor(time / 60)).padStart(2, "0");
+    lastDiscussionTime = discussionTime;
 
-          const seconds =
-            String(time % 60).padStart(2, "0");
+    restartDiscussionTimer(discussionTime);
+  });
+}
 
-          if (timerElement) {
-            timerElement.textContent =
-              `${minutes}:${seconds}`;
-          }
+function restartDiscussionTimer(totalTime) {
+  const timerElement = document.getElementById("discussion-timer");
+  const circle = document.getElementById("progress-ring");
 
-          if (circle) {
-            const offset =
-              circumference * (1 - time / totalTime);
+  if (discussionTimer) {
+    clearInterval(discussionTimer);
+  }
 
-            circle.setAttribute(
-              "stroke-dashoffset",
-              offset
-            );
-          }
-        },
-        () => {
-          if (currentIsHost) {
-            changeStatusToVoting();
-          }
+  let circumference = 0;
+
+  if (circle) {
+    const radius = 150;
+    circumference = 2 * Math.PI * radius;
+
+    circle.setAttribute("stroke-dasharray", circumference);
+    circle.setAttribute("stroke-dashoffset", 0);
+  }
+
+  discussionTimer =
+    game.startDiscussionTimer(
+      totalTime,
+      (time) => {
+        const minutes =
+          String(Math.floor(time / 60)).padStart(2, "0");
+
+        const seconds =
+          String(time % 60).padStart(2, "0");
+
+        if (timerElement) {
+          timerElement.textContent = `${minutes}:${seconds}`;
         }
-      );
-    });
+
+        if (circle) {
+          const offset =
+            circumference * (1 - time / totalTime);
+
+          circle.setAttribute("stroke-dashoffset", offset);
+        }
+      },
+      () => {
+        if (currentIsHost) {
+          changeStatusToVoting();
+        }
+      }
+    );
 }
 
 function showDiscussionTopic() {
-  if (!discussionTopic) {
-    return;
-  }
+  if (!discussionTopic) return;
 
   const playerRef = ref(
     database,
-    "rooms/" +
-    currentRoomName +
-    "/players/" +
-    currentPlayerId
+    "rooms/" + currentRoomName + "/players/" + currentPlayerId
   );
 
   get(playerRef)
     .then((snapshot) => {
-      if (!snapshot.exists()) {
-        return;
-      }
+      if (!snapshot.exists()) return;
 
       const playerData = snapshot.val();
 
       const topicData =
         game.createDiscussionTopicData(playerData);
 
-      discussionTopic.textContent =
-        topicData.message;
+      discussionTopic.textContent = topicData.message;
     })
     .catch((error) => {
-      console.error(
-        "話し合い中のお題表示エラー",
-        error
-      );
+      console.error("話し合い中のお題表示エラー", error);
     });
 }
 
@@ -859,10 +696,7 @@ function showHintModal() {
 
   const playerRef = ref(
     database,
-    "rooms/" +
-    currentRoomName +
-    "/players/" +
-    currentPlayerId
+    "rooms/" + currentRoomName + "/players/" + currentPlayerId
   );
 
   get(playerRef)
@@ -877,7 +711,7 @@ function showHintModal() {
       hintText.textContent =
         playerData.hint || "自由に話題を広げてみよう";
 
-      hintModal.classList.remove("hidden");
+      setHidden(hintModal, false);
     })
     .catch((error) => {
       console.error("ヒント取得エラー", error);
@@ -886,32 +720,7 @@ function showHintModal() {
 }
 
 function closeHintModal() {
-  if (!hintModal) {
-    return;
-  }
-
-  hintModal.classList.add("hidden");
-}
-
-function getDiscussionTime() {
-  const discussionTimeRef = ref(
-    database,
-    "rooms/" +
-    currentRoomName +
-    "/discussionTime"
-  );
-
-  return get(discussionTimeRef)
-    .then((snapshot) => {
-      if (!snapshot.exists()) {
-        return 120;
-      }
-
-      return snapshot.val() || 120;
-    })
-    .catch(() => {
-      return 120;
-    });
+  setHidden(hintModal, true);
 }
 
 function addOneMinute() {
@@ -920,28 +729,24 @@ function addOneMinute() {
     return;
   }
 
-  const discussionTimeRef = ref(
-    database,
-    "rooms/" +
-    currentRoomName +
-    "/discussionTime"
-  );
+  const timerElement = document.getElementById("discussion-timer");
 
-  get(discussionTimeRef)
-    .then((snapshot) => {
-      const currentTime = snapshot.val() || 120;
+  let currentTime = 120;
 
-      const addTimeData =
-        game.addDiscussionTime(
-          currentTime,
-          60
-        );
+  if (timerElement && timerElement.textContent) {
+    const [minutes, seconds] =
+      timerElement.textContent.split(":").map(Number);
 
-      const roomRef =
-        ref(database, "rooms/" + currentRoomName);
+    currentTime = minutes * 60 + seconds;
+  }
 
-      return update(roomRef, addTimeData);
-    })
+  const newTime = currentTime + 60;
+
+  const roomRef = ref(database, "rooms/" + currentRoomName);
+
+  update(roomRef, {
+    discussionTime: newTime
+  })
     .then(() => {
       console.log("1分追加OK");
     })
@@ -961,8 +766,7 @@ function changeStatusToVoting() {
     game.stopTimer();
   }
 
-  const roomRef =
-    ref(database, "rooms/" + currentRoomName);
+  const roomRef = ref(database, "rooms/" + currentRoomName);
 
   update(roomRef, {
     status: "voting",
@@ -978,12 +782,9 @@ function changeStatusToVoting() {
 function showVoteScreen() {
   hideAllScreens();
 
-  const voteScreen =
-    document.getElementById("vote-screen");
+  const voteScreen = document.getElementById("vote-screen");
 
-  if (voteScreen) {
-    voteScreen.classList.remove("hidden");
-  }
+  setHidden(voteScreen, false);
 
   if (discussionTimer) {
     clearInterval(discussionTimer);
@@ -1008,33 +809,25 @@ function showVoteScreen() {
 }
 
 function renderVoteList() {
-  if (!voteList) {
-    return;
-  }
+  if (!voteList) return;
 
   voteList.innerHTML = "";
 
-  const roomRef =
-    ref(database, "rooms/" + currentRoomName);
+  const roomRef = ref(database, "rooms/" + currentRoomName);
 
   get(roomRef)
     .then((snapshot) => {
-      if (!snapshot.exists()) {
-        return;
-      }
+      if (!snapshot.exists()) return;
 
       const roomData = snapshot.val();
       const players = roomData.players || {};
 
       Object.keys(players).forEach((playerId) => {
-        if (playerId === currentPlayerId) {
-          return;
-        }
+        if (playerId === currentPlayerId) return;
 
         const player = players[playerId];
 
-        const button =
-          document.createElement("button");
+        const button = document.createElement("button");
 
         button.type = "button";
         button.classList.add("vote-player-button");
@@ -1061,14 +854,11 @@ function renderVoteList() {
 }
 
 function selectVoteTarget(targetPlayerId) {
-  if (hasVoted) {
-    return;
-  }
+  if (hasVoted) return;
 
   selectedVoteTargetId = targetPlayerId;
 
-  const buttons =
-    document.querySelectorAll(".vote-player-button");
+  const buttons = document.querySelectorAll(".vote-player-button");
 
   buttons.forEach((button) => {
     if (button.dataset.playerId === targetPlayerId) {
@@ -1090,9 +880,7 @@ function selectVoteTarget(targetPlayerId) {
 }
 
 function submitVote() {
-  if (hasVoted) {
-    return;
-  }
+  if (hasVoted) return;
 
   if (!selectedVoteTargetId) {
     alert("投票する相手を選んでください");
@@ -1101,10 +889,7 @@ function submitVote() {
 
   const voteRef = ref(
     database,
-    "rooms/" +
-    currentRoomName +
-    "/votes/" +
-    currentPlayerId
+    "rooms/" + currentRoomName + "/votes/" + currentPlayerId
   );
 
   set(voteRef, selectedVoteTargetId)
@@ -1122,9 +907,7 @@ function showVoteWaiting() {
   if (voteList) {
     voteList.innerHTML = "";
 
-    const message =
-      document.createElement("p");
-
+    const message = document.createElement("p");
     message.textContent =
       "投票しました。他の人の投票を待っています...";
 
@@ -1144,70 +927,48 @@ function showVoteWaiting() {
 function listenVotes() {
   const votesRef = ref(
     database,
-    "rooms/" +
-    currentRoomName +
-    "/votes"
+    "rooms/" + currentRoomName + "/votes"
   );
 
   onValue(votesRef, (snapshot) => {
-    if (isVoteCounted) {
-      return;
-    }
+    if (isVoteCounted) return;
 
     const votes = snapshot.val();
 
-    if (!votes) {
-      return;
-    }
+    if (!votes) return;
 
     checkAllVotesSubmitted(votes);
   });
 }
 
 function checkAllVotesSubmitted(votes) {
-  const roomRef =
-    ref(database, "rooms/" + currentRoomName);
+  const roomRef = ref(database, "rooms/" + currentRoomName);
 
   get(roomRef)
     .then((snapshot) => {
-      if (!snapshot.exists()) {
-        return;
-      }
+      if (!snapshot.exists()) return;
 
       const roomData = snapshot.val();
       const players = roomData.players || {};
       const voteRound = roomData.voteRound || 1;
 
-      const voterCount =
-        Object.keys(players).length;
-
-      const voteCount =
-        Object.keys(votes).length;
+      const voterCount = Object.keys(players).length;
+      const voteCount = Object.keys(votes).length;
 
       if (voteCount === voterCount) {
         isVoteCounted = true;
-
-        handleVoteFinished(
-          players,
-          votes,
-          voteRound
-        );
+        handleVoteFinished(players, votes, voteRound);
       }
     })
     .catch((error) => {
-      console.error(
-        "投票完了確認エラー",
-        error
-      );
+      console.error("投票完了確認エラー", error);
     });
 }
 
 function handleVoteFinished(players, votes, voteRound) {
-  const roomRef =
-    ref(database, "rooms/" + currentRoomName);
+  const roomRef = ref(database, "rooms/" + currentRoomName);
 
-  const voteResult =
-    vote.judgeVoteResult(votes);
+  const voteResult = vote.judgeVoteResult(votes);
 
   if (voteResult.isTie) {
     if (voteRound >= 3) {
@@ -1221,17 +982,13 @@ function handleVoteFinished(players, votes, voteRound) {
     alert(game.getTieMessage());
 
     const revoteData =
-      vote.createRevoteDiscussionData(
-        voteResult,
-        voteRound
-      );
+      vote.createRevoteDiscussionData(voteResult, voteRound);
 
     update(roomRef, revoteData);
     return;
   }
 
-  const eliminatedPlayerId =
-    voteResult.eliminatedPlayerId;
+  const eliminatedPlayerId = voteResult.eliminatedPlayerId;
 
   const playersArray =
     Object.keys(players).map((playerId) => {
@@ -1243,16 +1000,10 @@ function handleVoteFinished(players, votes, voteRound) {
     });
 
   const eliminatedPlayer =
-    game.getEliminatedPlayer(
-      playersArray,
-      eliminatedPlayerId
-    );
+    game.getEliminatedPlayer(playersArray, eliminatedPlayerId);
 
   const resultData =
-    game.createResultData(
-      playersArray,
-      eliminatedPlayer
-    );
+    game.createResultData(playersArray, eliminatedPlayer);
 
   update(roomRef, {
     status: "result",
@@ -1268,41 +1019,27 @@ function handleVoteFinished(players, votes, voteRound) {
 function showResultScreen() {
   hideAllScreens();
 
-  const resultScreen =
-    document.getElementById("result-screen");
+  const resultScreen = document.getElementById("result-screen");
+  const resultContent = document.getElementById("result-content");
 
-  const resultContent =
-    document.getElementById("result-content");
-
-  if (resultScreen) {
-    resultScreen.classList.remove("hidden");
-  }
+  setHidden(resultScreen, false);
 
   const resultRef = ref(
     database,
-    "rooms/" +
-    currentRoomName +
-    "/result"
+    "rooms/" + currentRoomName + "/result"
   );
 
   get(resultRef)
     .then((snapshot) => {
-      if (!snapshot.exists()) {
-        return;
-      }
+      if (!snapshot.exists()) return;
 
       const resultData = snapshot.val();
 
-      if (!resultContent) {
-        return;
-      }
-
-      resultContent.innerHTML = "";
+      if (!resultContent) return;
 
       if (resultData.winner === "citizen") {
         resultContent.innerHTML = `
-          <img src="images/gold.png"
-               class="result-icon citizen-icon">
+          <img src="images/gold.png" class="result-icon citizen-icon">
 
           <h2 class="result-banner citizen-banner">
             <span></span>
@@ -1333,26 +1070,22 @@ function showResultScreen() {
           </div>
 
           <div class="result-buttons">
-            <button class="result-btn citizen-btn"
-                    id="result-answer-button">
+            <button class="result-btn citizen-btn" id="result-answer-button">
               お題を確認
             </button>
 
-            <button class="result-btn citizen-btn"
-                    id="result-restart-button">
+            <button class="result-btn citizen-btn" id="result-restart-button">
               もう一度遊ぶ
             </button>
 
-            <button class="result-btn citizen-btn"
-                    id="result-quit-button">
+            <button class="result-btn citizen-btn" id="result-quit-button">
               ゲームをやめる
             </button>
           </div>
         `;
       } else {
         resultContent.innerHTML = `
-          <img src="images/ookam_red.png"
-               class="result-icon">
+          <img src="images/ookam_red.png" class="result-icon">
 
           <h2 class="result-banner">
             <span></span>
@@ -1383,18 +1116,15 @@ function showResultScreen() {
           </div>
 
           <div class="result-buttons">
-            <button class="result-btn wolf-btn"
-                    id="result-answer-button">
+            <button class="result-btn wolf-btn" id="result-answer-button">
               お題を確認
             </button>
 
-            <button class="result-btn wolf-btn"
-                    id="result-restart-button">
+            <button class="result-btn wolf-btn" id="result-restart-button">
               もう一度遊ぶ
             </button>
 
-            <button class="result-btn wolf-btn"
-                    id="result-quit-button">
+            <button class="result-btn wolf-btn" id="result-quit-button">
               ゲームをやめる
             </button>
           </div>
@@ -1410,73 +1140,47 @@ function showResultScreen() {
 }
 
 function setupResultButtons() {
-  const resultAnswerButton =
-    document.getElementById("result-answer-button");
-
-  const resultRestartButton =
-    document.getElementById("result-restart-button");
-
-  const resultQuitButton =
-    document.getElementById("result-quit-button");
+  const resultAnswerButton = document.getElementById("result-answer-button");
+  const resultRestartButton = document.getElementById("result-restart-button");
+  const resultQuitButton = document.getElementById("result-quit-button");
 
   if (resultAnswerButton) {
-    resultAnswerButton.addEventListener(
-      "click",
-      showAnswerArea
-    );
+    resultAnswerButton.addEventListener("click", showAnswerArea);
   }
 
   if (resultRestartButton) {
-    resultRestartButton.addEventListener(
-      "click",
-      restartGame
-    );
+    resultRestartButton.addEventListener("click", restartGame);
   }
 
   if (resultQuitButton) {
-    resultQuitButton.addEventListener(
-      "click",
-      quitGame
-    );
+    resultQuitButton.addEventListener("click", quitGame);
   }
 }
 
 function renderVoteResult() {
-  const roomRef = ref(
-    database,
-    "rooms/" + currentRoomName
-  );
+  const roomRef = ref(database, "rooms/" + currentRoomName);
 
   get(roomRef)
     .then((snapshot) => {
-      if (!snapshot.exists()) {
-        return;
-      }
+      if (!snapshot.exists()) return;
 
       const roomData = snapshot.val();
 
       const players = roomData.players || {};
       const votes = roomData.votes || {};
 
-      const voteResultList =
-        document.getElementById(
-          "vote-result-list"
-        );
+      const voteResultList = document.getElementById("vote-result-list");
 
-      if (!voteResultList) {
-        return;
-      }
+      if (!voteResultList) return;
 
       voteResultList.innerHTML = "";
 
       const voteCounts = {};
 
-      Object.values(votes).forEach(
-        (targetPlayerId) => {
-          voteCounts[targetPlayerId] =
-            (voteCounts[targetPlayerId] || 0) + 1;
-        }
-      );
+      Object.values(votes).forEach((targetPlayerId) => {
+        voteCounts[targetPlayerId] =
+          (voteCounts[targetPlayerId] || 0) + 1;
+      });
 
       const sortedPlayers =
         Object.keys(players)
@@ -1492,36 +1196,21 @@ function renderVoteResult() {
       sortedPlayers.forEach((player) => {
         voteResultList.innerHTML += `
           <div class="vote-row">
-            <span>
-              👤 ${player.name}
-            </span>
-
-            <span>
-              ${player.votes}票
-            </span>
+            <span>👤 ${player.name}</span>
+            <span>${player.votes}票</span>
           </div>
         `;
       });
     })
     .catch((error) => {
-      console.error(
-        "投票結果表示エラー",
-        error
-      );
+      console.error("投票結果表示エラー", error);
     });
 }
 
 function showAnswerArea() {
-  if (!answerArea) {
-    return;
-  }
+  if (!answerArea) return;
 
-  const gameRef = ref(
-    database,
-    "rooms/" +
-    currentRoomName +
-    "/game"
-  );
+  const gameRef = ref(database, "rooms/" + currentRoomName + "/game");
 
   get(gameRef)
     .then((snapshot) => {
@@ -1534,24 +1223,17 @@ function showAnswerArea() {
 
       answerArea.innerHTML = "";
 
-      const title =
-        document.createElement("h3");
-
-      const citizenTopic =
-        document.createElement("p");
-
-      const wolfTopic =
-        document.createElement("p");
+      const title = document.createElement("h3");
+      const citizenTopic = document.createElement("p");
+      const wolfTopic = document.createElement("p");
 
       title.textContent = "お題";
 
       citizenTopic.textContent =
-        "市民のお題：" +
-        (gameData.citizenTopic || "不明");
+        "市民のお題：" + (gameData.citizenTopic || "不明");
 
       wolfTopic.textContent =
-        "ワードウルフのお題：" +
-        (gameData.wolfTopic || "不明");
+        "ワードウルフのお題：" + (gameData.wolfTopic || "不明");
 
       answerArea.appendChild(title);
       answerArea.appendChild(citizenTopic);
@@ -1575,8 +1257,7 @@ function restartGame() {
     return;
   }
 
-  const roomRef =
-    ref(database, "rooms/" + currentRoomName);
+  const roomRef = ref(database, "rooms/" + currentRoomName);
 
   const restartData =
     game.createRestartData
@@ -1623,10 +1304,7 @@ function quitGame() {
 
   const playerRef = ref(
     database,
-    "rooms/" +
-    currentRoomName +
-    "/players/" +
-    currentPlayerId
+    "rooms/" + currentRoomName + "/players/" + currentPlayerId
   );
 
   remove(playerRef)
@@ -1650,29 +1328,22 @@ function quitGame() {
 // =========================
 
 function listenPlayers(roomName) {
-  const playersRef =
-    ref(database, "rooms/" + roomName + "/players");
+  const playersRef = ref(database, "rooms/" + roomName + "/players");
 
   onValue(playersRef, (snapshot) => {
     const players = snapshot.val();
 
-    if (!playerList) {
-      return;
-    }
+    if (!playerList) return;
 
     playerList.innerHTML = "";
 
-    if (!players) {
-      return;
-    }
+    if (!players) return;
 
     Object.keys(players).forEach((playerId) => {
       const player = players[playerId];
 
       const li = document.createElement("li");
-
-      const nameSpan =
-        document.createElement("span");
+      const nameSpan = document.createElement("span");
 
       nameSpan.textContent = player.isHost
         ? player.name + "（ホスト）"
@@ -1680,21 +1351,14 @@ function listenPlayers(roomName) {
 
       li.appendChild(nameSpan);
 
-      if (
-        currentIsHost &&
-        playerId !== currentPlayerId
-      ) {
-        const kickButton =
-          document.createElement("button");
+      if (currentIsHost && playerId !== currentPlayerId) {
+        const kickButton = document.createElement("button");
 
         kickButton.textContent = "退出";
         kickButton.classList.add("kick-button");
 
         kickButton.addEventListener("click", () => {
-          kickPlayer(
-            playerId,
-            player.name
-          );
+          kickPlayer(playerId, player.name);
         });
 
         li.appendChild(kickButton);
@@ -1705,10 +1369,7 @@ function listenPlayers(roomName) {
   });
 }
 
-function kickPlayer(
-  targetPlayerId,
-  targetPlayerName
-) {
+function kickPlayer(targetPlayerId, targetPlayerName) {
   if (!currentIsHost) {
     alert("退出させられるのはホストだけです");
     return;
@@ -1720,20 +1381,14 @@ function kickPlayer(
   }
 
   const isOk = confirm(
-    targetPlayerName +
-    "さんを退出させますか？"
+    targetPlayerName + "さんを退出させますか？"
   );
 
-  if (!isOk) {
-    return;
-  }
+  if (!isOk) return;
 
   const targetPlayerRef = ref(
     database,
-    "rooms/" +
-    currentRoomName +
-    "/players/" +
-    targetPlayerId
+    "rooms/" + currentRoomName + "/players/" + targetPlayerId
   );
 
   remove(targetPlayerRef)
@@ -1761,8 +1416,7 @@ function hideAllScreens() {
   ];
 
   screens.forEach((screenId) => {
-    const screen =
-      document.getElementById(screenId);
+    const screen = document.getElementById(screenId);
 
     if (screen) {
       screen.classList.add("hidden");
