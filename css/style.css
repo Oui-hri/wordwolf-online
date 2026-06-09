@@ -232,6 +232,31 @@ button {
   margin-top: 40px;
 }
 
+/* 待機画面：カテゴリー選択とゲーム開始ボタンの重なり防止 */
+#category-area {
+  width: 100%;
+  margin-top: 22px;
+  margin-bottom: 24px;
+}
+
+#category-area p {
+  margin: 0 0 8px;
+}
+
+#category-select {
+  display: block;
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  box-sizing: border-box;
+}
+
+#start-game-button {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+}
+
 .ornament {
   width: 180px;
   display: block;
