@@ -75,6 +75,18 @@ const goVoteButton =
 const discussionTopic =
   document.getElementById("discussion-topic");
 
+const hintButton =
+  document.getElementById("hint-button");
+
+const hintModal =
+  document.getElementById("hint-modal");
+
+const hintText =
+  document.getElementById("hint-text");
+
+const hintCloseButton =
+  document.getElementById("hint-close-button");
+
 // =========================
 // 状態管理
 // =========================
@@ -161,6 +173,19 @@ if (goVoteButton) {
 
     changeStatusToVoting();
   });
+}
+if (hintButton) {
+  hintButton.addEventListener(
+    "click",
+    showHintModal
+  );
+}
+
+if (hintCloseButton) {
+  hintCloseButton.addEventListener(
+    "click",
+    closeHintModal
+  );
 }
 
 restoreSession();
@@ -815,6 +840,57 @@ function showDiscussionTopic() {
         error
       );
     });
+}
+
+// =========================
+// ヒント表示
+// =========================
+
+function showHintModal() {
+  if (!currentRoomName || !currentPlayerId) {
+    alert("プレイヤー情報が見つかりません");
+    return;
+  }
+
+  if (!hintModal || !hintText) {
+    alert("ヒント表示エリアが見つかりません");
+    return;
+  }
+
+  const playerRef = ref(
+    database,
+    "rooms/" +
+    currentRoomName +
+    "/players/" +
+    currentPlayerId
+  );
+
+  get(playerRef)
+    .then((snapshot) => {
+      if (!snapshot.exists()) {
+        alert("ヒント情報が見つかりません");
+        return;
+      }
+
+      const playerData = snapshot.val();
+
+      hintText.textContent =
+        playerData.hint || "自由に話題を広げてみよう";
+
+      hintModal.classList.remove("hidden");
+    })
+    .catch((error) => {
+      console.error("ヒント取得エラー", error);
+      alert("ヒントの取得に失敗しました");
+    });
+}
+
+function closeHintModal() {
+  if (!hintModal) {
+    return;
+  }
+
+  hintModal.classList.add("hidden");
 }
 
 function getDiscussionTime() {
