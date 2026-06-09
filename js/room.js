@@ -905,7 +905,9 @@ function showVoteScreen() {
   const voteScreen =
     document.getElementById("vote-screen");
 
-  setHidden(voteScreen, false);
+  if (voteScreen) {
+    voteScreen.classList.remove("hidden");
+  }
 
   if (discussionTimer) {
     clearInterval(discussionTimer);
@@ -918,8 +920,8 @@ function showVoteScreen() {
 
   if (voteButton) {
     voteButton.disabled = false;
+    voteButton.style.display = "none";
     voteButton.textContent = "投票する";
-    setHidden(voteButton, true);
   }
 
   renderVoteList();
@@ -961,7 +963,14 @@ function renderVoteList() {
         button.type = "button";
         button.classList.add("vote-player-button");
         button.dataset.playerId = playerId;
-        button.textContent = player.name;
+
+        button.innerHTML = `
+          <div class="player-left">
+            <div class="player-icon">👤</div>
+            <div class="player-name">${player.name}</div>
+          </div>
+          <div class="check">✓</div>
+        `;
 
         button.addEventListener("click", () => {
           selectVoteTarget(playerId);
@@ -988,12 +997,20 @@ function selectVoteTarget(targetPlayerId) {
   buttons.forEach((button) => {
     if (button.dataset.playerId === targetPlayerId) {
       button.classList.add("selected");
+      button.style.opacity = "1";
+      button.style.border = "3px solid #ffcc00";
+      button.style.transform = "scale(1.05)";
     } else {
       button.classList.remove("selected");
+      button.style.opacity = "0.35";
+      button.style.border = "none";
+      button.style.transform = "scale(1)";
     }
   });
 
-  setHidden(voteButton, false);
+  if (voteButton) {
+    voteButton.style.display = "block";
+  }
 }
 
 function submitVote() {
@@ -1040,7 +1057,7 @@ function showVoteWaiting() {
 
   if (voteButton) {
     voteButton.disabled = true;
-    setHidden(voteButton, true);
+    voteButton.style.display = "none";
   }
 }
 
@@ -1181,7 +1198,9 @@ function showResultScreen() {
   const resultContent =
     document.getElementById("result-content");
 
-  setHidden(resultScreen, false);
+  if (resultScreen) {
+    resultScreen.classList.remove("hidden");
+  }
 
   const resultRef = ref(
     database,
@@ -1202,74 +1221,112 @@ function showResultScreen() {
         return;
       }
 
-      const viewData =
-        game.getResultViewData
-          ? game.getResultViewData(resultData.winner)
-          : null;
+      resultContent.innerHTML = "";
 
-      const hasStaticResultParts =
-        document.getElementById("result-title") ||
-        document.getElementById("result-message") ||
-        document.getElementById("result-eliminated");
+      if (resultData.winner === "citizen") {
+        resultContent.innerHTML = `
+          <img src="images/gold.png"
+               class="result-icon citizen-icon">
 
-      if (!hasStaticResultParts) {
-        resultContent.innerHTML = "";
+          <h2 class="result-banner citizen-banner">
+            <span></span>
+            CITIZEN WIN
+            <span></span>
+          </h2>
+
+          <h2 class="result-title citizen-win">
+            市民チームの勝利
+          </h2>
+
+          <p class="result-message">
+            市民たちはワードウルフを見抜いた
+          </p>
+
+          <p>
+            追放者：${resultData.eliminatedName || "不明"}
+          </p>
+
+          <div class="vote-result-card citizen-card">
+            <div class="vote-result-title">
+              <span></span>
+              投票結果
+              <span></span>
+            </div>
+
+            <div id="vote-result-list"></div>
+          </div>
+
+          <div class="result-buttons">
+            <button class="result-btn citizen-btn"
+                    id="result-answer-button">
+              お題を確認
+            </button>
+
+            <button class="result-btn citizen-btn"
+                    id="result-restart-button">
+              もう一度遊ぶ
+            </button>
+
+            <button class="result-btn citizen-btn"
+                    id="result-quit-button">
+              ゲームをやめる
+            </button>
+          </div>
+        `;
+      } else {
+        resultContent.innerHTML = `
+          <img src="images/ookam_red.png"
+               class="result-icon">
+
+          <h2 class="result-banner">
+            <span></span>
+            WOLF WIN
+            <span></span>
+          </h2>
+
+          <h2 class="result-title wolf-win">
+            ワードウルフの勝利
+          </h2>
+
+          <p class="result-message">
+            ワードウルフは正体を隠し通した
+          </p>
+
+          <p>
+            追放者：${resultData.eliminatedName || "不明"}
+          </p>
+
+          <div class="vote-result-card">
+            <div class="vote-result-title">
+              <span></span>
+              投票結果
+              <span></span>
+            </div>
+
+            <div id="vote-result-list"></div>
+          </div>
+
+          <div class="result-buttons">
+            <button class="result-btn wolf-btn"
+                    id="result-answer-button">
+              お題を確認
+            </button>
+
+            <button class="result-btn wolf-btn"
+                    id="result-restart-button">
+              もう一度遊ぶ
+            </button>
+
+            <button class="result-btn wolf-btn"
+                    id="result-quit-button">
+              ゲームをやめる
+            </button>
+          </div>
+        `;
       }
 
-      const resultTitle =
-        getOrCreateElement(
-          resultContent,
-          "result-title",
-          "h2"
-        );
-
-      const resultMessage =
-        getOrCreateElement(
-          resultContent,
-          "result-message",
-          "p"
-        );
-
-      const resultEliminated =
-        getOrCreateElement(
-          resultContent,
-          "result-eliminated",
-          "p"
-        );
-
-      const voteResultList =
-        getOrCreateElement(
-          resultContent,
-          "vote-result-list",
-          "div"
-        );
-
-      if (resultTitle) {
-        resultTitle.textContent =
-          viewData?.title ||
-          resultData.message ||
-          "結果";
-      }
-
-      if (resultMessage) {
-        resultMessage.textContent =
-          viewData?.message ||
-          resultData.message ||
-          "";
-      }
-
-      if (resultEliminated) {
-        resultEliminated.textContent =
-          "追放者：" +
-          (resultData.eliminatedName || "不明");
-      }
-
-      if (voteResultList) {
-        voteResultList.textContent = "";
-      }
-
-      setupResultButtons();
       renderVoteResult();
+      setupResultButtons();
     })
     .catch((error) => {
       console.error("結果表示エラー", error);
@@ -1309,8 +1366,10 @@ function setupResultButtons() {
 }
 
 function renderVoteResult() {
-  const roomRef =
-    ref(database, "rooms/" + currentRoomName);
+  const roomRef = ref(
+    database,
+    "rooms/" + currentRoomName
+  );
 
   get(roomRef)
     .then((snapshot) => {
@@ -1324,7 +1383,9 @@ function renderVoteResult() {
       const votes = roomData.votes || {};
 
       const voteResultList =
-        document.getElementById("vote-result-list");
+        document.getElementById(
+          "vote-result-list"
+        );
 
       if (!voteResultList) {
         return;
@@ -1334,10 +1395,12 @@ function renderVoteResult() {
 
       const voteCounts = {};
 
-      Object.values(votes).forEach((targetPlayerId) => {
-        voteCounts[targetPlayerId] =
-          (voteCounts[targetPlayerId] || 0) + 1;
-      });
+      Object.values(votes).forEach(
+        (targetPlayerId) => {
+          voteCounts[targetPlayerId] =
+            (voteCounts[targetPlayerId] || 0) + 1;
+        }
+      );
 
       const sortedPlayers =
         Object.keys(players)
@@ -1351,27 +1414,17 @@ function renderVoteResult() {
           .sort((a, b) => b.votes - a.votes);
 
       sortedPlayers.forEach((player) => {
-        const row =
-          document.createElement("div");
+        voteResultList.innerHTML += `
+          <div class="vote-row">
+            <span>
+              👤 ${player.name}
+            </span>
 
-        const name =
-          document.createElement("span");
-
-        const count =
-          document.createElement("span");
-
-        row.classList.add("vote-row");
-
-        name.textContent =
-          "👤 " + player.name;
-
-        count.textContent =
-          player.votes + "票";
-
-        row.appendChild(name);
-        row.appendChild(count);
-
-        voteResultList.appendChild(row);
+            <span>
+              ${player.votes}票
+            </span>
+          </div>
+        `;
       });
     })
     .catch((error) => {
