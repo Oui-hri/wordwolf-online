@@ -41,10 +41,47 @@ const quitGameButton = document.getElementById("quit-game-button");
 const addTimeButton = document.getElementById("add-time-button");
 const goVoteButton = document.getElementById("go-vote-button");
 const discussionTopic = document.getElementById("discussion-topic");
+
 const hintButton = document.getElementById("hint-button");
 const hintModal = document.getElementById("hint-modal");
 const hintText = document.getElementById("hint-text");
 const hintCloseButton = document.getElementById("hint-close-button");
+
+const createRoomScreen =
+  document.getElementById("create-room-screen");
+
+const joinRoomScreen =
+  document.getElementById("join-room-screen");
+
+const createRoomNameInput =
+  document.getElementById("create-room-name-input");
+
+const createPlayerNameInput =
+  document.getElementById("create-player-name-input");
+
+const joinRoomNameInput =
+  document.getElementById("join-room-name-input");
+
+const joinPlayerNameInput =
+  document.getElementById("join-player-name-input");
+
+const createRoomSubmitButton =
+  document.getElementById("create-room-submit-button");
+
+const joinRoomSubmitButton =
+  document.getElementById("join-room-submit-button");
+
+const createRoomBackButton =
+  document.getElementById("create-room-back-button");
+
+const joinRoomBackButton =
+  document.getElementById("join-room-back-button");
+
+const createRoomError =
+  document.getElementById("create-room-error");
+
+const joinRoomError =
+  document.getElementById("join-room-error");
 
 // =========================
 // 状態管理
@@ -69,35 +106,87 @@ let lastStatus = "";
 // =========================
 
 if (createRoomButton) {
-  createRoomButton.addEventListener("click", createRoom);
+  createRoomButton.addEventListener(
+    "click",
+    showCreateRoomScreen
+  );
 }
 
 if (joinRoomButton) {
-  joinRoomButton.addEventListener("click", joinRoom);
+  joinRoomButton.addEventListener(
+    "click",
+    showJoinRoomScreen
+  );
+}
+
+if (createRoomSubmitButton) {
+  createRoomSubmitButton.addEventListener(
+    "click",
+    createRoom
+  );
+}
+
+if (joinRoomSubmitButton) {
+  joinRoomSubmitButton.addEventListener(
+    "click",
+    joinRoom
+  );
+}
+
+if (createRoomBackButton) {
+  createRoomBackButton.addEventListener(
+    "click",
+    showTitleScreen
+  );
+}
+
+if (joinRoomBackButton) {
+  joinRoomBackButton.addEventListener(
+    "click",
+    showTitleScreen
+  );
 }
 
 if (startGameButton) {
-  startGameButton.addEventListener("click", startGame);
+  startGameButton.addEventListener(
+    "click",
+    startGame
+  );
 }
 
 if (voteButton) {
-  voteButton.addEventListener("click", submitVote);
+  voteButton.addEventListener(
+    "click",
+    submitVote
+  );
 }
 
 if (answerButton) {
-  answerButton.addEventListener("click", showAnswerArea);
+  answerButton.addEventListener(
+    "click",
+    showAnswerArea
+  );
 }
 
 if (restartButton) {
-  restartButton.addEventListener("click", restartGame);
+  restartButton.addEventListener(
+    "click",
+    restartGame
+  );
 }
 
 if (quitGameButton) {
-  quitGameButton.addEventListener("click", quitGame);
+  quitGameButton.addEventListener(
+    "click",
+    quitGame
+  );
 }
 
 if (addTimeButton) {
-  addTimeButton.addEventListener("click", addOneMinute);
+  addTimeButton.addEventListener(
+    "click",
+    addOneMinute
+  );
 }
 
 if (goVoteButton) {
@@ -112,11 +201,17 @@ if (goVoteButton) {
 }
 
 if (hintButton) {
-  hintButton.addEventListener("click", showHintModal);
+  hintButton.addEventListener(
+    "click",
+    showHintModal
+  );
 }
 
 if (hintCloseButton) {
-  hintCloseButton.addEventListener("click", closeHintModal);
+  hintCloseButton.addEventListener(
+    "click",
+    closeHintModal
+  );
 }
 
 restoreSession();
@@ -126,7 +221,9 @@ restoreSession();
 // =========================
 
 function setHidden(element, shouldHide) {
-  if (!element) return;
+  if (!element) {
+    return;
+  }
 
   if (shouldHide) {
     element.classList.add("hidden");
@@ -135,14 +232,70 @@ function setHidden(element, shouldHide) {
   }
 }
 
+function showTitleScreen() {
+  hideAllScreens();
+
+  const titleScreen =
+    document.getElementById("title-screen");
+
+  setHidden(titleScreen, false);
+}
+
+function showCreateRoomScreen() {
+  hideAllScreens();
+
+  if (createRoomError) {
+    createRoomError.textContent = "";
+  }
+
+  if (createRoomNameInput) {
+    createRoomNameInput.value = "";
+  }
+
+  if (createPlayerNameInput) {
+    createPlayerNameInput.value = "";
+  }
+
+  setHidden(createRoomScreen, false);
+}
+
+function showJoinRoomScreen() {
+  hideAllScreens();
+
+  if (joinRoomError) {
+    joinRoomError.textContent = "";
+  }
+
+  if (joinRoomNameInput) {
+    joinRoomNameInput.value = "";
+  }
+
+  if (joinPlayerNameInput) {
+    joinPlayerNameInput.value = "";
+  }
+
+  setHidden(joinRoomScreen, false);
+}
+
 // =========================
 // セッション
 // =========================
 
 function saveSession() {
-  sessionStorage.setItem("wordwolfRoomName", currentRoomName);
-  sessionStorage.setItem("wordwolfPlayerId", currentPlayerId);
-  sessionStorage.setItem("wordwolfIsHost", String(currentIsHost));
+  sessionStorage.setItem(
+    "wordwolfRoomName",
+    currentRoomName
+  );
+
+  sessionStorage.setItem(
+    "wordwolfPlayerId",
+    currentPlayerId
+  );
+
+  sessionStorage.setItem(
+    "wordwolfIsHost",
+    String(currentIsHost)
+  );
 }
 
 function clearSession() {
@@ -152,9 +305,14 @@ function clearSession() {
 }
 
 function restoreSession() {
-  const savedRoomName = sessionStorage.getItem("wordwolfRoomName");
-  const savedPlayerId = sessionStorage.getItem("wordwolfPlayerId");
-  const savedIsHost = sessionStorage.getItem("wordwolfIsHost");
+  const savedRoomName =
+    sessionStorage.getItem("wordwolfRoomName");
+
+  const savedPlayerId =
+    sessionStorage.getItem("wordwolfPlayerId");
+
+  const savedIsHost =
+    sessionStorage.getItem("wordwolfIsHost");
 
   if (!savedRoomName || !savedPlayerId) {
     return;
@@ -166,7 +324,10 @@ function restoreSession() {
 
   const playerRef = ref(
     database,
-    "rooms/" + currentRoomName + "/players/" + currentPlayerId
+    "rooms/" +
+    currentRoomName +
+    "/players/" +
+    currentPlayerId
   );
 
   get(playerRef)
@@ -203,11 +364,22 @@ function resetLocalState() {
 // =========================
 
 function createRoom() {
-  const inputRoomName = prompt("ルーム名を入力してください");
-  const playerName = prompt("あなたの名前を入力してください");
+  const inputRoomName =
+    createRoomNameInput
+      ? createRoomNameInput.value
+      : "";
+
+  const playerName =
+    createPlayerNameInput
+      ? createPlayerNameInput.value
+      : "";
 
   if (!inputRoomName || !playerName) {
-    alert("ルーム名と名前を入力してください");
+    if (createRoomError) {
+      createRoomError.textContent =
+        "ルーム名と名前を入力してください";
+    }
+
     return;
   }
 
@@ -220,12 +392,15 @@ function createRoom() {
 
   resetLocalState();
 
-  const roomRef = ref(database, "rooms/" + roomName);
+  const roomRef =
+    ref(database, "rooms/" + roomName);
 
   get(roomRef)
     .then((snapshot) => {
       if (snapshot.exists()) {
-        throw new Error("このルーム名はすでに使われています");
+        throw new Error(
+          "このルーム名はすでに使われています"
+        );
       }
 
       return set(roomRef, {
@@ -250,7 +425,6 @@ function createRoom() {
     })
     .then(() => {
       saveSession();
-      alert("ルームを作成しました");
 
       showWaitingRoom(roomName);
       listenPlayers(roomName);
@@ -258,7 +432,12 @@ function createRoom() {
     })
     .catch((error) => {
       console.error("ルーム作成エラー", error);
-      alert(error.message || "ルーム作成に失敗しました");
+
+      if (createRoomError) {
+        createRoomError.textContent =
+          error.message ||
+          "ルーム作成に失敗しました";
+      }
     });
 }
 
@@ -267,11 +446,22 @@ function createRoom() {
 // =========================
 
 function joinRoom() {
-  const inputRoomName = prompt("参加するルーム名を入力してください");
-  const playerName = prompt("あなたの名前を入力してください");
+  const inputRoomName =
+    joinRoomNameInput
+      ? joinRoomNameInput.value
+      : "";
+
+  const playerName =
+    joinPlayerNameInput
+      ? joinPlayerNameInput.value
+      : "";
 
   if (!inputRoomName || !playerName) {
-    alert("ルーム名と名前を入力してください");
+    if (joinRoomError) {
+      joinRoomError.textContent =
+        "ルーム名と名前を入力してください";
+    }
+
     return;
   }
 
@@ -284,10 +474,15 @@ function joinRoom() {
 
   resetLocalState();
 
-  const roomRef = ref(database, "rooms/" + roomName);
+  const roomRef =
+    ref(database, "rooms/" + roomName);
+
   const playerRef = ref(
     database,
-    "rooms/" + roomName + "/players/" + playerId
+    "rooms/" +
+    roomName +
+    "/players/" +
+    playerId
   );
 
   get(roomRef)
@@ -305,7 +500,9 @@ function joinRoom() {
         });
 
       if (isDuplicateName) {
-        throw new Error("この名前はすでに使われています");
+        throw new Error(
+          "この名前はすでに使われています"
+        );
       }
 
       return set(playerRef, {
@@ -315,7 +512,6 @@ function joinRoom() {
     })
     .then(() => {
       saveSession();
-      alert("ルームに参加しました");
 
       showWaitingRoom(roomName);
       listenPlayers(roomName);
@@ -323,7 +519,12 @@ function joinRoom() {
     })
     .catch((error) => {
       console.error("ルーム参加エラー", error);
-      alert(error.message || "ルーム参加に失敗しました");
+
+      if (joinRoomError) {
+        joinRoomError.textContent =
+          error.message ||
+          "ルーム参加に失敗しました";
+      }
     });
 }
 
@@ -334,7 +535,8 @@ function joinRoom() {
 function showWaitingRoom(roomName) {
   hideAllScreens();
 
-  const waitingScreen = document.getElementById("waiting-screen");
+  const waitingScreen =
+    document.getElementById("waiting-screen");
 
   setHidden(waitingScreen, false);
 
@@ -382,7 +584,8 @@ function startGame() {
       ? categorySelect.value
       : "random";
 
-  const roomRef = ref(database, "rooms/" + currentRoomName);
+  const roomRef =
+    ref(database, "rooms/" + currentRoomName);
 
   get(roomRef)
     .then((snapshot) => {
@@ -404,7 +607,9 @@ function startGame() {
         });
 
       if (players.length < 3) {
-        throw new Error("ゲーム開始には3人以上必要です");
+        throw new Error(
+          "ゲーム開始には3人以上必要です"
+        );
       }
 
       const startResult =
@@ -412,7 +617,10 @@ function startGame() {
 
       const playersWithHints =
         typeof assignHints === "function"
-          ? assignHints(startResult.players, startResult.category)
+          ? assignHints(
+            startResult.players,
+            startResult.category
+          )
           : startResult.players;
 
       const updates = {};
@@ -420,17 +628,26 @@ function startGame() {
       playersWithHints.forEach((player) => {
         const playerId = player.uid || player.id;
 
-        updates["players/" + playerId + "/role"] = player.role;
-        updates["players/" + playerId + "/topic"] = player.topic;
+        updates["players/" + playerId + "/role"] =
+          player.role;
+
+        updates["players/" + playerId + "/topic"] =
+          player.topic;
 
         if (player.hint) {
-          updates["players/" + playerId + "/hint"] = player.hint;
+          updates["players/" + playerId + "/hint"] =
+            player.hint;
         }
       });
 
-      updates["game/category"] = startResult.category;
-      updates["game/citizenTopic"] = startResult.citizenTopic;
-      updates["game/wolfTopic"] = startResult.wolfTopic;
+      updates["game/category"] =
+        startResult.category;
+
+      updates["game/citizenTopic"] =
+        startResult.citizenTopic;
+
+      updates["game/wolfTopic"] =
+        startResult.wolfTopic;
 
       updates["status"] = "topic";
       updates["voteRound"] = 1;
@@ -445,9 +662,12 @@ function startGame() {
     })
     .then(() => {
       setTimeout(() => {
-        if (!currentIsHost) return;
+        if (!currentIsHost) {
+          return;
+        }
 
-        const roomRef = ref(database, "rooms/" + currentRoomName);
+        const roomRef =
+          ref(database, "rooms/" + currentRoomName);
 
         update(roomRef, {
           status: "discussion",
@@ -466,13 +686,19 @@ function startGame() {
 // =========================
 
 function listenRoomStatus(roomName) {
-  const statusRef = ref(database, "rooms/" + roomName + "/status");
+  const statusRef =
+    ref(database, "rooms/" + roomName + "/status");
 
   onValue(statusRef, (snapshot) => {
     const status = snapshot.val();
 
-    if (!status) return;
-    if (status === lastStatus) return;
+    if (!status) {
+      return;
+    }
+
+    if (status === lastStatus) {
+      return;
+    }
 
     lastStatus = status;
 
@@ -509,8 +735,11 @@ function listenRoomStatus(roomName) {
 function showTopicScreen() {
   hideAllScreens();
 
-  const topicScreen = document.getElementById("topic-screen");
-  const countdownElement = document.getElementById("countdown");
+  const topicScreen =
+    document.getElementById("topic-screen");
+
+  const countdownElement =
+    document.getElementById("countdown");
 
   setHidden(topicScreen, false);
 
@@ -524,7 +753,10 @@ function showTopicScreen() {
 
   const playerRef = ref(
     database,
-    "rooms/" + currentRoomName + "/players/" + currentPlayerId
+    "rooms/" +
+    currentRoomName +
+    "/players/" +
+    currentPlayerId
   );
 
   get(playerRef)
@@ -537,7 +769,8 @@ function showTopicScreen() {
       const playerData = snapshot.val();
 
       if (topicCard) {
-        topicCard.textContent = playerData.topic || "";
+        topicCard.textContent =
+          playerData.topic || "";
       }
 
       startTopicCountdown(countdownElement);
@@ -576,7 +809,8 @@ function startTopicCountdown(countdownElement) {
 function showDiscussionScreen() {
   hideAllScreens();
 
-  const discussionScreen = document.getElementById("discussion-screen");
+  const discussionScreen =
+    document.getElementById("discussion-screen");
 
   setHidden(discussionScreen, false);
 
@@ -603,9 +837,9 @@ function showTieScreen() {
   const tieScreen =
     document.getElementById("tie-screen");
 
-  if (tieScreen) {
-    tieScreen.classList.remove("hidden");
-  }
+  setHidden(tieScreen, false);
+
+  lastDiscussionTime = null;
 
   if (discussionTimer) {
     clearInterval(discussionTimer);
@@ -629,15 +863,21 @@ function showTieScreen() {
 function listenDiscussionTime() {
   const discussionTimeRef = ref(
     database,
-    "rooms/" + currentRoomName + "/discussionTime"
+    "rooms/" +
+    currentRoomName +
+    "/discussionTime"
   );
 
   onValue(discussionTimeRef, (snapshot) => {
     const discussionTime = snapshot.val();
 
-    if (!discussionTime) return;
+    if (!discussionTime) {
+      return;
+    }
 
-    if (discussionTime === lastDiscussionTime) return;
+    if (discussionTime === lastDiscussionTime) {
+      return;
+    }
 
     lastDiscussionTime = discussionTime;
 
@@ -646,8 +886,11 @@ function listenDiscussionTime() {
 }
 
 function restartDiscussionTimer(totalTime) {
-  const timerElement = document.getElementById("discussion-timer");
-  const circle = document.getElementById("progress-ring");
+  const timerElement =
+    document.getElementById("discussion-timer");
+
+  const circle =
+    document.getElementById("progress-ring");
 
   if (discussionTimer) {
     clearInterval(discussionTimer);
@@ -659,8 +902,15 @@ function restartDiscussionTimer(totalTime) {
     const radius = 150;
     circumference = 2 * Math.PI * radius;
 
-    circle.setAttribute("stroke-dasharray", circumference);
-    circle.setAttribute("stroke-dashoffset", 0);
+    circle.setAttribute(
+      "stroke-dasharray",
+      circumference
+    );
+
+    circle.setAttribute(
+      "stroke-dashoffset",
+      0
+    );
   }
 
   discussionTimer =
@@ -674,14 +924,18 @@ function restartDiscussionTimer(totalTime) {
           String(time % 60).padStart(2, "0");
 
         if (timerElement) {
-          timerElement.textContent = `${minutes}:${seconds}`;
+          timerElement.textContent =
+            `${minutes}:${seconds}`;
         }
 
         if (circle) {
           const offset =
             circumference * (1 - time / totalTime);
 
-          circle.setAttribute("stroke-dashoffset", offset);
+          circle.setAttribute(
+            "stroke-dashoffset",
+            offset
+          );
         }
       },
       () => {
@@ -693,26 +947,37 @@ function restartDiscussionTimer(totalTime) {
 }
 
 function showDiscussionTopic() {
-  if (!discussionTopic) return;
+  if (!discussionTopic) {
+    return;
+  }
 
   const playerRef = ref(
     database,
-    "rooms/" + currentRoomName + "/players/" + currentPlayerId
+    "rooms/" +
+    currentRoomName +
+    "/players/" +
+    currentPlayerId
   );
 
   get(playerRef)
     .then((snapshot) => {
-      if (!snapshot.exists()) return;
+      if (!snapshot.exists()) {
+        return;
+      }
 
       const playerData = snapshot.val();
 
       const topicData =
         game.createDiscussionTopicData(playerData);
 
-      discussionTopic.textContent = topicData.message;
+      discussionTopic.textContent =
+        topicData.message;
     })
     .catch((error) => {
-      console.error("話し合い中のお題表示エラー", error);
+      console.error(
+        "話し合い中のお題表示エラー",
+        error
+      );
     });
 }
 
@@ -733,7 +998,10 @@ function showHintModal() {
 
   const playerRef = ref(
     database,
-    "rooms/" + currentRoomName + "/players/" + currentPlayerId
+    "rooms/" +
+    currentRoomName +
+    "/players/" +
+    currentPlayerId
   );
 
   get(playerRef)
@@ -746,7 +1014,8 @@ function showHintModal() {
       const playerData = snapshot.val();
 
       hintText.textContent =
-        playerData.hint || "自由に話題を広げてみよう";
+        playerData.hint ||
+        "自由に話題を広げてみよう";
 
       setHidden(hintModal, false);
     })
@@ -766,7 +1035,8 @@ function addOneMinute() {
     return;
   }
 
-  const timerElement = document.getElementById("discussion-timer");
+  const timerElement =
+    document.getElementById("discussion-timer");
 
   let currentTime = 120;
 
@@ -779,7 +1049,8 @@ function addOneMinute() {
 
   const newTime = currentTime + 60;
 
-  const roomRef = ref(database, "rooms/" + currentRoomName);
+  const roomRef =
+    ref(database, "rooms/" + currentRoomName);
 
   update(roomRef, {
     discussionTime: newTime
@@ -803,7 +1074,8 @@ function changeStatusToVoting() {
     game.stopTimer();
   }
 
-  const roomRef = ref(database, "rooms/" + currentRoomName);
+  const roomRef =
+    ref(database, "rooms/" + currentRoomName);
 
   update(roomRef, {
     status: "voting",
@@ -819,7 +1091,8 @@ function changeStatusToVoting() {
 function showVoteScreen() {
   hideAllScreens();
 
-  const voteScreen = document.getElementById("vote-screen");
+  const voteScreen =
+    document.getElementById("vote-screen");
 
   setHidden(voteScreen, false);
 
@@ -846,25 +1119,33 @@ function showVoteScreen() {
 }
 
 function renderVoteList() {
-  if (!voteList) return;
+  if (!voteList) {
+    return;
+  }
 
   voteList.innerHTML = "";
 
-  const roomRef = ref(database, "rooms/" + currentRoomName);
+  const roomRef =
+    ref(database, "rooms/" + currentRoomName);
 
   get(roomRef)
     .then((snapshot) => {
-      if (!snapshot.exists()) return;
+      if (!snapshot.exists()) {
+        return;
+      }
 
       const roomData = snapshot.val();
       const players = roomData.players || {};
 
       Object.keys(players).forEach((playerId) => {
-        if (playerId === currentPlayerId) return;
+        if (playerId === currentPlayerId) {
+          return;
+        }
 
         const player = players[playerId];
 
-        const button = document.createElement("button");
+        const button =
+          document.createElement("button");
 
         button.type = "button";
         button.classList.add("vote-player-button");
@@ -891,11 +1172,14 @@ function renderVoteList() {
 }
 
 function selectVoteTarget(targetPlayerId) {
-  if (hasVoted) return;
+  if (hasVoted) {
+    return;
+  }
 
   selectedVoteTargetId = targetPlayerId;
 
-  const buttons = document.querySelectorAll(".vote-player-button");
+  const buttons =
+    document.querySelectorAll(".vote-player-button");
 
   buttons.forEach((button) => {
     if (button.dataset.playerId === targetPlayerId) {
@@ -917,7 +1201,9 @@ function selectVoteTarget(targetPlayerId) {
 }
 
 function submitVote() {
-  if (hasVoted) return;
+  if (hasVoted) {
+    return;
+  }
 
   if (!selectedVoteTargetId) {
     alert("投票する相手を選んでください");
@@ -926,7 +1212,10 @@ function submitVote() {
 
   const voteRef = ref(
     database,
-    "rooms/" + currentRoomName + "/votes/" + currentPlayerId
+    "rooms/" +
+    currentRoomName +
+    "/votes/" +
+    currentPlayerId
   );
 
   set(voteRef, selectedVoteTargetId)
@@ -944,7 +1233,9 @@ function showVoteWaiting() {
   if (voteList) {
     voteList.innerHTML = "";
 
-    const message = document.createElement("p");
+    const message =
+      document.createElement("p");
+
     message.textContent =
       "投票しました。他の人の投票を待っています...";
 
@@ -964,37 +1255,54 @@ function showVoteWaiting() {
 function listenVotes() {
   const votesRef = ref(
     database,
-    "rooms/" + currentRoomName + "/votes"
+    "rooms/" +
+    currentRoomName +
+    "/votes"
   );
 
   onValue(votesRef, (snapshot) => {
-    if (isVoteCounted) return;
+    if (isVoteCounted) {
+      return;
+    }
 
     const votes = snapshot.val();
 
-    if (!votes) return;
+    if (!votes) {
+      return;
+    }
 
     checkAllVotesSubmitted(votes);
   });
 }
 
 function checkAllVotesSubmitted(votes) {
-  const roomRef = ref(database, "rooms/" + currentRoomName);
+  const roomRef =
+    ref(database, "rooms/" + currentRoomName);
 
   get(roomRef)
     .then((snapshot) => {
-      if (!snapshot.exists()) return;
+      if (!snapshot.exists()) {
+        return;
+      }
 
       const roomData = snapshot.val();
       const players = roomData.players || {};
       const voteRound = roomData.voteRound || 1;
 
-      const voterCount = Object.keys(players).length;
-      const voteCount = Object.keys(votes).length;
+      const voterCount =
+        Object.keys(players).length;
+
+      const voteCount =
+        Object.keys(votes).length;
 
       if (voteCount === voterCount) {
         isVoteCounted = true;
-        handleVoteFinished(players, votes, voteRound);
+
+        handleVoteFinished(
+          players,
+          votes,
+          voteRound
+        );
       }
     })
     .catch((error) => {
@@ -1003,9 +1311,11 @@ function checkAllVotesSubmitted(votes) {
 }
 
 function handleVoteFinished(players, votes, voteRound) {
-  const roomRef = ref(database, "rooms/" + currentRoomName);
+  const roomRef =
+    ref(database, "rooms/" + currentRoomName);
 
-  const voteResult = vote.judgeVoteResult(votes);
+  const voteResult =
+    vote.judgeVoteResult(votes);
 
   if (voteResult.isTie) {
     if (voteRound >= 3) {
@@ -1017,17 +1327,21 @@ function handleVoteFinished(players, votes, voteRound) {
     }
 
     const revoteData =
-  vote.createRevoteDiscussionData(voteResult, voteRound);
+      vote.createRevoteDiscussionData(
+        voteResult,
+        voteRound
+      );
 
-update(roomRef, {
-  ...revoteData,
-  status: "tie"
-});
+    update(roomRef, {
+      ...revoteData,
+      status: "tie"
+    });
 
-return;
+    return;
   }
 
-  const eliminatedPlayerId = voteResult.eliminatedPlayerId;
+  const eliminatedPlayerId =
+    voteResult.eliminatedPlayerId;
 
   const playersArray =
     Object.keys(players).map((playerId) => {
@@ -1039,10 +1353,16 @@ return;
     });
 
   const eliminatedPlayer =
-    game.getEliminatedPlayer(playersArray, eliminatedPlayerId);
+    game.getEliminatedPlayer(
+      playersArray,
+      eliminatedPlayerId
+    );
 
   const resultData =
-    game.createResultData(playersArray, eliminatedPlayer);
+    game.createResultData(
+      playersArray,
+      eliminatedPlayer
+    );
 
   update(roomRef, {
     status: "result",
@@ -1058,23 +1378,32 @@ return;
 function showResultScreen() {
   hideAllScreens();
 
-  const resultScreen = document.getElementById("result-screen");
-  const resultContent = document.getElementById("result-content");
+  const resultScreen =
+    document.getElementById("result-screen");
+
+  const resultContent =
+    document.getElementById("result-content");
 
   setHidden(resultScreen, false);
 
   const resultRef = ref(
     database,
-    "rooms/" + currentRoomName + "/result"
+    "rooms/" +
+    currentRoomName +
+    "/result"
   );
 
   get(resultRef)
     .then((snapshot) => {
-      if (!snapshot.exists()) return;
+      if (!snapshot.exists()) {
+        return;
+      }
 
       const resultData = snapshot.val();
 
-      if (!resultContent) return;
+      if (!resultContent) {
+        return;
+      }
 
       if (resultData.winner === "citizen") {
         resultContent.innerHTML = `
@@ -1179,38 +1508,58 @@ function showResultScreen() {
 }
 
 function setupResultButtons() {
-  const resultAnswerButton = document.getElementById("result-answer-button");
-  const resultRestartButton = document.getElementById("result-restart-button");
-  const resultQuitButton = document.getElementById("result-quit-button");
+  const resultAnswerButton =
+    document.getElementById("result-answer-button");
+
+  const resultRestartButton =
+    document.getElementById("result-restart-button");
+
+  const resultQuitButton =
+    document.getElementById("result-quit-button");
 
   if (resultAnswerButton) {
-    resultAnswerButton.addEventListener("click", showAnswerArea);
+    resultAnswerButton.addEventListener(
+      "click",
+      showAnswerArea
+    );
   }
 
   if (resultRestartButton) {
-    resultRestartButton.addEventListener("click", restartGame);
+    resultRestartButton.addEventListener(
+      "click",
+      restartGame
+    );
   }
 
   if (resultQuitButton) {
-    resultQuitButton.addEventListener("click", quitGame);
+    resultQuitButton.addEventListener(
+      "click",
+      quitGame
+    );
   }
 }
 
 function renderVoteResult() {
-  const roomRef = ref(database, "rooms/" + currentRoomName);
+  const roomRef =
+    ref(database, "rooms/" + currentRoomName);
 
   get(roomRef)
     .then((snapshot) => {
-      if (!snapshot.exists()) return;
+      if (!snapshot.exists()) {
+        return;
+      }
 
       const roomData = snapshot.val();
 
       const players = roomData.players || {};
       const votes = roomData.votes || {};
 
-      const voteResultList = document.getElementById("vote-result-list");
+      const voteResultList =
+        document.getElementById("vote-result-list");
 
-      if (!voteResultList) return;
+      if (!voteResultList) {
+        return;
+      }
 
       voteResultList.innerHTML = "";
 
@@ -1247,9 +1596,12 @@ function renderVoteResult() {
 }
 
 function showAnswerArea() {
-  if (!answerArea) return;
+  if (!answerArea) {
+    return;
+  }
 
-  const gameRef = ref(database, "rooms/" + currentRoomName + "/game");
+  const gameRef =
+    ref(database, "rooms/" + currentRoomName + "/game");
 
   get(gameRef)
     .then((snapshot) => {
@@ -1262,17 +1614,24 @@ function showAnswerArea() {
 
       answerArea.innerHTML = "";
 
-      const title = document.createElement("h3");
-      const citizenTopic = document.createElement("p");
-      const wolfTopic = document.createElement("p");
+      const title =
+        document.createElement("h3");
+
+      const citizenTopic =
+        document.createElement("p");
+
+      const wolfTopic =
+        document.createElement("p");
 
       title.textContent = "お題";
 
       citizenTopic.textContent =
-        "市民のお題：" + (gameData.citizenTopic || "不明");
+        "市民のお題：" +
+        (gameData.citizenTopic || "不明");
 
       wolfTopic.textContent =
-        "ワードウルフのお題：" + (gameData.wolfTopic || "不明");
+        "ワードウルフのお題：" +
+        (gameData.wolfTopic || "不明");
 
       answerArea.appendChild(title);
       answerArea.appendChild(citizenTopic);
@@ -1296,7 +1655,8 @@ function restartGame() {
     return;
   }
 
-  const roomRef = ref(database, "rooms/" + currentRoomName);
+  const roomRef =
+    ref(database, "rooms/" + currentRoomName);
 
   const restartData =
     game.createRestartData
@@ -1343,7 +1703,10 @@ function quitGame() {
 
   const playerRef = ref(
     database,
-    "rooms/" + currentRoomName + "/players/" + currentPlayerId
+    "rooms/" +
+    currentRoomName +
+    "/players/" +
+    currentPlayerId
   );
 
   remove(playerRef)
@@ -1367,16 +1730,21 @@ function quitGame() {
 // =========================
 
 function listenPlayers(roomName) {
-  const playersRef = ref(database, "rooms/" + roomName + "/players");
+  const playersRef =
+    ref(database, "rooms/" + roomName + "/players");
 
   onValue(playersRef, (snapshot) => {
     const players = snapshot.val();
 
-    if (!playerList) return;
+    if (!playerList) {
+      return;
+    }
 
     playerList.innerHTML = "";
 
-    if (!players) return;
+    if (!players) {
+      return;
+    }
 
     Object.keys(players).forEach((playerId) => {
       const player = players[playerId];
@@ -1390,8 +1758,12 @@ function listenPlayers(roomName) {
 
       li.appendChild(nameSpan);
 
-      if (currentIsHost && playerId !== currentPlayerId) {
-        const kickButton = document.createElement("button");
+      if (
+        currentIsHost &&
+        playerId !== currentPlayerId
+      ) {
+        const kickButton =
+          document.createElement("button");
 
         kickButton.textContent = "退出";
         kickButton.classList.add("kick-button");
@@ -1423,11 +1795,16 @@ function kickPlayer(targetPlayerId, targetPlayerName) {
     targetPlayerName + "さんを退出させますか？"
   );
 
-  if (!isOk) return;
+  if (!isOk) {
+    return;
+  }
 
   const targetPlayerRef = ref(
     database,
-    "rooms/" + currentRoomName + "/players/" + targetPlayerId
+    "rooms/" +
+    currentRoomName +
+    "/players/" +
+    targetPlayerId
   );
 
   remove(targetPlayerRef)
@@ -1447,6 +1824,8 @@ function kickPlayer(targetPlayerId, targetPlayerName) {
 function hideAllScreens() {
   const screens = [
     "title-screen",
+    "create-room-screen",
+    "join-room-screen",
     "waiting-screen",
     "topic-screen",
     "discussion-screen",
@@ -1456,7 +1835,8 @@ function hideAllScreens() {
   ];
 
   screens.forEach((screenId) => {
-    const screen = document.getElementById(screenId);
+    const screen =
+      document.getElementById(screenId);
 
     if (screen) {
       screen.classList.add("hidden");
