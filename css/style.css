@@ -799,6 +799,39 @@ button {
   font-size: 15px;
   font-weight: bold;
 }
+/* =========================
+   同票説明画面
+========================= */
+
+#tie-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#tie-screen.hidden {
+  display: none;
+}
+
+.tie-card {
+  width: min(90%, 520px);
+  padding: 40px 32px;
+  border-radius: 28px;
+  text-align: center;
+}
+
+.tie-title {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.tie-message,
+.tie-sub-message,
+.tie-note {
+  font-size: 18px;
+  line-height: 1.8;
+}
 /*変更箇所--ここまで--*/
 
 .vote-title {
