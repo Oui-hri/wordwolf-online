@@ -707,15 +707,32 @@
 }
 
 /* 狼3枚をまとめる箱 */
-.vote-wolf-runner {
-  position: absolute;
-  left: 68%;
-  bottom: 18px;
 
-  width: 84px;
-  height: 42px;
+/* =========================
+   投票待機：狼を同票画面と同じ方式で動かす
+========================= */
 
-  animation: voteWolfBounce 0.34s infinite ease-in-out;
+.vote-waiting-area .vote-wolf-runner {
+  position: absolute !important;
+  left: 0;
+  bottom: 18px !important;
+
+  width: 84px !important;
+  height: 42px !important;
+
+  animation:
+    voteWolfMove 2.4s infinite linear,
+    voteWolfBounce 0.34s infinite ease-in-out !important;
+}
+
+@keyframes voteWolfMove {
+  from {
+    left: 0;
+  }
+
+  to {
+    left: calc(100% - 84px);
+  }
 }
 
 /* 狼画像共通 */
@@ -841,6 +858,7 @@
     transform: translateY(0);
   }
 }
+
 
 /* 狼フレーム1 */
 @keyframes voteWolfFrame1 {
@@ -1126,16 +1144,6 @@
   overflow: hidden !important;
 }
 
-.vote-wolf-runner {
-  position: absolute !important;
-  left: 68% !important;
-  bottom: 18px !important;
-
-  width: 84px !important;
-  height: 42px !important;
-
-  animation: voteWolfBounce 0.34s infinite ease-in-out !important;
-}
 
 .vote-wolf {
   position: absolute !important;
@@ -1149,4 +1157,32 @@
 
   mix-blend-mode: screen !important;
   filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.65)) !important;
+}
+
+
+/* =========================
+   投票待機：狼を同票画面と同じ方式で動かす
+========================= */
+
+.vote-waiting-area .vote-wolf-runner {
+  position: absolute !important;
+  left: 0;
+  bottom: 18px !important;
+
+  width: 84px !important;
+  height: 42px !important;
+
+  animation:
+    voteWolfMove 2.4s infinite linear,
+    voteWolfBounce 0.34s infinite ease-in-out !important;
+}
+
+@keyframes voteWolfMove {
+  from {
+    left: 0;
+  }
+
+  to {
+    left: calc(100% - 84px);
+  }
 }
