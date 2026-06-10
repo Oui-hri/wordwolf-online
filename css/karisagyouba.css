@@ -473,3 +473,680 @@
     }
   }
 }
+
+
+/* =========================
+   投票画面：投票後待機UI
+========================= */
+
+/* 説明文 */
+.vote-description {
+  margin: 0 0 36px;
+
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+/* 投票後エリア */
+.vote-waiting-area {
+  width: 100%;
+  margin-top: 36px;
+}
+
+.vote-waiting-area.hidden {
+  display: none;
+}
+
+/* 待機カード */
+.vote-waiting-area {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background-color: #10084a;
+
+  background-image:
+    url("../images/tuki.png"),
+    url("../images/tie-mountain-castle.png"),
+    url("../images/tie-night-sky.png");
+
+  background-repeat:
+    no-repeat,
+    no-repeat,
+    no-repeat;
+
+  background-size:
+    120px auto,
+    cover,
+    cover;
+
+  background-position:
+    64px 42px,
+    center bottom,
+    center center;
+}
+
+.vote-waiting-area.hidden {
+  display: none;
+}
+
+/* 投票しました */
+.vote-waiting-title {
+  margin: 0 0 26px;
+
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  line-height: 1.2;
+
+  color: #ffffff;
+
+  text-shadow:
+    0 0 8px rgba(255, 255, 255, 0.85),
+    0 0 20px rgba(255, 255, 255, 0.35);
+}
+
+/* 肉球つき区切り */
+.vote-waiting-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+
+  width: 320px;
+  max-width: 68%;
+  margin: 0 auto 34px;
+}
+
+.vote-waiting-divider span {
+  flex: 1;
+  height: 1px;
+
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(202, 122, 46, 0.95),
+      transparent);
+}
+
+.vote-waiting-paw-center {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+
+  filter: drop-shadow(0 0 8px rgba(255, 168, 70, 0.65));
+}
+
+/* 待機文 */
+.vote-waiting-message {
+  margin: 0 0 26px;
+
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  line-height: 1.7;
+}
+
+/* 投票状況 */
+.vote-status-count {
+  margin: 0 0 30px;
+
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 2px;
+
+  color: #ffffff;
+}
+
+.vote-status-count .vote-count-current {
+  color: #ffe4a0;
+  text-shadow:
+    0 0 10px rgba(255, 228, 160, 0.8),
+    0 0 18px rgba(255, 174, 72, 0.45);
+}
+
+/* =========================
+   肉球ローディング
+   0個 → 1個 → 2個 → 3個 → 0個
+========================= */
+
+.vote-paw-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 26px;
+
+  height: 46px;
+  margin-bottom: 36px;
+}
+
+.vote-paw {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+
+  opacity: 0;
+  transform: scale(0.82);
+
+  filter: drop-shadow(0 0 9px rgba(255, 174, 72, 0.65));
+}
+
+.vote-paw-1 {
+  animation: votePaw1 1.6s infinite;
+}
+
+.vote-paw-2 {
+  animation: votePaw2 1.6s infinite;
+}
+
+.vote-paw-3 {
+  animation: votePaw3 1.6s infinite;
+}
+
+/* =========================
+   投票待機：狼と進行バー
+========================= */
+
+.vote-runner-area {
+  position: relative;
+
+  width: 430px;
+  max-width: 80%;
+  height: 64px;
+
+  margin: 0 auto;
+}
+
+/* バー土台 */
+.vote-progress-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 12px;
+
+  height: 4px;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+/* 待機中なのでループで流れるバー */
+.vote-progress-line::before {
+  content: "";
+
+  position: absolute;
+  top: 0;
+  left: -40%;
+
+  width: 40%;
+  height: 100%;
+
+  border-radius: 999px;
+
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(232, 137, 33, 0.95),
+      rgba(255, 221, 139, 1),
+      transparent);
+
+  box-shadow: 0 0 12px rgba(255, 174, 72, 0.8);
+
+  animation: voteProgressLoop 1.8s infinite linear;
+}
+
+/* 狼3枚をまとめる箱 */
+.vote-wolf-runner {
+  position: absolute;
+  left: 68%;
+  bottom: 18px;
+
+  width: 84px;
+  height: 42px;
+
+  animation: voteWolfBounce 0.34s infinite ease-in-out;
+}
+
+/* 狼画像共通 */
+.vote-wolf {
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  width: 84px;
+  height: auto;
+
+  opacity: 0;
+
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.65));
+}
+
+/* 3枚切り替え */
+.vote-wolf-1 {
+  animation: voteWolfFrame1 0.45s infinite;
+}
+
+.vote-wolf-2 {
+  animation: voteWolfFrame2 0.45s infinite;
+}
+
+.vote-wolf-3 {
+  animation: voteWolfFrame3 0.45s infinite;
+}
+
+/* =========================
+   投票待機アニメーション
+========================= */
+
+/* 肉球1個目 */
+@keyframes votePaw1 {
+
+  0%,
+  18% {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+
+  19%,
+  74% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  75%,
+  100% {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+}
+
+/* 肉球2個目 */
+@keyframes votePaw2 {
+
+  0%,
+  36% {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+
+  37%,
+  74% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  75%,
+  100% {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+}
+
+/* 肉球3個目 */
+@keyframes votePaw3 {
+
+  0%,
+  54% {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+
+  55%,
+  74% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  75%,
+  100% {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+}
+
+/* バーが流れる */
+@keyframes voteProgressLoop {
+  from {
+    left: -40%;
+  }
+
+  to {
+    left: 100%;
+  }
+}
+
+/* 狼の軽い上下揺れ */
+@keyframes voteWolfBounce {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* 狼フレーム1 */
+@keyframes voteWolfFrame1 {
+
+  0%,
+  33% {
+    opacity: 1;
+  }
+
+  34%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* 狼フレーム2 */
+@keyframes voteWolfFrame2 {
+
+  0%,
+  33% {
+    opacity: 0;
+  }
+
+  34%,
+  66% {
+    opacity: 1;
+  }
+
+  67%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* 狼フレーム3 */
+@keyframes voteWolfFrame3 {
+
+  0%,
+  66% {
+    opacity: 0;
+  }
+
+  67%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* =========================
+   スマホ寄り調整
+========================= */
+
+@media (max-width: 768px) {
+  .vote-waiting-card {
+    width: 78vw;
+    padding: 36px 28px 38px;
+    border-radius: 20px;
+  }
+
+  .vote-waiting-title {
+    font-size: 32px;
+    letter-spacing: 2px;
+  }
+
+  .vote-waiting-message {
+    font-size: 18px;
+  }
+
+  .vote-status-count {
+    font-size: 18px;
+  }
+
+  .vote-paw {
+    width: 28px;
+    height: 28px;
+  }
+
+  .vote-runner-area {
+    width: 86%;
+  }
+
+  .vote-wolf-runner {
+    width: 68px;
+    height: 36px;
+  }
+
+  .vote-wolf {
+    width: 68px;
+  }
+}
+/* =========================
+   投票待機画面：全画面＋中央カード修正
+========================= */
+
+.vote-waiting-area {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 100 !important;
+
+  width: 100vw !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  overflow: hidden !important;
+
+  background-color: #10084a !important;
+
+  background-image:
+    url("../images/tuki.png"),
+    url("../images/tie-mountain-castle.png"),
+    url("../images/tie-night-sky.png") !important;
+
+  background-repeat:
+    no-repeat,
+    no-repeat,
+    no-repeat !important;
+
+  background-size:
+    120px auto,
+    cover,
+    cover !important;
+
+  background-position:
+    58px 36px,
+    center bottom,
+    center center !important;
+}
+
+.vote-waiting-area.hidden {
+  display: none !important;
+}
+
+/* カードを中央に固定 */
+.vote-waiting-card {
+  position: relative !important;
+  z-index: 2 !important;
+
+  width: 620px !important;
+  max-width: 72vw !important;
+
+  margin: 0 auto !important;
+  padding: 48px 56px 44px !important;
+
+  border-radius: 24px !important;
+  border: 1px solid rgba(164, 92, 255, 0.34) !important;
+
+  background: rgba(16, 8, 58, 0.68) !important;
+  backdrop-filter: blur(4px) !important;
+
+  color: #ffffff !important;
+  text-align: center !important;
+
+  box-shadow:
+    0 0 24px rgba(120, 72, 255, 0.24),
+    0 20px 60px rgba(0, 0, 0, 0.32) !important;
+}
+
+/* タイトル */
+.vote-waiting-title {
+  margin: 0 0 26px !important;
+
+  font-size: 42px !important;
+  font-weight: 900 !important;
+  letter-spacing: 4px !important;
+  line-height: 1.2 !important;
+
+  color: #ffffff !important;
+  text-align: center !important;
+
+  text-shadow:
+    0 0 8px rgba(255, 255, 255, 0.85),
+    0 0 20px rgba(255, 255, 255, 0.35) !important;
+}
+
+/* 区切り */
+.vote-waiting-divider {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 16px !important;
+
+  width: 320px !important;
+  max-width: 68% !important;
+  margin: 0 auto 34px !important;
+}
+
+.vote-waiting-divider span {
+  flex: 1 !important;
+  height: 1px !important;
+
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(202, 122, 46, 0.95),
+      transparent) !important;
+}
+
+.vote-waiting-paw-center {
+  width: 28px !important;
+  height: 28px !important;
+  object-fit: contain !important;
+
+  filter: drop-shadow(0 0 8px rgba(255, 168, 70, 0.65)) !important;
+}
+
+/* 文言 */
+.vote-waiting-message {
+  margin: 0 0 26px !important;
+
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px !important;
+  line-height: 1.7 !important;
+  text-align: center !important;
+}
+
+.vote-status-count {
+  margin: 0 0 30px !important;
+
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  letter-spacing: 2px !important;
+
+  color: #ffffff !important;
+  text-align: center !important;
+}
+
+.vote-count-current {
+  color: #ffe4a0 !important;
+
+  text-shadow:
+    0 0 10px rgba(255, 228, 160, 0.8),
+    0 0 18px rgba(255, 174, 72, 0.45) !important;
+}
+
+/* 肉球ローディング */
+.vote-paw-loading {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 26px !important;
+
+  height: 46px !important;
+  margin: 0 auto 36px !important;
+}
+
+.vote-paw {
+  width: 34px !important;
+  height: 34px !important;
+  object-fit: contain !important;
+
+  opacity: 0;
+  transform: scale(0.82);
+
+  filter: drop-shadow(0 0 9px rgba(255, 174, 72, 0.65)) !important;
+}
+
+/* バーと狼をカード内に収める */
+.vote-runner-area {
+  position: relative !important;
+
+  width: 430px !important;
+  max-width: 80% !important;
+  height: 64px !important;
+
+  margin: 0 auto !important;
+}
+
+.vote-progress-line {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 12px !important;
+
+  height: 4px !important;
+  border-radius: 999px !important;
+
+  background: rgba(255, 255, 255, 0.12) !important;
+  overflow: hidden !important;
+}
+
+.vote-wolf-runner {
+  position: absolute !important;
+  left: 68% !important;
+  bottom: 18px !important;
+
+  width: 84px !important;
+  height: 42px !important;
+
+  animation: voteWolfBounce 0.34s infinite ease-in-out !important;
+}
+
+.vote-wolf {
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+
+  width: 84px !important;
+  height: auto !important;
+
+  opacity: 0;
+
+  mix-blend-mode: screen !important;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.65)) !important;
+}

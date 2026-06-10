@@ -252,15 +252,64 @@
       投票タイム
     </h2>
 
-    <p>
+    <p class="vote-description">
       最も怪しい人物に投票してください
     </p>
 
+    <!-- 投票前：プレイヤー一覧 -->
     <div id="vote-list"></div>
 
+    <!-- 投票前：投票ボタン -->
     <button id="vote-button">
       投票する
     </button>
+
+    <!-- 投票後：待機表示 -->
+    <div id="vote-waiting-area" class="vote-waiting-area hidden">
+
+      <div class="vote-waiting-card">
+
+        <h3 class="vote-waiting-title">
+          投票しました
+        </h3>
+
+        <div class="vote-waiting-divider">
+          <span></span>
+
+          <img src="images/nikukyuu.png" alt="" class="vote-waiting-paw-center">
+
+          <span></span>
+        </div>
+
+        <p class="vote-waiting-message">
+          他の人の投票を待っています…
+        </p>
+
+        <p id="vote-status-count" class="vote-status-count">
+          投票状況 0 / 0
+        </p>
+
+        <div class="vote-paw-loading">
+          <img src="images/nikukyuu.png" alt="" class="vote-paw vote-paw-1">
+          <img src="images/nikukyuu.png" alt="" class="vote-paw vote-paw-2">
+          <img src="images/nikukyuu.png" alt="" class="vote-paw vote-paw-3">
+        </div>
+
+        <div class="vote-runner-area">
+
+          <div class="vote-progress-line"></div>
+
+          <div class="vote-wolf-runner">
+            <img src="images/tie-wolf-run-1.png" alt="" class="vote-wolf vote-wolf-1">
+            <img src="images/tie-wolf-run-2.png" alt="" class="vote-wolf vote-wolf-2">
+            <img src="images/tie-wolf-run-3.png" alt="" class="vote-wolf vote-wolf-3">
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
 
   </section>
 

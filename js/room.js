@@ -32,8 +32,16 @@ const startGameButton = document.getElementById("start-game-button");
 const categoryArea = document.getElementById("category-area");
 const categorySelect = document.getElementById("category-select");
 const topicCard = document.getElementById("player-word");
+
 const voteList = document.getElementById("vote-list");
 const voteButton = document.getElementById("vote-button");
+
+const voteWaitingArea =
+  document.getElementById("vote-waiting-area");
+
+const voteStatusCount =
+  document.getElementById("vote-status-count");
+
 const answerButton = document.getElementById("answer-button");
 const answerArea = document.getElementById("answer-area");
 const restartButton = document.getElementById("restart-button");
@@ -100,6 +108,8 @@ let lastDiscussionTime = null;
 
 let isVoteCounted = false;
 let lastStatus = "";
+
+let stopVoteProgressListener = null;
 
 // =========================
 // イベント登録
@@ -276,6 +286,7 @@ function showJoinRoomScreen() {
 
   setHidden(joinRoomScreen, false);
 }
+
 function watchMyPlayerStatus() {
   if (!currentRoomName || !currentPlayerId) {
     return;
@@ -305,6 +316,7 @@ function watchMyPlayerStatus() {
     location.reload();
   });
 }
+
 // =========================
 // セッション
 // =========================
@@ -386,6 +398,8 @@ function resetLocalState() {
   isVoteCounted = false;
   lastStatus = "";
   lastDiscussionTime = null;
+
+  stopVoteProgressWatch();
 }
 
 // =========================
@@ -460,7 +474,6 @@ function createRoom() {
       listenRoomStatus(roomName);
       watchMyPlayerStatus();
     })
-
     .catch((error) => {
       console.error("ルーム作成エラー", error);
 
@@ -1137,11 +1150,20 @@ function showVoteScreen() {
   hasVoted = false;
   isVoteCounted = false;
 
+  setHidden(voteWaitingArea, true);
+  setHidden(voteList, false);
+
+  if (voteStatusCount) {
+    voteStatusCount.textContent = "投票状況 0 / 0";
+  }
+
   if (voteButton) {
     voteButton.disabled = false;
     voteButton.style.display = "none";
     voteButton.textContent = "投票する";
   }
+
+  stopVoteProgressWatch();
 
   renderVoteList();
 
@@ -1262,22 +1284,75 @@ function submitVote() {
 }
 
 function showVoteWaiting() {
-  if (voteList) {
-    voteList.innerHTML = "";
-
-    const message =
-      document.createElement("p");
-
-    message.textContent =
-      "投票しました。他の人の投票を待っています...";
-
-    voteList.appendChild(message);
-  }
+  setHidden(voteList, true);
+  setHidden(voteWaitingArea, false);
 
   if (voteButton) {
     voteButton.disabled = true;
     voteButton.style.display = "none";
   }
+
+  startVoteProgressWatch();
+}
+
+function startVoteProgressWatch() {
+  stopVoteProgressWatch();
+
+  if (!currentRoomName) {
+    return;
+  }
+
+  const votesRef = ref(
+    database,
+    "rooms/" +
+    currentRoomName +
+    "/votes"
+  );
+
+  stopVoteProgressListener =
+    onValue(votesRef, (snapshot) => {
+      const votes = snapshot.val() || {};
+
+      updateVoteStatusCount(votes);
+    });
+}
+
+function stopVoteProgressWatch() {
+  if (stopVoteProgressListener) {
+    stopVoteProgressListener();
+    stopVoteProgressListener = null;
+  }
+}
+
+function updateVoteStatusCount(votes) {
+  if (!voteStatusCount) {
+    return;
+  }
+
+  const roomRef =
+    ref(database, "rooms/" + currentRoomName);
+
+  get(roomRef)
+    .then((snapshot) => {
+      if (!snapshot.exists()) {
+        return;
+      }
+
+      const roomData = snapshot.val();
+      const players = roomData.players || {};
+
+      const votedCount =
+        Object.keys(votes || {}).length;
+
+      const totalPlayerCount =
+        Object.keys(players).length;
+
+      voteStatusCount.innerHTML =
+        `投票状況 <span class="vote-count-current">${votedCount}</span> / ${totalPlayerCount}`;
+    })
+    .catch((error) => {
+      console.error("投票状況取得エラー", error);
+    });
 }
 
 // =========================
@@ -1469,27 +1544,26 @@ function showResultScreen() {
             <div id="vote-result-list"></div>
           </div>
 
-         <div class="result-buttons">
-  <button class="result-btn citizen-btn"
-          id="result-answer-button">
-    お題を確認
-  </button>
+          <div class="result-buttons">
+            <button class="result-btn citizen-btn"
+                    id="result-answer-button">
+              お題を確認
+            </button>
 
-  <div id="answer-area" class="answer-card hidden"></div>
+            <div id="answer-area" class="answer-card hidden"></div>
 
-  <button class="result-btn citizen-btn"
-          id="result-restart-button">
-    もう一度遊ぶ
-  </button>
-</div>
+            <button class="result-btn citizen-btn"
+                    id="result-restart-button">
+              もう一度遊ぶ
+            </button>
+          </div>
 
-<div class="result-buttons">
-  <button class="result-btn citizen-btn"
-          id="result-quit-button">
-    ゲームをやめる
-  </button>
-</div>
-
+          <div class="result-buttons">
+            <button class="result-btn citizen-btn"
+                    id="result-quit-button">
+              ゲームをやめる
+            </button>
+          </div>
         `;
       } else {
         resultContent.innerHTML = `
@@ -1524,26 +1598,25 @@ function showResultScreen() {
           </div>
 
           <div class="result-buttons">
-  <button class="result-btn wolf-btn"
-          id="result-answer-button">
-    お題を確認
-  </button>
+            <button class="result-btn wolf-btn"
+                    id="result-answer-button">
+              お題を確認
+            </button>
 
-  <div id="answer-area" class="answer-card hidden"></div>
+            <div id="answer-area" class="answer-card hidden"></div>
 
-  <button class="result-btn wolf-btn"
-          id="result-restart-button">
-    もう一度遊ぶ
-  </button>
-</div>
+            <button class="result-btn wolf-btn"
+                    id="result-restart-button">
+              もう一度遊ぶ
+            </button>
+          </div>
 
-
-<div class="result-buttons">
-  <button class="result-btn wolf-btn"
-          id="result-quit-button">
-    ゲームをやめる
-  </button>
-</div>
+          <div class="result-buttons">
+            <button class="result-btn wolf-btn"
+                    id="result-quit-button">
+              ゲームをやめる
+            </button>
+          </div>
         `;
       }
 
