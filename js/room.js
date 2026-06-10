@@ -889,7 +889,7 @@ function showTieScreen() {
     update(roomRef, {
       status: "discussion"
     });
-  }, 3000);
+  }, 5000);
 }
 
 function listenDiscussionTime() {
