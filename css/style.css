@@ -1652,3 +1652,241 @@ button {
 .answer-topic-text {
   font-weight: bold;
 }
+
+/* =========================
+   同票説明画面
+========================= */
+
+#tie-screen {
+  min-height: 100vh;
+  padding: 40px 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    radial-gradient(circle at 15% 15%, rgba(255, 230, 160, 0.16), transparent 18%),
+    radial-gradient(circle at 80% 25%, rgba(255, 255, 255, 0.08), transparent 3%),
+    linear-gradient(180deg, #180b4f 0%, #13083f 100%);
+
+  box-sizing: border-box;
+}
+
+#tie-screen.hidden {
+  display: none;
+}
+
+.tie-card {
+  width: min(88%, 680px);
+  padding: 56px 52px 48px;
+
+  border-radius: 28px;
+  border: 1px solid rgba(170, 110, 255, 0.38);
+
+  background: rgba(22, 10, 68, 0.78);
+  box-shadow:
+    0 0 24px rgba(150, 90, 255, 0.28),
+    0 24px 80px rgba(0, 0, 0, 0.35);
+
+  text-align: center;
+  color: #fff;
+}
+
+.tie-title {
+  margin: 0 0 28px;
+
+  font-size: 44px;
+  font-weight: 900;
+  letter-spacing: 4px;
+
+  color: #ffffff;
+  text-shadow:
+    0 0 10px rgba(255, 255, 255, 0.55),
+    0 0 22px rgba(170, 130, 255, 0.35);
+}
+
+.tie-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+
+  width: min(80%, 360px);
+  margin: 0 auto 34px;
+}
+
+.tie-divider span {
+  flex: 1;
+  height: 1px;
+
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(234, 142, 0, 0.8),
+      transparent);
+}
+
+.tie-paw {
+  width: 22px;
+  height: 22px;
+
+  color: #e88a00;
+  font-size: 13px;
+  line-height: 22px;
+
+  text-shadow: 0 0 12px rgba(255, 170, 40, 0.8);
+}
+
+.tie-message {
+  margin: 0 0 22px;
+
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.tie-sub-message {
+  margin: 0 0 34px;
+
+  font-size: 22px;
+  letter-spacing: 2px;
+}
+
+.tie-sub-message span {
+  color: #ff9800;
+  font-weight: 900;
+  text-shadow: 0 0 12px rgba(255, 152, 0, 0.55);
+}
+
+.tie-loading-dots {
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+
+  margin-bottom: 34px;
+}
+
+.tie-loading-dots span {
+  width: 14px;
+  height: 14px;
+
+  border-radius: 50%;
+  background: #ffe29a;
+
+  box-shadow: 0 0 16px rgba(255, 210, 120, 0.8);
+
+  animation: tieDotBlink 1s infinite ease-in-out;
+}
+
+.tie-loading-dots span:nth-child(2) {
+  animation-delay: 0.18s;
+}
+
+.tie-loading-dots span:nth-child(3) {
+  animation-delay: 0.36s;
+}
+
+.tie-runner-area {
+  position: relative;
+
+  width: min(82%, 440px);
+  height: 46px;
+
+  margin: 0 auto;
+}
+
+.tie-progress-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 14px;
+
+  height: 4px;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+.tie-progress-line::before {
+  content: "";
+
+  display: block;
+  width: 0%;
+  height: 100%;
+
+  border-radius: 999px;
+
+  background: linear-gradient(90deg,
+      #ff9800,
+      #ffd67a,
+      #9b7cff);
+
+  box-shadow: 0 0 14px rgba(255, 152, 0, 0.75);
+
+  animation: tieProgress 3s linear forwards;
+}
+
+.tie-runner {
+  position: absolute;
+  left: 0;
+  bottom: 12px;
+
+  font-size: 30px;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.75));
+
+  animation:
+    tieRun 3s linear forwards,
+    tieBounce 0.32s infinite ease-in-out;
+}
+
+@keyframes tieDotBlink {
+  0% {
+    opacity: 0.35;
+    transform: scale(0.82);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+
+  100% {
+    opacity: 0.35;
+    transform: scale(0.82);
+  }
+}
+
+@keyframes tieProgress {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes tieRun {
+  from {
+    left: 0;
+  }
+
+  to {
+    left: calc(100% - 34px);
+  }
+}
+
+@keyframes tieBounce {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
