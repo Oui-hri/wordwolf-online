@@ -309,6 +309,8 @@ button {
     0 0 40px rgba(145, 70, 255, 0.2);
 
   margin: 00px 0;
+
+  padding-top: 100px;
 }
 
 /* タイトル */
@@ -329,6 +331,13 @@ button {
   text-shadow:
     0 0 8px rgba(255, 255, 255, .7),
     0 0 20px rgba(200, 140, 255, .5);
+
+  transform: translateY(-20px);
+}
+
+
+#create-room-screen .join-title {
+  margin-bottom: 40px;
 
   transform: translateY(-20px);
 }
@@ -368,7 +377,6 @@ button {
   justify-content: center;
 
   gap: 12px;
-  /* タイトルとの距離だけ */
 
   color: white;
 
@@ -376,6 +384,10 @@ button {
   font-weight: 600;
 
   letter-spacing: 3px;
+
+  text-shadow:
+    0 0 8px rgba(255, 255, 255, .7),
+    0 0 20px rgba(200, 140, 255, .5);
 
   transform: translateY(-20px);
 }
@@ -501,92 +513,73 @@ button {
   margin-bottom: 5px;
 }
 
-/* ボタン共通 */
+/* =========================
+   ボタン共通
+========================= */
 
 #join-room-submit-button,
-#join-room-back-button {
-  width: 100%;
-
+#join-room-back-button,
+#create-room-submit-button,
+#create-room-back-button {
+  width: 280px;
   height: 95px;
 
-  border: none;
+  padding: 16px;
 
-  border-radius: 999px;
+  border-radius: 20px;
 
-  font-size: 2rem;
-
-  font-weight: bold;
-
-  color: white;
+  font-family: "Zen Kaku Gothic New", sans-serif;
+  font-size: 1.125rem;
 
   cursor: pointer;
 
-  transition: .25s;
-
-  margin-top: 8px;
+  transition: all 0.3s;
 }
 
 #join-room-submit-button:hover,
-#join-room-back-button:hover {
+#join-room-back-button:hover,
+#create-room-submit-button:hover,
+#create-room-back-button:hover {
   transform: translateY(-3px);
 }
 
-/* 参加ボタン */
+/* =========================
+   オレンジボタン
+========================= */
 
-#join-room-submit-button {
+#join-room-submit-button,
+#create-room-submit-button {
   background:
-    linear-gradient(135deg,
-      #ff9558,
-      #ff6633);
-
-  box-shadow:
-    0 0 20px rgba(255, 120, 60, .4);
-}
-
-/* 戻るボタン */
-
-#join-room-submit-button {
-  width: 280px;
-  padding: 16px;
-
-  background: linear-gradient(180deg,
+    linear-gradient(180deg,
       #f08a00 0%,
       #e06d00 55%,
       #c95a00 100%);
 
   color: white;
 
-  border-radius: 20px;
+  border: 1px solid rgba(255, 180, 0, 0.5);
 
   box-shadow:
     0 0 15px rgba(255, 140, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 
-  border: 1px solid rgba(255, 180, 0, 0.5);
-
-  backdrop-filter: blur(4px);
-
-  transition: all 0.3s;
-
-  font-family: "Zen Kaku Gothic New", sans-serif;
-  font-size: 1.125rem;
-
   position: relative;
   top: -50px;
 }
 
-#join-room-back-button {
-  width: 280px;
-  padding: 16px;
+/* =========================
+   紫ボタン
+========================= */
 
-  background: linear-gradient(135deg,
+#join-room-back-button,
+#create-room-back-button {
+  background:
+    linear-gradient(135deg,
       #4b2c78 0%,
       #39205f 45%,
       #23234a 100%);
 
   color: #fff8e7;
-
-  border-radius: 20px;
 
   border: 1px solid rgba(255, 140, 0, 0.25);
 
@@ -594,26 +587,83 @@ button {
     0 0 15px rgba(111, 66, 193, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
-  transition: all 0.3s;
-
-  font-family: "Zen Kaku Gothic New", sans-serif;
-  font-size: 1.125rem;
-
   position: relative;
   top: -55px;
 }
 
+/* =========================
+   ボタン配置
+========================= */
+
 .join-buttons {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+
   align-items: center;
+
+  gap: 16px;
+
   margin-top: 20px;
-  /* 60 → 20 */
 }
 
 .join-buttons button {
   flex: 1;
+}
+
+#create-room-screen {
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  padding-top: 50px;
+
+  background:
+    radial-gradient(circle at top,
+      #2d106d 0%,
+      #17003f 70%);
+
+  overflow-y: auto;
+}
+
+#create-room-name-input,
+#create-player-name-input {
+  width: 100%;
+
+  height: 64px;
+
+  padding: 0 24px;
+
+  margin-bottom: 18px;
+
+  box-sizing: border-box;
+
+  border: 2px solid #b04fff;
+
+  border-radius: 18px;
+
+  background: rgba(35, 0, 80, 0.7);
+
+  color: white;
+
+  font-size: 1.2rem;
+
+  outline: none;
+
+  transition: 0.3s;
+}
+
+#create-room-name-input:focus,
+#create-player-name-input:focus {
+  box-shadow:
+    0 0 10px #b04fff,
+    0 0 20px #b04fff;
+}
+
+#create-room-name-input::placeholder,
+#create-player-name-input::placeholder {
+  color: rgba(255, 255, 255, .5);
 }
 
 .room-label {
