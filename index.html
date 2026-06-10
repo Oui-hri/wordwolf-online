@@ -5,6 +5,7 @@
   <title>ワードウルフ</title>
 
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/karisagyouba.css">
 
   <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
 </head>
@@ -266,25 +267,37 @@
   <!-- 同票説明 -->
   <section id="tie-screen" class="screen hidden">
 
+    <!-- 背景レイヤー -->
+    <div class="tie-bg-wrap">
+      <img src="images/tie-night-sky.png" alt="" class="tie-bg-sky">
+
+      <img src="images/tie-mountain-castle.png" alt="" class="tie-bg-mountain">
+
+      <img src="images/tuki.png" alt="" class="tie-moon">
+    </div>
+
+    <!-- 中央カード -->
     <div class="tie-card">
 
       <h2 class="tie-title">
-      同票になりました
-    </h2>
+        同票になりました
+      </h2>
 
       <div class="tie-divider">
         <span></span>
-        <div class="tie-paw">●</div>
+
+        <img src="images/nikukyuu.png" alt="" class="tie-paw-icon">
+
         <span></span>
       </div>
 
       <p class="tie-message">
-      もう一度話し合いを行います
-    </p>
+        もう一度話し合いを行います
+      </p>
 
       <p class="tie-sub-message">
-      <span>3秒後</span>に再開します
-    </p>
+        3秒後に再開します
+      </p>
 
       <div class="tie-loading-dots">
         <span></span>
@@ -294,12 +307,20 @@
 
       <div class="tie-runner-area">
         <div class="tie-progress-line"></div>
-        <div class="tie-runner">🐺</div>
+
+        <div class="tie-wolf-runner">
+          <img src="images/tie-wolf-run-1.png" alt="" class="tie-wolf tie-wolf-1">
+
+          <img src="images/tie-wolf-run-2.png" alt="" class="tie-wolf tie-wolf-2">
+
+          <img src="images/tie-wolf-run-3.png" alt="" class="tie-wolf tie-wolf-3">
+        </div>
       </div>
 
     </div>
 
   </section>
+
   <!-- 結果 -->
   <section id="result-screen" class="screen hidden">
 
