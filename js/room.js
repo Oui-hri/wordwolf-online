@@ -5,6 +5,11 @@
 
 import { database } from "./firebase.js";
 
+import {
+  playBgm,
+  stopBgm
+} from "./audio.js";
+
 import * as game from "./game.js";
 import * as vote from "./vote.js";
 import { assignHints } from "./hints.js";
@@ -225,7 +230,6 @@ if (hintCloseButton) {
 }
 
 restoreSession();
-
 // =========================
 // 共通UI補助
 // =========================
@@ -572,13 +576,14 @@ function joinRoom() {
       }
     });
 }
-
 // =========================
 // 待機画面
 // =========================
 
 function showWaitingRoom(roomName) {
   hideAllScreens();
+
+  stopBgm();
 
   const waitingScreen =
     document.getElementById("waiting-screen");
@@ -780,6 +785,8 @@ function listenRoomStatus(roomName) {
 function showTopicScreen() {
   hideAllScreens();
 
+  stopBgm();
+
   const topicScreen =
     document.getElementById("topic-screen");
 
@@ -854,6 +861,8 @@ function startTopicCountdown(countdownElement) {
 function showDiscussionScreen() {
   hideAllScreens();
 
+  playBgm("./js/audio/潜む怪奇.mp3");
+
   const discussionScreen =
     document.getElementById("discussion-screen");
 
@@ -878,6 +887,8 @@ function showDiscussionScreen() {
 
 function showTieScreen() {
   hideAllScreens();
+
+  playBgm("./js/audio/潜む怪奇.mp3");
 
   const tieScreen =
     document.getElementById("tie-screen");
@@ -1025,7 +1036,6 @@ function showDiscussionTopic() {
       );
     });
 }
-
 // =========================
 // ヒント表示
 // =========================
@@ -1135,6 +1145,8 @@ function changeStatusToVoting() {
 
 function showVoteScreen() {
   hideAllScreens();
+
+  playBgm("./js/audio/潜む怪奇.mp3");
 
   const voteScreen =
     document.getElementById("vote-screen");
@@ -1485,6 +1497,8 @@ function handleVoteFinished(players, votes, voteRound) {
 function showResultScreen() {
   hideAllScreens();
 
+  stopBgm();
+
   const resultScreen =
     document.getElementById("result-screen");
 
@@ -1787,6 +1801,8 @@ function restartGame() {
     return;
   }
 
+  stopBgm();
+
   const roomRef =
     ref(database, "rooms/" + currentRoomName);
 
@@ -1827,6 +1843,8 @@ function restartGame() {
 // =========================
 
 function quitGame() {
+  stopBgm();
+
   if (!currentRoomName || !currentPlayerId) {
     clearSession();
     location.reload();
