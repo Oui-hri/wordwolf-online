@@ -24,6 +24,8 @@ body {
   justify-content: flex-start;
 
   min-height: 100vh;
+  height: auto;
+  overflow-y: auto;
 
   padding: 0 20px;
 
@@ -275,37 +277,38 @@ button {
 
   display: flex;
   justify-content: center;
-  align-items: center;
-
-  padding: 50px;
+  align-items: flex-start;
+  padding-top: 10px;
 
   background:
     radial-gradient(circle at top,
       #2d106d 0%,
       #17003f 70%);
 
-  transform: translateY(-80px);
+  overflow-y: auto;
 }
 
 /* カード */
 
 .room-form-card {
+  height: fit-content;
   width: 90%;
   max-width: 760px;
 
-  padding: 40px 50px;
-
-  border-radius: 32px;
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
 
   background: rgba(18, 0, 55, 0.8);
+
+  border-radius: 32px;
 
   border: 1px solid rgba(255, 170, 70, 0.45);
 
   box-shadow:
     0 0 40px rgba(145, 70, 255, 0.2);
 
-  display: flex;
-  flex-direction: column;
+  margin: 00px 0;
 }
 
 /* タイトル */
@@ -364,7 +367,8 @@ button {
   align-items: center;
   justify-content: center;
 
-  gap: 6px;
+  gap: 12px;
+  /* タイトルとの距離だけ */
 
   color: white;
 
@@ -374,6 +378,13 @@ button {
   letter-spacing: 3px;
 
   transform: translateY(-20px);
+}
+
+.title-side {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  /* 線と星は完全に接触 */
 }
 
 .title-text {
@@ -413,6 +424,7 @@ button {
 
 .line {
   width: 140px;
+  margin-right: -5px;
   height: 2px;
 
   flex-shrink: 0;
@@ -426,11 +438,14 @@ button {
   background: linear-gradient(to right,
       #ffb347,
       rgba(255, 179, 71, 0));
+
+  margin-left: -5px;
 }
 
 .gold-star {
   color: #ffb347;
   font-size: 0.9rem;
+  margin: 0 -3px;
 }
 
 /* 入力欄 */
@@ -508,7 +523,7 @@ button {
 
   transition: .25s;
 
-  margin-top: 15px;
+  margin-top: 8px;
 }
 
 #join-room-submit-button:hover,
@@ -530,19 +545,71 @@ button {
 
 /* 戻るボタン */
 
-#join-room-back-button {
-  background:
-    linear-gradient(135deg,
-      #7b31ff,
-      #5d1cc8);
+#join-room-submit-button {
+  width: 280px;
+  padding: 16px;
+
+  background: linear-gradient(180deg,
+      #f08a00 0%,
+      #e06d00 55%,
+      #c95a00 100%);
+
+  color: white;
+
+  border-radius: 20px;
 
   box-shadow:
-    0 0 20px rgba(125, 80, 255, .35);
+    0 0 15px rgba(255, 140, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+  border: 1px solid rgba(255, 180, 0, 0.5);
+
+  backdrop-filter: blur(4px);
+
+  transition: all 0.3s;
+
+  font-family: "Zen Kaku Gothic New", sans-serif;
+  font-size: 1.125rem;
+
+  position: relative;
+  top: -50px;
+}
+
+#join-room-back-button {
+  width: 280px;
+  padding: 16px;
+
+  background: linear-gradient(135deg,
+      #4b2c78 0%,
+      #39205f 45%,
+      #23234a 100%);
+
+  color: #fff8e7;
+
+  border-radius: 20px;
+
+  border: 1px solid rgba(255, 140, 0, 0.25);
+
+  box-shadow:
+    0 0 15px rgba(111, 66, 193, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+  transition: all 0.3s;
+
+  font-family: "Zen Kaku Gothic New", sans-serif;
+  font-size: 1.125rem;
+
+  position: relative;
+  top: -55px;
 }
 
 .join-buttons {
   display: flex;
-  gap: 25px;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  margin-top: 20px;
+  /* 60 → 20 */
 }
 
 .join-buttons button {
