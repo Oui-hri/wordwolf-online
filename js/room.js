@@ -230,6 +230,7 @@ if (hintCloseButton) {
 }
 
 restoreSession();
+
 // =========================
 // 共通UI補助
 // =========================
@@ -321,6 +322,33 @@ function watchMyPlayerStatus() {
   });
 }
 
+function watchRoomExists() {
+  if (!currentRoomName) {
+    return;
+  }
+
+  const roomRef = ref(
+    database,
+    "rooms/" + currentRoomName
+  );
+
+  onValue(roomRef, (snapshot) => {
+    if (snapshot.exists()) {
+      return;
+    }
+
+    alert("ホストによりルームが解散されました");
+
+    clearSession();
+
+    currentRoomName = "";
+    currentPlayerId = "";
+    currentIsHost = false;
+
+    location.reload();
+  });
+}
+
 // =========================
 // セッション
 // =========================
@@ -384,6 +412,7 @@ function restoreSession() {
       listenPlayers(currentRoomName);
       listenRoomStatus(currentRoomName);
       watchMyPlayerStatus();
+      watchRoomExists();
       updateStartGameButton();
     })
     .catch((error) => {
@@ -477,6 +506,7 @@ function createRoom() {
       listenPlayers(roomName);
       listenRoomStatus(roomName);
       watchMyPlayerStatus();
+      watchRoomExists();
     })
     .catch((error) => {
       console.error("ルーム作成エラー", error);
@@ -565,6 +595,7 @@ function joinRoom() {
       listenPlayers(roomName);
       listenRoomStatus(roomName);
       watchMyPlayerStatus();
+      watchRoomExists();
     })
     .catch((error) => {
       console.error("ルーム参加エラー", error);
@@ -576,6 +607,7 @@ function joinRoom() {
       }
     });
 }
+
 // =========================
 // 待機画面
 // =========================
@@ -1036,6 +1068,7 @@ function showDiscussionTopic() {
       );
     });
 }
+
 // =========================
 // ヒント表示
 // =========================
@@ -1843,11 +1876,41 @@ function restartGame() {
 // =========================
 
 function quitGame() {
-  stopBgm();
-
   if (!currentRoomName || !currentPlayerId) {
     clearSession();
     location.reload();
+    return;
+  }
+
+  if (currentIsHost) {
+    const isOk = confirm(
+      "ホストが退出すると、このルームは解散されます。よろしいですか？"
+    );
+
+    if (!isOk) {
+      return;
+    }
+
+    const roomRef = ref(
+      database,
+      "rooms/" + currentRoomName
+    );
+
+    remove(roomRef)
+      .then(() => {
+        clearSession();
+
+        currentRoomName = "";
+        currentPlayerId = "";
+        currentIsHost = false;
+
+        location.reload();
+      })
+      .catch((error) => {
+        console.error("ルーム削除エラー", error);
+        alert("ルームの削除に失敗しました");
+      });
+
     return;
   }
 
