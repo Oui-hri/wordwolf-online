@@ -1,0 +1,437 @@
+/* =========================
+   同票画面：完成イメージ寄せ
+========================= */
+
+#tie-screen {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #10084a;
+}
+
+#tie-screen.hidden {
+  display: none;
+}
+
+/* 背景全体 */
+.tie-bg-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* 夜空 */
+.tie-bg-sky {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center center;
+}
+
+/* 山・城 */
+.tie-bg-mountain {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center bottom;
+
+  pointer-events: none;
+}
+
+/* 月 */
+.tie-moon {
+  position: absolute;
+  z-index: 3;
+
+  top: 42px;
+  left: 86px;
+
+  width: 128px;
+  height: auto;
+
+  pointer-events: none;
+  user-select: none;
+
+  filter: drop-shadow(0 0 18px rgba(255, 238, 190, 0.55));
+}
+
+/* 中央カード */
+.tie-card {
+  position: relative;
+  z-index: 10;
+
+  width: 620px;
+  max-width: 72vw;
+
+  padding: 48px 64px 54px;
+
+  border-radius: 22px;
+  border: 1px solid rgba(164, 92, 255, 0.34);
+
+  background: rgba(16, 8, 58, 0.66);
+  backdrop-filter: blur(3px);
+
+  color: #ffffff;
+  text-align: center;
+
+  box-shadow:
+    0 0 24px rgba(120, 72, 255, 0.2),
+    0 20px 60px rgba(0, 0, 0, 0.26);
+}
+
+/* タイトル */
+.tie-title {
+  margin: 0 0 28px;
+
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  line-height: 1.2;
+
+  color: #ffffff;
+
+  text-shadow:
+    0 0 8px rgba(255, 255, 255, 0.85),
+    0 0 20px rgba(255, 255, 255, 0.35);
+}
+
+/* 肉球つき区切り */
+.tie-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+
+  width: 320px;
+  max-width: 68%;
+  margin: 0 auto 34px;
+}
+
+.tie-divider span {
+  flex: 1;
+  height: 1px;
+
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(202, 122, 46, 0.95),
+      transparent);
+}
+
+.tie-paw-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+
+  filter: drop-shadow(0 0 8px rgba(255, 168, 70, 0.65));
+}
+
+/* テキスト */
+.tie-message {
+  margin: 0 0 28px;
+
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  line-height: 1.7;
+}
+
+.tie-sub-message {
+  margin: 0 0 34px;
+
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  line-height: 1.7;
+}
+
+/* ローディングドット */
+.tie-loading-dots {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+
+  margin-bottom: 38px;
+}
+
+.tie-loading-dots span {
+  width: 14px;
+  height: 14px;
+
+  border-radius: 50%;
+  background: #ffe4a0;
+
+  box-shadow:
+    0 0 10px rgba(255, 228, 160, 0.9),
+    0 0 18px rgba(255, 174, 72, 0.45);
+
+  animation: tieDotBlink 1s infinite ease-in-out;
+}
+
+.tie-loading-dots span:nth-child(2) {
+  animation-delay: 0.18s;
+}
+
+.tie-loading-dots span:nth-child(3) {
+  animation-delay: 0.36s;
+}
+
+/* 狼とバー */
+.tie-runner-area {
+  position: relative;
+
+  width: 430px;
+  max-width: 80%;
+  height: 52px;
+
+  margin: 0 auto;
+}
+
+/* バーの土台 */
+.tie-progress-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 12px;
+
+  height: 4px;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+/* 伸びるバー */
+.tie-progress-line::before {
+  content: "";
+
+  display: block;
+  width: 0%;
+  height: 100%;
+
+  border-radius: 999px;
+
+  background: linear-gradient(90deg,
+      rgba(164, 92, 255, 0.65),
+      rgba(232, 137, 33, 0.95),
+      rgba(255, 221, 139, 1));
+
+  box-shadow: 0 0 12px rgba(255, 174, 72, 0.8);
+
+  animation: tieProgress 3s linear forwards;
+}
+
+/* 狼の移動体 */
+.tie-wolf-runner {
+  position: absolute;
+  left: 0;
+  bottom: 18px;
+
+  width: 84px;
+  height: 42px;
+
+  animation:
+    tieWolfMove 3s linear forwards,
+    tieWolfBounce 0.34s infinite ease-in-out;
+}
+
+/* 狼画像 */
+.tie-wolf {
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  width: 84px;
+  height: auto;
+
+  opacity: 0;
+
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.65));
+}
+
+/* 3枚切り替え */
+.tie-wolf-1 {
+  animation: tieWolfFrame1 0.45s infinite;
+}
+
+.tie-wolf-2 {
+  animation: tieWolfFrame2 0.45s infinite;
+}
+
+.tie-wolf-3 {
+  animation: tieWolfFrame3 0.45s infinite;
+}
+
+/* 点滅 */
+@keyframes tieDotBlink {
+  0% {
+    opacity: 0.35;
+    transform: scale(0.82);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.16);
+  }
+
+  100% {
+    opacity: 0.35;
+    transform: scale(0.82);
+  }
+}
+
+/* バー進行 */
+@keyframes tieProgress {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 76%;
+  }
+}
+
+/* 狼移動 */
+@keyframes tieWolfMove {
+  from {
+    left: 66%;
+  }
+
+  to {
+    left: 78%;
+  }
+}
+
+/* 狼の上下揺れ */
+@keyframes tieWolfBounce {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* 狼フレーム1 */
+@keyframes tieWolfFrame1 {
+
+  0%,
+  33% {
+    opacity: 1;
+  }
+
+  34%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* 狼フレーム2 */
+@keyframes tieWolfFrame2 {
+
+  0%,
+  33% {
+    opacity: 0;
+  }
+
+  34%,
+  66% {
+    opacity: 1;
+  }
+
+  67%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* 狼フレーム3 */
+@keyframes tieWolfFrame3 {
+
+  0%,
+  66% {
+    opacity: 0;
+  }
+
+  67%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* =========================
+   画面幅が狭い時
+========================= */
+
+@media (max-width: 768px) {
+  .tie-moon {
+    top: 28px;
+    left: 28px;
+    width: 92px;
+  }
+
+  .tie-card {
+    width: 78vw;
+    max-width: none;
+
+    padding: 36px 28px 38px;
+    border-radius: 20px;
+  }
+
+  .tie-title {
+    font-size: 32px;
+    letter-spacing: 2px;
+  }
+
+  .tie-message {
+    font-size: 18px;
+  }
+
+  .tie-sub-message {
+    font-size: 17px;
+  }
+
+  .tie-runner-area {
+    width: 86%;
+  }
+
+  .tie-wolf-runner {
+    width: 68px;
+  }
+
+  .tie-wolf {
+    width: 68px;
+  }
+}
