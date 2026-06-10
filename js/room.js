@@ -116,6 +116,8 @@ let lastStatus = "";
 
 let stopVoteProgressListener = null;
 
+let selectedCategory = "random";
+
 // =========================
 // イベント登録
 // =========================
@@ -660,11 +662,6 @@ function startGame() {
   if (topicCard) {
     topicCard.textContent = "";
   }
-
-  const selectedCategory =
-    categorySelect && categorySelect.value
-      ? categorySelect.value
-      : "random";
 
   const roomRef =
     ref(database, "rooms/" + currentRoomName);
@@ -2056,3 +2053,21 @@ function hideAllScreens() {
     }
   });
 }
+
+document.addEventListener("click", (e) => {
+
+  const chip = e.target.closest(".category-chip");
+
+  if (!chip) return;
+
+  document
+    .querySelectorAll(".category-chip")
+    .forEach(c => c.classList.remove("active"));
+
+  chip.classList.add("active");
+
+  selectedCategory = chip.dataset.value;
+
+  console.log("選択カテゴリー:", selectedCategory);
+
+});
