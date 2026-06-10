@@ -1,7 +1,8 @@
 /* =========================
-   同票画面：完成イメージ寄せ
+   同票画面：仮作業用CSS
 ========================= */
 
+/* 同票画面全体 */
 #tie-screen {
   position: relative;
   width: 100%;
@@ -23,7 +24,10 @@
   display: none;
 }
 
-/* 背景全体 */
+/* =========================
+   背景レイヤー
+========================= */
+
 .tie-bg-wrap {
   position: absolute;
   inset: 0;
@@ -47,6 +51,9 @@
 
   object-fit: cover;
   object-position: center center;
+
+  pointer-events: none;
+  user-select: none;
 }
 
 /* 山・城 */
@@ -63,6 +70,7 @@
   object-position: center bottom;
 
   pointer-events: none;
+  user-select: none;
 }
 
 /* 月 */
@@ -82,7 +90,10 @@
   filter: drop-shadow(0 0 18px rgba(255, 238, 190, 0.55));
 }
 
-/* 中央カード */
+/* =========================
+   中央カード
+========================= */
+
 .tie-card {
   position: relative;
   z-index: 10;
@@ -122,7 +133,10 @@
     0 0 20px rgba(255, 255, 255, 0.35);
 }
 
-/* 肉球つき区切り */
+/* =========================
+   肉球つき区切り線
+========================= */
+
 .tie-divider {
   display: flex;
   align-items: center;
@@ -152,7 +166,10 @@
   filter: drop-shadow(0 0 8px rgba(255, 168, 70, 0.65));
 }
 
-/* テキスト */
+/* =========================
+   テキスト
+========================= */
+
 .tie-message {
   margin: 0 0 28px;
 
@@ -171,7 +188,10 @@
   line-height: 1.7;
 }
 
-/* ローディングドット */
+/* =========================
+   ローディングドット
+========================= */
+
 .tie-loading-dots {
   display: flex;
   justify-content: center;
@@ -202,13 +222,16 @@
   animation-delay: 0.36s;
 }
 
-/* 狼とバー */
+/* =========================
+   狼と進行バー
+========================= */
+
 .tie-runner-area {
   position: relative;
 
   width: 430px;
   max-width: 80%;
-  height: 52px;
+  height: 64px;
 
   margin: 0 auto;
 }
@@ -227,7 +250,7 @@
   overflow: hidden;
 }
 
-/* 伸びるバー */
+/* 5秒で最後まで進むバー */
 .tie-progress-line::before {
   content: "";
 
@@ -244,10 +267,10 @@
 
   box-shadow: 0 0 12px rgba(255, 174, 72, 0.8);
 
-  animation: tieProgress 3s linear forwards;
+  animation: tieProgress 5s linear forwards;
 }
 
-/* 狼の移動体 */
+/* 狼3枚をまとめて動かす箱 */
 .tie-wolf-runner {
   position: absolute;
   left: 0;
@@ -257,11 +280,11 @@
   height: 42px;
 
   animation:
-    tieWolfMove 3s linear forwards,
+    tieWolfMove 5s linear forwards,
     tieWolfBounce 0.34s infinite ease-in-out;
 }
 
-/* 狼画像 */
+/* 狼画像共通 */
 .tie-wolf {
   position: absolute;
   left: 0;
@@ -289,7 +312,11 @@
   animation: tieWolfFrame3 0.45s infinite;
 }
 
-/* 点滅 */
+/* =========================
+   アニメーション
+========================= */
+
+/* ドット点滅 */
 @keyframes tieDotBlink {
   0% {
     opacity: 0.35;
@@ -307,29 +334,29 @@
   }
 }
 
-/* バー進行 */
+/* バーを最後まで進める */
 @keyframes tieProgress {
   from {
     width: 0%;
   }
 
   to {
-    width: 76%;
+    width: 100%;
   }
 }
 
-/* 狼移動 */
+/* 狼をバーの左端から右端まで移動 */
 @keyframes tieWolfMove {
   from {
-    left: 66%;
+    left: 0;
   }
 
   to {
-    left: 78%;
+    left: calc(100% - 84px);
   }
 }
 
-/* 狼の上下揺れ */
+/* 狼の軽い上下揺れ */
 @keyframes tieWolfBounce {
   0% {
     transform: translateY(0);
@@ -392,7 +419,7 @@
 }
 
 /* =========================
-   画面幅が狭い時
+   スマホ寄り調整
 ========================= */
 
 @media (max-width: 768px) {
@@ -429,9 +456,20 @@
 
   .tie-wolf-runner {
     width: 68px;
+    height: 36px;
   }
 
   .tie-wolf {
     width: 68px;
+  }
+
+  @keyframes tieWolfMove {
+    from {
+      left: 0;
+    }
+
+    to {
+      left: calc(100% - 68px);
+    }
   }
 }
