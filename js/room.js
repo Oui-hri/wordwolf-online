@@ -638,17 +638,23 @@ function showWaitingRoom(roomName) {
 }
 
 function updateStartGameButton() {
-  console.log("currentIsHost:", currentIsHost); // ← 確認用なのでこれは残していい
+  console.log("currentIsHost:", currentIsHost);
 
-  // ↓↓↓ これが全部抜けてる！
   setHidden(startGameButton, !currentIsHost);
   if (startGameButton) {
     startGameButton.disabled = !currentIsHost;
   }
-  setHidden(categoryArea, !currentIsHost);
+
+  setHidden(categoryArea, false); // ← falseに変えるだけ！
+
+  // 参加者はチップを押せないようにする
+  const chips = document.querySelectorAll(".category-chip");
+  chips.forEach((chip) => {
+    chip.disabled = !currentIsHost;
+  });
 }
 
-// チップをクリックしたら選択状態を切り替える
+// チップをクリックしたら選択状態を切り替える（これはそのまま）
 categoryChips.forEach((chip) => {
   chip.addEventListener("click", () => {
     categoryChips.forEach((btn) => btn.classList.remove("active"));
