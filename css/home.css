@@ -36,13 +36,15 @@
   margin: -220px auto 0;
   position: absolute;
   z-index: 1;
+  filter:
+      drop-shadow(0 0 70px #f7feb5);
 }
 
 #title-screen .rock {
   width: 420px;
   position: absolute;
   left: 50%;
-  top: 135px;
+  top: 130px;
   transform: translateX(-50%);
   z-index: 2;
 }
@@ -50,10 +52,11 @@
 #title-screen .wolf {
   width: 500px;
   position: absolute;
-  top: -150px;
+  top: -160px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 3;
+
 }
 
 /* =========================
@@ -71,25 +74,34 @@
   transform: translateX(-50%);
   pointer-events: none;
     filter:
-        brightness(0.75) saturate(0.8) contrast(0.9);
+        hue-rotate(-20deg) saturate(0.9) brightness(0.8) blur(1.5px) drop-shadow(0 0 20px rgba(120, 170, 255, 0.18));
 }
 
 #title-screen .fog-back {
-  bottom: 150px;
+  bottom: 160px;
   opacity: 0.3;
   z-index: 1;
+  filter:
+       saturate(0.85) brightness(0.72) blur(1px) drop-shadow(0 0 8px rgba(120, 170, 255, 0.14));
 }
 
 #title-screen .fog-mid {
   bottom: 100px;
   opacity: 0.5;
   z-index: 20;
+  filter:
+       saturate(0.9) brightness(0.8) blur(2px) drop-shadow(0 0 10px rgba(120, 170, 255, 0.16));
 }
 
 #title-screen .fog-front {
   bottom: -55px;
   opacity: 0.8;
   z-index: 21;
+  filter:
+    saturate(0.95)
+    brightness(0.85)
+    blur(5px)
+    drop-shadow(0 0 12px rgba(120, 170, 255, 0.18));
 }
 
 /* =========================
