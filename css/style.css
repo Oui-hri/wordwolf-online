@@ -2158,7 +2158,6 @@ button {
   position: relative;
   /* 追加 */
   top: -5px;
-  /* ← 数値を変えて調整 */
 }
 
 .citizen-card .vote-result-title {
