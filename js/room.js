@@ -1656,9 +1656,11 @@ function showResultScreen() {
             ワードウルフは正体を隠し通した
           </p>
 
-          <p>
-            追放者：${resultData.eliminatedName || "不明"}
-          </p>
+          <div class="eliminated-box">
+    <div class="eliminated-dot"></div>
+    <span class="eliminated-label">追放者</span>
+    <span class="eliminated-name">${resultData.eliminatedName || "不明"}</span>
+  </div>
 
           <div class="vote-result-card">
             <div class="vote-result-title">

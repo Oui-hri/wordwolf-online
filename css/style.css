@@ -2038,6 +2038,39 @@ button {
   margin-bottom: 40px;
 }
 
+.eliminated-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 80, 80, 0.08);
+  border: 1px solid rgba(255, 107, 107, 0.35);
+  border-radius: 8px;
+  padding: 6px 19px;
+  margin-bottom: 40px;
+}
+
+.eliminated-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff6b6b;
+  box-shadow: 0 0 6px rgba(255, 80, 80, 0.8);
+  flex-shrink: 0;
+}
+
+.eliminated-label {
+  font-size: 50px;
+  letter-spacing: 2px;
+  color: #ff6b6b;
+}
+
+.eliminated-name {
+  font-size: 50px;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 0 8px rgba(255, 107, 107, 0.6);
+}
+
 .vote-result-card {
 
   width: 420px;
