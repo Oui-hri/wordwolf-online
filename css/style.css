@@ -1949,8 +1949,10 @@ button {
   filter:
     drop-shadow(0 0 10px rgba(255, 80, 80, .6)) drop-shadow(0 0 20px rgba(255, 50, 50, .4));
 
-  position: static;
-  margin-top: 30px;
+  position: relative;
+  /* static → relative に変更 */
+  top: -40px;
+  margin-top: 20px;
 }
 
 .result-banner {
