@@ -63,27 +63,32 @@
 #title-screen .home-fog {
   position: absolute;
   left: 50%;
-  width: 120%;
+
+  width: 1280px;
+  max-width: none;
   height: auto;
+
   transform: translateX(-50%);
   pointer-events: none;
+    filter:
+        brightness(0.75) saturate(0.8) contrast(0.9);
 }
 
 #title-screen .fog-back {
-  bottom: 45px;
-  opacity: 0.1;
+  bottom: 150px;
+  opacity: 0.3;
   z-index: 1;
 }
 
 #title-screen .fog-mid {
-  bottom: -10px;
-  opacity: 0.25;
+  bottom: 100px;
+  opacity: 0.5;
   z-index: 20;
 }
 
 #title-screen .fog-front {
   bottom: -55px;
-  opacity: 0.18;
+  opacity: 0.8;
   z-index: 21;
 }
 
@@ -123,6 +128,7 @@
   align-items: center;
   justify-content: center;
   gap: 14px;
+  top:300px;
 
   margin: 16px 0 42px;
 
@@ -152,60 +158,144 @@
 
 #title-screen #create-room-button,
 #title-screen #join-room-button {
-  width: 280px;
+  width: 360px;
   padding: 16px;
-
   border-radius: 20px;
 
   transition: all 0.3s;
 
   font-family: "Zen Kaku Gothic New", sans-serif;
   font-size: 1.125rem;
+  font-weight: 900;
+  letter-spacing: 2px;
 
-  position: relative;
-  top: -100px;
+  position: absolute;
+  left: 50%;
   z-index: 30;
+
+  transform: translateX(-50%);
+
+  overflow: hidden;
+  cursor: pointer;
 }
 
 /* オレンジのボタン */
 #title-screen #create-room-button {
+  top: 450px;
+
   background:
     linear-gradient(180deg,
-      #f08a00 0%,
-      #e06d00 55%,
+      #ffb12a 0%,
+      #f08a00 45%,
       #c95a00 100%);
 
   color: white;
 
-  border: 1px solid rgba(255, 180, 0, 0.5);
+  border: 1px solid rgba(255, 220, 120, 0.9);
 
   box-shadow:
-    0 0 18px rgba(255, 155, 30, 0.55),
-    0 0 34px rgba(255, 155, 30, 0.28),
-    inset 0 0 12px rgba(255, 255, 255, 0.25);
+    0 0 18px rgba(255, 155, 30, 0.65),
+    0 0 36px rgba(255, 155, 30, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -8px 18px rgba(130, 50, 0, 0.25);
+
+  text-shadow:
+    0 0 6px rgba(255, 255, 255, 0.75),
+    0 2px 3px rgba(80, 30, 0, 0.35);
 
   backdrop-filter: blur(4px);
 }
 
 /* 紫のボタン */
 #title-screen #join-room-button {
+  top: 530px;
+
   background:
-    linear-gradient(135deg,
-      #4b2c78 0%,
-      #39205f 45%,
-      #23234a 100%);
+    linear-gradient(180deg,
+      rgba(105, 60, 165, 0.9) 0%,
+      rgba(57, 32, 95, 0.92) 50%,
+      rgba(35, 35, 74, 0.98) 100%);
 
   color: #fff8e7;
 
-  border: 1px solid rgba(255, 140, 0, 0.25);
+  border: 1px solid rgba(215, 150, 255, 0.9);
 
   box-shadow:
-    0 0 18px rgba(180, 100, 255, 0.45),
-    0 0 34px rgba(180, 100, 255, 0.22),
-    inset 0 0 12px rgba(255, 255, 255, 0.18);
+    0 0 18px rgba(180, 100, 255, 0.52),
+    0 0 36px rgba(180, 100, 255, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -8px 18px rgba(20, 10, 45, 0.35);
+
+  text-shadow:
+    0 0 6px rgba(255, 255, 255, 0.65),
+    0 2px 3px rgba(20, 10, 50, 0.5);
+}
+
+/* ボタン内の左右装飾 */
+#title-screen #create-room-button::before,
+#title-screen #join-room-button::before,
+#title-screen #create-room-button::after,
+#title-screen #join-room-button::after {
+  content: "◇";
+  position: absolute;
+  top: 50%;
+
+  width: 62px;
+  height: 1px;
+
+  display: flex;
+  align-items: center;
+
+  font-size: 0.65rem;
+  font-weight: 700;
+
+  transform: translateY(-50%);
+
+  pointer-events: none;
+}
+
+/* 左側装飾 */
+#title-screen #create-room-button::before,
+#title-screen #join-room-button::before {
+  left: 26px;
+  justify-content: flex-end;
+  padding-right: 8px;
+
+  background:
+    linear-gradient(to right,
+      transparent,
+      rgba(255, 235, 170, 0.75));
+}
+
+/* 右側装飾 */
+#title-screen #create-room-button::after,
+#title-screen #join-room-button::after {
+  right: 26px;
+  justify-content: flex-start;
+  padding-left: 8px;
+
+  background:
+    linear-gradient(to left,
+      transparent,
+      rgba(255, 235, 170, 0.75));
+}
+
+/* 作成ボタンの装飾色 */
+#title-screen #create-room-button::before,
+#title-screen #create-room-button::after {
+  color: #fff2b8;
+  text-shadow: 0 0 8px rgba(255, 230, 150, 0.9);
+}
+
+/* 参加ボタンの装飾色 */
+#title-screen #join-room-button::before,
+#title-screen #join-room-button::after {
+  color: #f0d6ff;
+  text-shadow: 0 0 8px rgba(210, 150, 255, 0.9);
 }
 
 #title-screen #create-room-button:hover,
 #title-screen #join-room-button:hover {
-  transform: translateY(-3px);
+  transform: translateX(-50%) translateY(-3px);
+  filter: brightness(1.08);
 }
