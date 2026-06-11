@@ -1110,12 +1110,13 @@ button {
 }
 
 .discussion-card h2 {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: bold;
   letter-spacing: 0.2em;
   color: white;
   text-align: center;
   font-family: "Zen Kaku Gothic New", sans-serif;
+  margin-top: -10px;
 }
 
 /* あなたのお題 */
@@ -1123,25 +1124,17 @@ button {
 
   width: 420px;
   margin: 0 auto;
-  padding: 22px 16px;
+  padding: 8px 16px;
+  background: none !important;
 
-  background:
-    linear-gradient(180deg,
-      rgba(155, 120, 255, .25),
-      rgba(90, 50, 180, .15));
+  border: none !important;
 
-  backdrop-filter: blur(16px);
-
-  border: 1px solid rgba(200, 170, 255, .25);
-
-  border-radius: 24px;
-  box-shadow:
-    0 0 25px rgba(166, 117, 255, .2),
-    inset 0 1px 0 rgba(255, 255, 255, .15);
+  border-radius: 0 !important;
+  box-shadow: none !important;
 
   color: white;
 
-  font-size: 2.4rem;
+  font-size: 2.5rem;
 
   font-weight: 800;
 
@@ -1153,13 +1146,15 @@ button {
 }
 
 .topic-card {
-
-  width: 500px;
-  max-width: 90%;
-
-  margin: 0 auto 25px;
-
+  width: 600px;
+  /* 横を長く */
+  max-width: 95%;
+  margin: -20px auto 25px;
+  /* マイナスにすると上に動く */
   text-align: center;
+  border: none !important;
+  background: none !important;
+  box-shadow: none !important;
 }
 
 .topic-label {
@@ -1192,18 +1187,30 @@ button {
 
 .discussion-topic-wrapper {
   position: relative;
-  border: 1px solid rgba(200, 170, 255, .25);
   border-radius: 28px;
-  padding: 36px 20px 20px;
+  padding: 22px 20px 6px;
+  /* 上下をさらに小さく */
+  /* 上下を小さく */
+  background: linear-gradient(180deg,
+      rgba(155, 120, 255, .25),
+      rgba(90, 50, 180, .15));
+  border: 1px solid rgba(200, 170, 255, .25);
+  box-shadow:
+    0 0 25px rgba(166, 117, 255, .2),
+    inset 0 1px 0 rgba(255, 255, 255, .15);
 }
 
 .discussion-topic-wrapper .topic-label {
   position: absolute;
-  top: 12px;
+  top: 11px;
   left: 50%;
   transform: translateX(-50%);
   white-space: nowrap;
-  font-size: 0.85rem;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 80%;
 }
 
 /* ヒントを見る */
