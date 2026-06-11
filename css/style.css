@@ -1174,6 +1174,128 @@ button {
   pointer-events: none;
 }
 
+.hint-card {
+
+  width: 500px;
+  max-width: 90%;
+
+  padding: 30px;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  border-radius: 24px;
+
+  box-shadow:
+    0 0 30px rgba(140, 90, 255, .25),
+    inset 0 1px 0 rgba(255, 255, 255, .15);
+
+  text-align: center;
+
+  position: relative;
+  overflow: hidden;
+}
+
+.hint-card::before {
+
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 40%;
+
+  background:
+    linear-gradient(to bottom,
+      rgba(255, 255, 255, .15),
+      transparent);
+
+  pointer-events: none;
+}
+
+.hint-modal {
+
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, .55);
+
+  backdrop-filter: blur(6px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;
+}
+
+.hint-title {
+
+  font-size: 1.8rem;
+
+  color: #ffe7a3;
+
+  letter-spacing: 3px;
+
+  text-shadow:
+    0 0 10px rgba(255, 231, 163, .8),
+    0 0 25px rgba(255, 231, 163, .4);
+
+  margin-bottom: 20px;
+}
+
+.hint-text {
+
+  font-size: 1.2rem;
+
+  line-height: 1.8;
+
+  color: white;
+
+  margin: 25px 0;
+}
+
+.hint-close-button {
+
+  width: 180px;
+  height: 48px;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(180deg,
+      rgba(140, 90, 255, .45),
+      rgba(90, 50, 180, .35));
+
+  border: 1px solid rgba(220, 190, 255, .4);
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 0 15px rgba(170, 120, 255, .4);
+
+  transition: .25s;
+}
+
+.hint-close-button:hover {
+
+  transform: translateY(-2px);
+
+  filter: brightness(1.1);
+}
+
 
 /* タイトル */
 .discussion-card h2 {
