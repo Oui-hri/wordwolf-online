@@ -1084,29 +1084,22 @@ button {
 }
 
 /* カード */
-.discussion-card {
 
+.discussion-card {
   width: 700px;
   max-width: 90%;
-
   padding: 10px 40px 40px;
-
   margin-top: 20px;
-
   border-radius: 40px;
-
   background: rgba(255, 255, 255, 0.03);
-
   border: 1px solid rgba(255, 255, 255, .08);
-
   text-align: center;
-
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  transform: scale(0.85);
   transform: translateY(-15px);
+  /* scale(0.85)を削除 */
+  overflow: visible !important;
 }
 
 .discussion-card h2 {
@@ -1215,7 +1208,7 @@ button {
 
 /* ヒントを見る */
 #hint-button {
-
+  margin-top: 80px;
   width: 260px;
   height: 50px;
   font-size: 1.1rem;
@@ -1404,40 +1397,35 @@ button {
 /* タイトル */
 
 .timer-ring {
-
   position: relative;
-
-  width: 340px;
-  height: 340px;
-
+  width: 170px;
+  height: 170px;
   border-radius: 50%;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  box-shadow:
-    0 0 20px rgba(155, 124, 255, .5),
-    0 0 60px rgba(155, 124, 255, .3);
+  box-shadow: none;
+  /* 完全に消す */
 }
 
 .timer-ring svg {
 
   position: absolute;
 
-  width: 340px;
-  height: 340px;
+  width: 170px;
+  height: 170px;
 
   top: 0;
   left: 0;
+  overflow: visible;
 }
 
 .timer-inner {
 
   position: absolute;
 
-  width: 280px;
-  height: 280px;
+  width: 140px;
+  height: 140px;
 
   border-radius: 50%;
 
@@ -1458,24 +1446,15 @@ button {
 }
 
 .ring-progress {
-
   fill: none;
-
   stroke: #9b7cff;
-
   stroke-width: 12;
-
   stroke-linecap: round;
-
-  filter:
-    drop-shadow(0 0 6px #9b7cff) drop-shadow(0 0 16px #9b7cff);
-
+  filter: drop-shadow(0 0 2px #9b7cff);
+  /* 6→3、16→6に弱める */
   transform-origin: center;
-
   transform: rotate(-90deg);
-
   transform-box: fill-box;
-
   transition: stroke-dashoffset 1s linear;
 }
 
@@ -1483,7 +1462,7 @@ button {
 
   color: white;
 
-  font-size: 5rem;
+  font-size: 2.5rem;
 
   font-weight: 700;
 
@@ -1555,10 +1534,6 @@ button {
   filter: blur(50px);
 
   z-index: 0;
-}
-
-.discussion-card {
-  z-index: 1;
 }
 
 .hidden {
@@ -1662,6 +1637,30 @@ button {
 
   box-shadow:
     0 0 15px rgba(255, 170, 50, .55);
+}
+
+#hint-button,
+#add-time-button,
+#go-vote-button {
+  width: 300px;
+  height: 55px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 20px;
+  color: white;
+  cursor: pointer;
+  transition: all .25s ease;
+  margin-top: 1px;
+  /* ボタン間の間隔 */
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  /* この数字で上下位置を調整 */
 }
 
 /* =========================
