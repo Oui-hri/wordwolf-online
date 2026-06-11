@@ -78,3 +78,4 @@ document.addEventListener("click", (e) => {
   playSe("./js/audio/se/決定ボタンを押す7.mp3");
 
 });
+
