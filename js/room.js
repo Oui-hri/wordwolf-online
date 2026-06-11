@@ -635,6 +635,15 @@ function showWaitingRoom(roomName) {
   setHidden(answerArea, true);
 
   updateStartGameButton();
+  function updateStartGameButton() {
+    setHidden(startGameButton, !currentIsHost);
+
+    if (startGameButton) {
+      startGameButton.disabled = !currentIsHost;
+    }
+
+    setHidden(categoryArea, !currentIsHost);
+  }
 }
 
 function updateStartGameButton() {
