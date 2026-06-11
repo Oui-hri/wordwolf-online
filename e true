@@ -1,0 +1,498 @@
+* [33m0ea7db6[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmusashiroom[m[33m)[m WIP: room.js update
+*   [33m78c0588[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #122 from Oui-hri/hayakawa-vote-save-2
+[32m|[m[33m\[m  
+[32m|[m * [33m9ad8d20[m[33m ([m[1;31morigin/hayakawa-vote-save-2[m[33m)[m CSS編集
+* [33m|[m   [33md8c272b[m Merge pull request #121 from Oui-hri/haru-game
+[34m|[m[35m\[m [33m\[m  
+[34m|[m * [33m|[m [33m53b2992[m[33m ([m[1;31morigin/haru-game[m[33m)[m html
+[34m|[m[34m/[m [33m/[m  
+* [33m|[m [33mc7a6815[m Merge pull request #120 from Oui-hri/hayakawa-vote-save-2
+[36m|[m[33m\[m[33m|[m 
+[36m|[m * [33m579e984[m CSS編集
+* [1;31m|[m   [33md7c0d7f[m Merge pull request #119 from Oui-hri/haru-game
+[1;32m|[m[1;33m\[m [1;31m\[m  
+[1;32m|[m * [1;31m|[m [33m811349e[m wolf
+* [1;33m|[m [1;31m|[m   [33m6933896[m Merge pull request #118 from Oui-hri/hayakawa-vote-save-2
+[1;33m|[m[1;31m\[m [1;33m\[m [1;31m\[m  
+[1;33m|[m [1;31m|[m[1;33m/[m [1;31m/[m  
+[1;33m|[m[1;33m/[m[1;31m|[m [1;31m/[m   
+[1;33m|[m [1;31m|[m[1;31m/[m    
+[1;33m|[m * [33m2732bff[m CSS編集
+* [1;35m|[m   [33m49df7bc[m Merge pull request #117 from Oui-hri/haru-game
+[1;36m|[m[31m\[m [1;35m\[m  
+[1;36m|[m * [1;35m|[m [33maeb3e4e[m talk
+[1;36m|[m * [1;35m|[m [33mb7020ff[m html
+* [31m|[m [1;35m|[m   [33m273b74e[m Merge pull request #116 from Oui-hri/hayakawa-vote-save-2
+[32m|[m[1;35m\[m [31m\[m [1;35m\[m  
+[32m|[m [1;35m|[m [31m|[m[1;35m/[m  
+[32m|[m [1;35m|[m[1;35m/[m[31m|[m   
+[32m|[m * [31m|[m [33m6de1fa2[m BGM追加
+* [33m|[m [31m|[m [33m2f5901d[m Merge pull request #115 from Oui-hri/hayakawa-vote-save-2
+[34m|[m[33m\[m[33m|[m [31m|[m 
+[34m|[m * [31m|[m [33m31b065b[m BGM追加
+[34m|[m[34m/[m [31m/[m  
+* [31m|[m   [33m093167c[m Merge pull request #114 from Oui-hri/musashiroom
+[36m|[m[1;31m\[m [31m\[m  
+[36m|[m * [31m|[m [33m9e4f907[m[33m ([m[1;31morigin/musashiroom[m[33m)[m BGMファイル追加
+* [1;31m|[m [31m|[m   [33m568a086[m Merge pull request #113 from Oui-hri/haru-game
+[1;32m|[m[31m\[m [1;31m\[m [31m\[m  
+[1;32m|[m [31m|[m [1;31m|[m[31m/[m  
+[1;32m|[m [31m|[m[31m/[m[1;31m|[m   
+[1;32m|[m * [1;31m|[m [33meaf99f4[m categori
+* [1;33m|[m [1;31m|[m   [33m19780f2[m Merge pull request #111 from Oui-hri/musashiroom
+[1;34m|[m[1;31m\[m [1;33m\[m [1;31m\[m  
+[1;34m|[m [1;31m|[m [1;33m|[m[1;31m/[m  
+[1;34m|[m [1;31m|[m[1;31m/[m[1;33m|[m   
+[1;34m|[m * [1;33m|[m [33mbdd6aaa[m BGMファイル追加
+* [1;35m|[m [1;33m|[m   [33m4f5b569[m Merge pull request #112 from Oui-hri/haru-game
+[1;35m|[m[1;33m\[m [1;35m\[m [1;33m\[m  
+[1;35m|[m [1;33m|[m[1;35m/[m [1;33m/[m  
+[1;35m|[m[1;35m/[m[1;33m|[m [1;33m/[m   
+[1;35m|[m [1;33m|[m[1;33m/[m    
+[1;35m|[m * [33maffc591[m html
+[1;35m|[m[1;35m/[m  
+*   [33m6ee72c8[m Merge pull request #110 from Oui-hri/main
+[32m|[m[33m\[m  
+[32m|[m *   [33mc3abc75[m Merge pull request #109 from Oui-hri/musashiroom
+[32m|[m [34m|[m[32m\[m  
+[32m|[m [34m|[m[32m/[m  
+[32m|[m[32m/[m[34m|[m   
+* [34m|[m [33mbef7a22[m 追加
+* [34m|[m [33mf4fdd07[m 追加
+[34m|[m[34m/[m  
+*   [33mf67c524[m Merge pull request #108 from Oui-hri/haru-game
+[36m|[m[1;31m\[m  
+[36m|[m * [33mfddc996[m odai
+* [1;31m|[m [33mdb349c6[m Merge pull request #107 from Oui-hri/haru-game
+[1;32m|[m[1;31m\[m[1;31m|[m 
+[1;32m|[m * [33md87f43f[m hint
+* [1;33m|[m [33m86de3c0[m Merge pull request #106 from Oui-hri/haru-game
+[1;34m|[m[1;33m\[m[1;33m|[m 
+[1;34m|[m * [33m12798fa[m hanasiai
+* [1;35m|[m   [33m561ddf3[m Merge pull request #105 from Oui-hri/musashiroom
+[1;36m|[m[31m\[m [1;35m\[m  
+[1;36m|[m * [1;35m|[m [33m9e4f1c9[m 追加
+* [31m|[m [1;35m|[m   [33m9cbe679[m Merge pull request #104 from Oui-hri/haru-game
+[32m|[m[1;35m\[m [31m\[m [1;35m\[m  
+[32m|[m [1;35m|[m [31m|[m[1;35m/[m  
+[32m|[m [1;35m|[m[1;35m/[m[31m|[m   
+[32m|[m * [31m|[m [33m1e3da47[m html
+[32m|[m[32m/[m [31m/[m  
+* [31m|[m [33mfe5cdab[m Merge pull request #103 from Oui-hri/musashiroom
+[34m|[m[31m\[m[31m|[m 
+[34m|[m * [33ma5abbc9[m 追加
+* [35m|[m   [33m6893f83[m Merge pull request #102 from Oui-hri/haru-game
+[36m|[m[1;31m\[m [35m\[m  
+[36m|[m * [35m|[m [33mce8bb2b[m categori
+[36m|[m[36m/[m [35m/[m  
+* [35m|[m   [33m6aa7044[m Merge pull request #101 from Oui-hri/hayakawa-vote-save-2
+[1;32m|[m[1;33m\[m [35m\[m  
+[1;32m|[m * [35m|[m [33m34817fb[m CSS編集
+[1;32m|[m[1;32m/[m [35m/[m  
+* [35m|[m [33md1ff34e[m Merge pull request #100 from Oui-hri/musashiroom
+[1;34m|[m[35m\[m[35m|[m 
+[1;34m|[m * [33m563a3ea[m 追加
+[1;34m|[m[1;34m/[m  
+*   [33mf611f16[m Merge pull request #99 from Oui-hri/haru-game
+[1;36m|[m[31m\[m  
+[1;36m|[m * [33mca23382[m make
+* [31m|[m   [33mafb93be[m Merge pull request #98 from Oui-hri/hayakawa-vote-save-2
+[32m|[m[33m\[m [31m\[m  
+[32m|[m * [31m|[m [33m4641b55[m CSS編集
+[32m|[m[32m/[m [31m/[m  
+* [31m|[m [33mf15c089[m Merge pull request #97 from Oui-hri/haru-game
+[34m|[m[31m\[m[31m|[m 
+[34m|[m * [33mf6f0d7b[m room
+* [35m|[m   [33m7ddf8c0[m Merge pull request #96 from Oui-hri/hayakawa-vote-save-2
+[36m|[m[1;31m\[m [35m\[m  
+[36m|[m * [35m|[m [33m6ad9497[m CSS編集
+* [1;31m|[m [35m|[m [33ma6eedd6[m Merge pull request #95 from Oui-hri/hayakawa-vote-save-2
+[1;32m|[m[1;31m\[m[1;31m|[m [35m|[m 
+[1;32m|[m * [35m|[m [33mf87b694[m CSS編集
+* [1;33m|[m [35m|[m [33m7a47773[m Merge pull request #94 from Oui-hri/hayakawa-vote-save-2
+[1;34m|[m[1;33m\[m[1;33m|[m [35m|[m 
+[1;34m|[m * [35m|[m [33m7c75055[m CSS編集
+[1;34m|[m[1;34m/[m [35m/[m  
+* [35m|[m [33mc60be84[m Merge pull request #93 from Oui-hri/haru-game
+[1;36m|[m[35m\[m[35m|[m 
+[1;36m|[m * [33m4ed3117[m room
+[1;36m|[m[1;36m/[m  
+*   [33m6c29754[m Merge pull request #92 from Oui-hri/hayakawa-vote-save-2
+[32m|[m[33m\[m  
+[32m|[m * [33m278ede0[m CSSファイルの追加
+* [33m|[m [33me9f817a[m Merge pull request #91 from Oui-hri/hayakawa-vote-save-2
+[34m|[m[33m\[m[33m|[m 
+[34m|[m * [33m6d919db[m 修正
+* [35m|[m [33m5847c1d[m Merge pull request #90 from Oui-hri/hayakawa-vote-save-2
+[36m|[m[35m\[m[35m|[m 
+[36m|[m * [33m9968eca[m 修正
+[36m|[m[36m/[m  
+*   [33m254fb95[m Merge pull request #89 from Oui-hri/musashiroom
+[1;32m|[m[1;33m\[m  
+[1;32m|[m * [33m8490cdd[m 追加
+[1;32m|[m[1;32m/[m  
+*   [33m9810b43[m Merge pull request #88 from Oui-hri/hayakawa-vote-save-2
+[1;34m|[m[1;35m\[m  
+[1;34m|[m * [33m2cf6bb7[m 修正
+* [1;35m|[m [33m11f6334[m Merge pull request #87 from Oui-hri/hayakawa-vote-save-2
+[1;36m|[m[1;35m\[m[1;35m|[m 
+[1;36m|[m * [33md8c1a48[m index.html修正
+[1;36m|[m[1;36m/[m  
+*   [33m033f865[m Merge pull request #86 from Oui-hri/haru-game
+[32m|[m[33m\[m  
+[32m|[m *   [33m1b1fb95[m Merge branch 'main' into haru-game
+[32m|[m [34m|[m[32m\[m  
+[32m|[m [34m|[m[32m/[m  
+[32m|[m[32m/[m[34m|[m   
+* [34m|[m   [33m2ae9584[m Merge pull request #85 from Oui-hri/hayakawa-vote-save-2
+[36m|[m[1;31m\[m [34m\[m  
+[36m|[m * [34m|[m [33m2f74930[m index.html修正
+* [1;31m|[m [34m|[m   [33me9bb9c8[m Merge pull request #84 from Oui-hri/musashiroom
+[1;32m|[m[1;33m\[m [1;31m\[m [34m\[m  
+[1;32m|[m * [1;31m|[m [34m|[m [33m58ebdda[m 追加
+[1;32m|[m[1;32m/[m [1;31m/[m [34m/[m  
+* [1;31m|[m [34m|[m [33m8ecbb97[m Merge pull request #83 from Oui-hri/hayakawa-vote-save-2
+[1;34m|[m[1;31m\[m[1;31m|[m [34m|[m 
+[1;34m|[m * [34m|[m [33mb9e4b68[m room修正
+[1;34m|[m [1;35m|[m * [33maa5b6ed[m taiki
+[1;34m|[m [1;35m|[m[1;34m/[m  
+[1;34m|[m[1;34m/[m[1;35m|[m   
+* [1;35m|[m [33m05ab8d5[m Merge pull request #82 from Oui-hri/hayakawa-vote-save-2
+[1;36m|[m[1;35m\[m[1;35m|[m 
+[1;36m|[m * [33m4466366[m room修正
+* [31m|[m [33m31c49d3[m Merge pull request #81 from Oui-hri/hayakawa-vote-save-2
+[32m|[m[31m\[m[31m|[m 
+[32m|[m * [33m47ce72f[m room修正
+* [33m|[m [33m29759ad[m Merge pull request #80 from Oui-hri/hayakawa-vote-save-2
+[34m|[m[33m\[m[33m|[m 
+[34m|[m * [33m6a5cdaf[m room修正
+[34m|[m [35m|[m * [33mf382473[m[33m ([m[1;35mrefs/stash[m[33m)[m WIP on musashiroom: cabd6d6 Merge pull request #79 from Oui-hri/hayakawa-vote-save-2
+[34m|[m [35m|[m[34m/[m[1;31m|[m 
+[34m|[m[34m/[m[35m|[m [1;31m|[m 
+[34m|[m [35m|[m * [33mf9f9c45[m index on musashiroom: cabd6d6 Merge pull request #79 from Oui-hri/hayakawa-vote-save-2
+[34m|[m [35m|[m[34m/[m  
+[34m|[m[34m/[m[35m|[m   
+* [35m|[m [33mcabd6d6[m Merge pull request #79 from Oui-hri/hayakawa-vote-save-2
+[1;32m|[m[35m\[m[35m|[m 
+[1;32m|[m * [33md1315ef[m room修正
+* [1;33m|[m [33m898b8e2[m Merge pull request #78 from Oui-hri/hayakawa-vote-save-2
+[1;34m|[m[1;33m\[m[1;33m|[m 
+[1;34m|[m * [33m69be8f3[m room修正
+* [1;35m|[m [33m78913d6[m Merge pull request #77 from Oui-hri/hayakawa-vote-save-2
+[1;36m|[m[1;35m\[m[1;35m|[m 
+[1;36m|[m * [33m650591d[m ヒント配布処理を修正
+* [31m|[m [33m72d0fd7[m Merge pull request #76 from Oui-hri/hayakawa-vote-save-2
+[32m|[m[31m\[m[31m|[m 
+[32m|[m * [33m3f74186[m ヒント機能の準備を追加
+[32m|[m[32m/[m  
+*   [33m287fd33[m Merge pull request #75 from Oui-hri/musashiroom
+[34m|[m[35m\[m  
+[34m|[m * [33m7f8113d[m 追加
+[34m|[m[34m/[m  
+*   [33m05f55d3[m Merge pull request #74 from Oui-hri/hayakawa-vote-save-2
+[36m|[m[1;31m\[m  
+[36m|[m * [33m7b542f1[m touhyou
+[36m|[m[36m/[m  
+*   [33mb306fc4[m Merge pull request #73 from Oui-hri/hayakawa-vote-save-2
+[1;32m|[m[1;33m\[m  
+[1;32m|[m * [33md0c4a34[m 不要なSQL関連ファイルを削除
+* [1;33m|[m   [33md7ee26f[m Merge pull request #72 from Oui-hri/musashiroom
+[1;34m|[m[1;35m\[m [1;33m\[m  
+[1;34m|[m * [1;33m|[m [33m99992a2[m 追加
+[1;34m|[m[1;34m/[m [1;33m/[m  
+* [1;33m|[m [33m78ac672[m Merge pull request #71 from Oui-hri/hayakawa-vote-save-2
+[1;36m|[m[1;33m\[m[1;33m|[m 
+[1;36m|[m * [33m84318a0[m Add PostgreSQL random topic API
+* [31m|[m   [33mf6abefa[m Merge pull request #70 from Oui-hri/haru-game
+[31m|[m[33m\[m [31m\[m  
+[31m|[m [33m|[m[31m/[m  
+[31m|[m[31m/[m[33m|[m   
+[31m|[m * [33m0aa84c6[m botan
+* [33m|[m [33mb095246[m Merge pull request #69 from Oui-hri/haru-game
+[34m|[m[33m\[m[33m|[m 
+[34m|[m * [33ma20ecb6[m simin
+* [35m|[m [33maabeda3[m Merge pull request #68 from Oui-hri/haru-game
+[36m|[m[35m\[m[35m|[m 
+[36m|[m * [33ma1334c2[m urufu
+[36m|[m[36m/[m  
+*   [33mc82e293[m Merge pull request #67 from Oui-hri/musashiroom
+[1;32m|[m[1;33m\[m  
+[1;32m|[m * [33medfc4e6[m 追加
+* [1;33m|[m [33mdb836e0[m Merge pull request #66 from Oui-hri/musashiroom
+[1;34m|[m[1;33m\[m[1;33m|[m 
+[1;34m|[m * [33m5abcd69[m 追加
+* [1;35m|[m [33m9ce40be[m Merge pull request #65 from Oui-hri/musashiroom
+[1;36m|[m[1;35m\[m[1;35m|[m 
+[1;36m|[m * [33m77ab2ff[m 追加
+[1;36m|[m[1;36m/[m  
+*   [33m2b74fb4[m Merge pull request #64 from Oui-hri/haru-game
+[32m|[m[33m\[m  
+[32m|[m * [33m1f75069[m ookami
+* [33m|[m [33m3a2c808[m Merge pull request #63 from Oui-hri/haru-game
+[34m|[m[33m\[m[33m|[m 
+[34m|[m * [33m306e7e6[m html
+[34m|[m * [33m1c0a57d[m html
+[34m|[m[34m/[m  
+*   [33m3607286[m Merge pull request #62 from Oui-hri/musashiroom
+[36m|[m[1;31m\[m  
+[36m|[m * [33m794f37b[m 追加
+* [1;31m|[m [33m23133af[m Merge pull request #61 from Oui-hri/musashiroom
+[1;32m|[m[1;31m\[m[1;31m|[m 
+[1;32m|[m * [33m9c2ac57[m 追加
+[1;32m|[m[1;32m/[m  
+*   [33m745f05a[m Merge pull request #60 from Oui-hri/haru-game
+[1;34m|[m[1;35m\[m  
+[1;34m|[m * [33m53d7e02[m timer
+[1;34m|[m[1;34m/[m  
+*   [33mc92b755[m Merge pull request #59 from Oui-hri/hayakawa-vote-save-2
+[1;36m|[m[31m\[m  
+[1;36m|[m * [33me761a5d[m Firebase連携と再投票処理を追加
+* [31m|[m   [33m3a811c5[m Merge pull request #58 from Oui-hri/musashiroom
+[32m|[m[33m\[m [31m\[m  
+[32m|[m * [31m|[m [33m0b94226[m 追加
+[32m|[m[32m/[m [31m/[m  
+* [31m|[m [33md0c29ca[m Merge pull request #57 from Oui-hri/hayakawa-vote-save-2
+[34m|[m[31m\[m[31m|[m 
+[34m|[m * [33m6d48734[m Firebase連携と再投票処理を追加
+[34m|[m[34m/[m  
+*   [33m3cfe55c[m Merge pull request #56 from Oui-hri/hayakawa-vote-save-2
+[36m|[m[1;31m\[m  
+[36m|[m * [33m0aaa7fd[m Firebase連携と再投票処理を追加
+* [1;31m|[m   [33mf3f9778[m Merge pull request #55 from Oui-hri/haru-game
+[1;31m|[m[1;33m\[m [1;31m\[m  
+[1;31m|[m [1;33m|[m[1;31m/[m  
+[1;31m|[m[1;31m/[m[1;33m|[m   
+[1;31m|[m * [33mf988543[m touhyou
+[1;31m|[m[1;31m/[m  
+*   [33m0e7a8d9[m Merge pull request #54 from Oui-hri/musashiroom
+[1;34m|[m[1;35m\[m  
+[1;34m|[m * [33ma0a6992[m 追加
+[1;34m|[m[1;34m/[m  
+*   [33mf74bda8[m Merge pull request #53 from Oui-hri/hayakawa-vote-save-2
+[1;36m|[m[31m\[m  
+[1;36m|[m * [33m663351d[m 投票のCSS
+* [31m|[m [33m98c0e6d[m Merge pull request #52 from Oui-hri/hayakawa-vote-save-2
+[32m|[m[31m\[m[31m|[m 
+[32m|[m * [33m40092a4[m 投票のCSS
+[32m|[m[32m/[m  
+*   [33mcfeec74[m Merge pull request #51 from Oui-hri/hayakawa-vote-save-2
+[34m|[m[35m\[m  
+[34m|[m *   [33m6a8ae27[m Merge branch 'main' of https://github.com/Oui-hri/wordwolf-online into hayakawa-vote-save-2
+[34m|[m [36m|[m[1;31m\[m  
+[34m|[m * [1;31m\[m   [33m6daa465[m Merge branch 'main' of https://github.com/Oui-hri/wordwolf-online into hayakawa-vote-save-2
+[34m|[m [1;32m|[m[1;33m\[m [1;31m\[m  
+[34m|[m * [1;33m|[m [1;31m|[m [33mda28d46[m 最多票と同票を判定
+* [1;33m|[m [1;33m|[m [1;31m|[m   [33m838c04f[m Merge pull request #50 from Oui-hri/haru-game
+[1;34m|[m[1;35m\[m [1;33m\[m [1;33m\[m [1;31m\[m  
+[1;34m|[m * [1;33m|[m [1;33m|[m [1;31m|[m [33mea539bb[m html
+[1;34m|[m[1;34m/[m [1;33m/[m [1;33m/[m [1;31m/[m  
+* [1;33m|[m [1;33m|[m [1;31m|[m   [33m4ce2e4c[m Merge pull request #49 from Oui-hri/musashiroom
+[1;31m|[m[31m\[m [1;33m\[m [1;33m\[m [1;31m\[m  
+[1;31m|[m [31m|[m[1;31m_[m[1;33m|[m[1;31m_[m[1;33m|[m[1;31m/[m  
+[1;31m|[m[1;31m/[m[31m|[m [1;33m|[m [1;33m|[m   
+[1;31m|[m * [1;33m|[m [1;33m|[m [33md1da9b9[m 追加
+[1;31m|[m[1;31m/[m [1;33m/[m [1;33m/[m  
+* [1;33m|[m [1;33m|[m   [33m99d5ec4[m Merge pull request #48 from Oui-hri/haru-game
+[1;33m|[m[33m\[m [1;33m\[m [1;33m\[m  
+[1;33m|[m [33m|[m[1;33m_[m[1;33m|[m[1;33m/[m  
+[1;33m|[m[1;33m/[m[33m|[m [1;33m|[m   
+[1;33m|[m * [1;33m|[m [33m92cd184[m html
+[1;33m|[m[1;33m/[m [1;33m/[m  
+* [1;33m|[m   [33md7a3904[m Merge pull request #47 from Oui-hri/musashiroom
+[34m|[m[35m\[m [1;33m\[m  
+[34m|[m * [1;33m|[m [33m1a1939b[m 追加
+[34m|[m[34m/[m [1;33m/[m  
+* [1;33m|[m   [33ma6eef4c[m Merge pull request #46 from Oui-hri/haru-game
+[1;33m|[m[1;31m\[m [1;33m\[m  
+[1;33m|[m [1;31m|[m[1;33m/[m  
+[1;33m|[m[1;33m/[m[1;31m|[m   
+[1;33m|[m * [33m04777b6[m html
+[1;33m|[m[1;33m/[m  
+*   [33m4229505[m Merge pull request #45 from Oui-hri/haru-game
+[1;32m|[m[1;33m\[m  
+[1;32m|[m * [33m2df6965[m html
+[1;32m|[m[1;32m/[m  
+*   [33mba52f22[m Merge pull request #44 from Oui-hri/hayakawa-vote-save-2
+[1;34m|[m[1;35m\[m  
+[1;34m|[m * [33md483e7e[m お題表示先を修正
+[1;34m|[m[1;34m/[m  
+*   [33m59f000d[m Merge pull request #43 from Oui-hri/haru-game
+[1;36m|[m[31m\[m  
+[1;36m|[m * [33m285e6ca[m html
+[1;36m|[m[1;36m/[m  
+*   [33mf698395[m Merge pull request #42 from Oui-hri/musashiroom
+[32m|[m[33m\[m  
+[32m|[m * [33m7accd24[m タイマーバグの修正
+[32m|[m[32m/[m  
+*   [33m49abc52[m Merge pull request #41 from Oui-hri/haru-game
+[34m|[m[35m\[m  
+[34m|[m * [33m20a4860[m html
+* [35m|[m [33m3d75aeb[m Merge pull request #40 from Oui-hri/haru-game
+[36m|[m[35m\[m[35m|[m 
+[36m|[m * [33mb096f19[m html
+* [1;31m|[m [33mb55406b[m Merge pull request #39 from Oui-hri/haru-game
+[1;32m|[m[1;31m\[m[1;31m|[m 
+[1;32m|[m * [33m3796683[m html
+* [1;33m|[m [33me94de2e[m Merge pull request #38 from Oui-hri/haru-game
+[1;34m|[m[1;33m\[m[1;33m|[m 
+[1;34m|[m * [33m5790ab4[m taikigamen
+[1;34m|[m[1;34m/[m  
+*   [33mc431168[m Merge pull request #37 from Oui-hri/hayakawa-vote-save-2
+[1;36m|[m[31m\[m  
+[1;36m|[m * [33md3ddd5c[m 最多票と同票を判定
+* [31m|[m [33ma3e570b[m Merge pull request #36 from Oui-hri/hayakawa-vote-save-2
+[32m|[m[31m\[m[31m|[m 
+[32m|[m * [33mdb8fb96[m 投票結果を画面に表示
+[32m|[m * [33me34d14e[m 投票内容をFirebaseに保存
+* [33m|[m   [33mddf5d46[m Merge pull request #35 from Oui-hri/musashiroom
+[34m|[m[35m\[m [33m\[m  
+[34m|[m * [33m|[m [33m2196f1a[m topics.js 修正
+[34m|[m[34m/[m [33m/[m  
+* [33m|[m   [33mca7c56b[m Merge pull request #34 from Oui-hri/haru-game
+[36m|[m[1;31m\[m [33m\[m  
+[36m|[m * [33m|[m [33m83eb8d3[m html
+* [1;31m|[m [33m|[m [33m4d6f589[m Merge pull request #33 from Oui-hri/haru-game
+[33m|[m[1;31m\[m[1;31m|[m [33m|[m 
+[33m|[m [1;31m|[m[33m/[m  
+[33m|[m[33m/[m[1;31m|[m   
+[33m|[m * [33m46910e0[m html
+[33m|[m[33m/[m  
+*   [33m78975c9[m Merge pull request #32 from Oui-hri/hayakawa-vote-select
+[1;34m|[m[1;35m\[m  
+[1;34m|[m * [33m0067abc[m[33m ([m[1;31morigin/hayakawa-vote-select[m[33m)[m 投票候補の選択UIを追加
+[1;34m|[m[1;34m/[m  
+*   [33m2f886f4[m Merge pull request #31 from Oui-hri/hayakawa-assign-role
+[1;36m|[m[31m\[m  
+[1;36m|[m * [33mca92bdc[m[33m ([m[1;31morigin/hayakawa-assign-role[m[33m)[m 話し合い終了後に投票画面へ遷移
+[1;36m|[m[1;36m/[m  
+*   [33mc487331[m Merge pull request #29 from Oui-hri/musashiroom
+[32m|[m[33m\[m  
+[32m|[m * [33mc29e3ec[m 作業内容
+* [33m|[m   [33m6c39191[m Merge pull request #30 from Oui-hri/haru-game
+[33m|[m[35m\[m [33m\[m  
+[33m|[m [35m|[m[33m/[m  
+[33m|[m[33m/[m[35m|[m   
+[33m|[m * [33mc46b05f[m html
+[33m|[m[33m/[m  
+*   [33m02882fa[m Merge pull request #28 from Oui-hri/hayakawa-assign-role
+[36m|[m[1;31m\[m  
+[36m|[m * [33ma123e9b[m お題確認後に話し合いタイマーを開始
+* [1;31m|[m [33m18006e0[m Merge pull request #27 from Oui-hri/hayakawa-assign-role
+[1;32m|[m[1;31m\[m[1;31m|[m 
+[1;32m|[m * [33md82459e[m CSSsyuusei
+[1;32m|[m[1;32m/[m  
+*   [33m19ac086[m Merge pull request #26 from Oui-hri/haru-game
+[1;34m|[m[1;35m\[m  
+[1;34m|[m * [33mca290f2[m html
+* [1;35m|[m [33m8df1297[m Merge pull request #25 from Oui-hri/haru-game
+[1;36m|[m[1;35m\[m[1;35m|[m 
+[1;36m|[m * [33m7f8b098[m html
+* [31m|[m [33me15fa9b[m Merge pull request #24 from Oui-hri/haru-game
+[32m|[m[31m\[m[31m|[m 
+[32m|[m * [33mb9c58ed[m html
+[32m|[m[32m/[m  
+*   [33m42251a8[m Merge pull request #23 from Oui-hri/hayakawa-status-sync
+[34m|[m[35m\[m  
+[34m|[m * [33mf74d5fc[m[33m ([m[1;31morigin/hayakawa-status-sync[m[33m)[m ステータス変更で話し合い画面へ遷移
+[34m|[m[34m/[m  
+*   [33m239bd4e[m Merge pull request #22 from Oui-hri/hayakawa-game-start
+[36m|[m[1;31m\[m  
+[36m|[m * [33m507f6af[m[33m ([m[1;31morigin/hayakawa-game-start[m[33m)[m ゲーム開始でステータスを変更
+* [1;31m|[m   [33m11e3ae7[m Merge pull request #21 from Oui-hri/musashiroom
+[1;31m|[m[1;33m\[m [1;31m\[m  
+[1;31m|[m [1;33m|[m[1;31m/[m  
+[1;31m|[m[1;31m/[m[1;33m|[m   
+[1;31m|[m * [33m44e1127[m 作業内容
+[1;31m|[m[1;31m/[m  
+*   [33m6a533a7[m Merge pull request #20 from Oui-hri/haru-game
+[1;34m|[m[1;35m\[m  
+[1;34m|[m * [33m01bd3e9[m haikei
+[1;34m|[m[1;34m/[m  
+*   [33mf27c008[m Merge pull request #19 from Oui-hri/hayakawa-host-check
+[1;36m|[m[31m\[m  
+[1;36m|[m * [33me0127a6[m[33m ([m[1;31morigin/hayakawa-host-check[m[33m)[m ホスト判定でゲーム開始ボタンを制御
+[1;36m|[m[1;36m/[m  
+*   [33m8b6623f[m Merge pull request #18 from Oui-hri/musashiroom
+[32m|[m[33m\[m  
+[32m|[m * [33m5df0370[m 作業内容
+[32m|[m[32m/[m  
+*   [33me5f5a2c[m Merge pull request #17 from Oui-hri/haru-game
+[34m|[m[35m\[m  
+[34m|[m * [33me49f11b[m html
+[34m|[m[34m/[m  
+*   [33m2b87ffe[m Merge pull request #16 from Oui-hri/haru-game
+[36m|[m[1;31m\[m  
+[36m|[m * [33m4dd4982[m html
+* [1;31m|[m   [33m4620371[m Merge pull request #15 from Oui-hri/musashiroom
+[1;31m|[m[1;33m\[m [1;31m\[m  
+[1;31m|[m [1;33m|[m[1;31m/[m  
+[1;31m|[m[1;31m/[m[1;33m|[m   
+[1;31m|[m * [33m6e6c451[m 修正
+[1;31m|[m *   [33m8679d9b[m Merge branch 'main' into musashiroom
+[1;31m|[m [1;34m|[m[1;31m\[m  
+[1;31m|[m [1;34m|[m[1;31m/[m  
+[1;31m|[m[1;31m/[m[1;34m|[m   
+* [1;34m|[m   [33m3b0957d[m[33m ([m[1;32mmain[m[33m)[m Merge pull request #14 from Oui-hri/haru-game
+[1;36m|[m[31m\[m [1;34m\[m  
+[1;36m|[m * [1;34m|[m [33m100e921[m html
+[1;36m|[m[1;36m/[m [1;34m/[m  
+* [1;34m|[m   [33m6ed2076[m Merge pull request #13 from Oui-hri/haru-game
+[32m|[m[33m\[m [1;34m\[m  
+[32m|[m * [1;34m|[m [33meb6bbd2[m kaunnto
+* [33m|[m [1;34m|[m   [33m1a43f69[m Merge pull request #12 from Oui-hri/hayakawa-room-join
+[33m|[m[35m\[m [33m\[m [1;34m\[m  
+[33m|[m [35m|[m[33m/[m [1;34m/[m  
+[33m|[m[33m/[m[35m|[m [1;34m|[m   
+[33m|[m * [1;34m|[m [33m0e47be1[m[33m ([m[1;31morigin/hayakawa-room-join[m[33m)[m ルーム参加処理と参加者同期を追加
+[33m|[m[33m/[m [1;34m/[m  
+[33m|[m * [33m266516f[m musashiroom
+[33m|[m[33m/[m  
+*   [33mdb399df[m Merge pull request #11 from Oui-hri/hayakawa-room-create
+[36m|[m[1;31m\[m  
+[36m|[m * [33m31acbbd[m[33m ([m[1;31morigin/hayakawa-room-create[m[33m)[m ルーム作成処理を追加
+* [1;31m|[m   [33m50e12a2[m Merge pull request #10 from Oui-hri/musashiroom
+[1;31m|[m[1;33m\[m [1;31m\[m  
+[1;31m|[m [1;33m|[m[1;31m/[m  
+[1;31m|[m[1;31m/[m[1;33m|[m   
+[1;31m|[m * [33m82f6309[m topics.js追加とgame.js修正
+[1;31m|[m[1;31m/[m  
+*   [33md70ec8c[m Merge pull request #9 from Oui-hri/hayakawa-room
+[1;34m|[m[1;35m\[m  
+[1;34m|[m *   [33mfc8dfff[m[33m ([m[1;31morigin/hayakawa-room[m[33m)[m Merge branch 'main' into hayakawa-room
+[1;34m|[m [1;36m|[m[1;34m\[m  
+[1;34m|[m [1;36m|[m[1;34m/[m  
+[1;34m|[m[1;34m/[m[1;36m|[m   
+* [1;36m|[m   [33mdc08abf[m Merge pull request #8 from Oui-hri/haru-game
+[32m|[m[33m\[m [1;36m\[m  
+[32m|[m * [1;36m|[m [33md28246b[m tuika
+[32m|[m[32m/[m [1;36m/[m  
+* [1;36m|[m   [33mcedbc9b[m Merge pull request #7 from Oui-hri/hayakawa-room
+[34m|[m[35m\[m [1;36m\[m  
+[34m|[m [35m|[m * [33mf083ba4[m room追加
+[34m|[m [35m|[m[35m/[m  
+[34m|[m * [33m835dfac[m ファイアベース追加
+[34m|[m[34m/[m  
+*   [33ma03dc86[m Merge pull request #6 from Oui-hri/haru-game
+[36m|[m[1;31m\[m  
+[36m|[m * [33mdb13ea2[m hi
+* [1;31m|[m   [33m3c6488b[m Merge pull request #5 from Oui-hri/hayakawa-room
+[1;32m|[m[1;33m\[m [1;31m\[m  
+[1;32m|[m * [1;31m|[m [33m7be674d[m ファイアベース追加
+[1;32m|[m[1;32m/[m [1;31m/[m  
+* [1;31m|[m [33madb1172[m Merge pull request #4 from Oui-hri/haru-game
+[1;34m|[m[1;31m\[m[1;31m|[m 
+[1;34m|[m * [33m91ce11c[m CSSdayo
+[1;34m|[m[1;34m/[m  
+*   [33m68ad1f6[m Merge pull request #3 from Oui-hri/musashiroom
+[1;36m|[m[31m\[m  
+[1;36m|[m * [33mf514bc0[m ゲーム
+[1;36m|[m[1;36m/[m  
+*   [33mbdaa3fe[m Merge pull request #2 from Oui-hri/haru-game
+[32m|[m[33m\[m  
+[32m|[m * [33m7148b9b[m html
+[32m|[m[32m/[m  
+*   [33md278712[m Merge pull request #1 from Oui-hri/hayakawa-room
+[34m|[m[35m\[m  
+[34m|[m * [33m8fdacc5[m 初期フォルダ構成を作成
+[34m|[m[34m/[m  
+* [33m7fec37c[m Initial commit
