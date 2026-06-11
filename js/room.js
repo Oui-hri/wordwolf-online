@@ -876,6 +876,9 @@ function startTopicCountdown(countdownElement) {
 // 話し合い画面
 // =========================
 function showDiscussionScreen() {
+
+  console.log("討論画面に移動");
+
   hideAllScreens();
 
   playBgm("./js/audio/討論中.mp3");
@@ -1162,6 +1165,9 @@ function changeStatusToVoting() {
 // =========================
 
 function showVoteScreen() {
+
+  console.log("投票画面に移動");
+
   hideAllScreens();
 
   playBgm("./js/audio/投票結果.mp3");
@@ -2061,4 +2067,3 @@ document.addEventListener("click", (e) => {
   console.log("選択カテゴリー:", selectedCategory);
 
 });
-

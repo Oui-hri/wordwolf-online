@@ -1,6 +1,9 @@
 let currentBgm = null;
 
 export function playBgm(filePath) {
+
+  console.log("再生する曲:", filePath);
+
   stopBgm();
 
   currentBgm = new Audio(filePath);
@@ -19,6 +22,7 @@ export function stopBgm() {
   currentBgm.currentTime = 0;
   currentBgm = null;
 }
+
 export function playSe(filePath) {
   const se = new Audio(filePath);
 
