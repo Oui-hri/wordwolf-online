@@ -1611,9 +1611,11 @@ function showResultScreen() {
             市民たちはワードウルフを見抜いた
           </p>
 
-          <p>
-            追放者：${resultData.eliminatedName || "不明"}
-          </p>
+          <div class="eliminated-box citizen-eliminated-box">
+  <div class="eliminated-dot citizen-eliminated-dot"></div>
+  <span class="eliminated-label citizen-eliminated-label">追放者</span>
+  <span class="eliminated-name citizen-eliminated-name">${resultData.eliminatedName || "不明"}</span>
+</div>
 
           <div class="vote-result-card citizen-card">
             <div class="vote-result-title">
