@@ -1008,7 +1008,7 @@ function restartDiscussionTimer(totalTime) {
   let circumference = 0;
 
   if (circle) {
-    const radius = 150;
+    const radius = 75;
     circumference = 2 * Math.PI * radius;
 
     circle.setAttribute(
