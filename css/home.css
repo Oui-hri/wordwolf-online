@@ -1,0 +1,128 @@
+/* =========================
+   Home画面専用
+========================= */
+
+#title-screen {
+  position: relative;
+  overflow: hidden;
+}
+
+/* レイヤー調整 */
+#title-screen .stars,
+#title-screen .moon {
+  position: absolute;
+  z-index: 1;
+}
+
+#title-screen .fog-back {
+  z-index: 2;
+}
+
+#title-screen .rock {
+  position: absolute;
+  z-index: 3;
+}
+
+#title-screen .wolf {
+  position: absolute;
+  z-index: 4;
+}
+
+#title-screen .fog-mid {
+  z-index: 5;
+}
+
+#title-screen .fog-front {
+  z-index: 6;
+}
+
+#title-screen .title,
+#title-screen .home-ornament,
+#title-screen #create-room-button,
+#title-screen #join-room-button {
+  position: relative;
+  z-index: 10;
+}
+
+.home-fog {
+  position: absolute;
+  left: 50%;
+  width: 120%;
+  height: 260px;
+
+  background-image: url("../images/fog.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center bottom;
+
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.fog-back {
+  bottom: 120px;
+  opacity: 0.16;
+  z-index: 1;
+  filter: blur(3px);
+}
+
+.fog-mid {
+  bottom: 55px;
+  opacity: 0.11;
+  z-index: 4;
+  filter: blur(5px);
+}
+
+.fog-front {
+  bottom: -25px;
+  opacity: 0.08;
+  z-index: 5;
+  filter: blur(7px);
+}
+
+/* タイトル下の装飾ライン */
+#title-screen .home-ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 16px 0 42px;
+  color: #ffd36a;
+  text-shadow: 0 0 10px rgba(255, 211, 106, 0.9);
+}
+
+#title-screen .home-ornament span:first-child,
+#title-screen .home-ornament span:last-child {
+  display: block;
+  width: 150px;
+  height: 1px;
+  background: linear-gradient(to right,
+      transparent,
+      #ffd36a,
+      transparent);
+  box-shadow: 0 0 8px rgba(255, 211, 106, 0.8);
+}
+
+#title-screen .home-ornament span:nth-child(2) {
+  font-size: 18px;
+}
+
+/* ボタン発光 */
+#title-screen #create-room-button {
+  box-shadow:
+    0 0 18px rgba(255, 155, 30, 0.55),
+    0 0 34px rgba(255, 155, 30, 0.28),
+    inset 0 0 12px rgba(255, 255, 255, 0.25);
+}
+
+#title-screen #join-room-button {
+  box-shadow:
+    0 0 18px rgba(180, 100, 255, 0.45),
+    0 0 34px rgba(180, 100, 255, 0.22),
+    inset 0 0 12px rgba(255, 255, 255, 0.18);
+}
+
+#title-screen #create-room-button:hover,
+#title-screen #join-room-button:hover {
+  transform: translateY(-2px);
+}
