@@ -1895,13 +1895,24 @@ button {
 }
 
 .eliminated-label {
+  background: linear-gradient(to bottom,
+      #ffb199 0%,
+      #ff6b4a 20%,
+      #ff3b30 60%,
+      #d60000 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+  /* グラデーションテキストに必須 */
+  position: relative;
+  top: 10px;
   font-size: 50px;
-  letter-spacing: 2px;
-  color: #ff6b6b;
+  font-weight: 900;
 }
 
 .eliminated-name {
-  font-size: 50px;
+  font-size: 30px;
   font-weight: 900;
   color: #fff;
   text-shadow: 0 0 8px rgba(255, 107, 107, 0.6);
