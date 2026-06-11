@@ -2161,14 +2161,19 @@ button {
   /* ← 数値を変えて調整 */
 }
 
-.vote-result-title {
-
+.citizen-card .vote-result-title {
   color: #ffd54f;
-
-  text-shadow:
-    0 0 8px rgba(255, 215, 80, .7);
-
+  text-shadow: 0 0 8px rgba(255, 215, 80, .7);
   font-weight: bold;
+}
+
+/* ウルフ用（.citizen-card が付いていないカード） */
+.vote-result-card:not(.citizen-card) .vote-result-title {
+  text-shadow: 0 0 8px rgba(255, 75, 75, 0.7);
+}
+
+.vote-result-card:not(.citizen-card) .vote-result-title span {
+  box-shadow: 0 0 10px rgba(255, 75, 75, 0.7);
 }
 
 #result-content {
