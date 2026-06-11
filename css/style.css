@@ -1109,6 +1109,98 @@ button {
   transform: translateY(-15px);
 }
 
+/* あなたのお題 */
+.discussion-topic {
+
+  width: 420px;
+  margin: 0 auto;
+  padding: 22px 16px;
+
+  background:
+    linear-gradient(180deg,
+      rgba(155, 120, 255, .25),
+      rgba(90, 50, 180, .15));
+
+  backdrop-filter: blur(16px);
+
+  border: 1px solid rgba(200, 170, 255, .25);
+
+  border-radius: 24px;
+  box-shadow:
+    0 0 25px rgba(166, 117, 255, .2),
+    inset 0 1px 0 rgba(255, 255, 255, .15);
+
+  color: white;
+
+  font-size: 2.4rem;
+
+  font-weight: 800;
+
+  text-align: center;
+
+  position: relative;
+
+  overflow: hidden;
+}
+
+.topic-card {
+
+  width: 500px;
+  max-width: 90%;
+
+  margin: 0 auto 25px;
+
+  text-align: center;
+}
+
+.topic-label {
+
+  font-size: 1rem;
+
+  color: #ffe7a3;
+
+  letter-spacing: 4px;
+
+  margin-bottom: 12px;
+
+  text-shadow:
+    0 0 10px rgba(255, 231, 163, .5);
+}
+
+.discussion-topic {
+
+  width: 100%;
+
+  padding: 26px 20px;
+
+  background:
+    linear-gradient(180deg,
+      rgba(155, 120, 255, .25),
+      rgba(90, 50, 180, .15));
+
+  backdrop-filter: blur(16px);
+
+  border: 1px solid rgba(200, 170, 255, .25);
+
+  border-radius: 28px;
+
+  box-shadow:
+    0 0 25px rgba(166, 117, 255, .2),
+    inset 0 1px 0 rgba(255, 255, 255, .15);
+
+  color: white;
+
+  font-size: 3rem;
+
+  font-weight: 800;
+
+  text-align: center;
+
+  position: relative;
+
+  overflow: hidden;
+}
+
 /* ヒントを見る */
 #hint-button {
 
