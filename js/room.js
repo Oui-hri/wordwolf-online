@@ -261,7 +261,7 @@ function showTitleScreen() {
 }
 function showCreateRoomScreen() {
   hideAllScreens();
-
+  playBgm("./js/audio/スタート画面.mp3");
   if (createRoomError) {
     createRoomError.textContent = "";
   }
@@ -279,7 +279,7 @@ function showCreateRoomScreen() {
 
 function showJoinRoomScreen() {
   hideAllScreens();
-
+  playBgm("./js/audio/スタート画面.mp3");
   if (joinRoomError) {
     joinRoomError.textContent = "";
   }
