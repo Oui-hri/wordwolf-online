@@ -7,86 +7,125 @@
   overflow: hidden;
 }
 
-/* レイヤー調整 */
-#title-screen .stars,
+/* =========================
+   メインビジュアル
+========================= */
+
+#title-screen .hero {
+  position: relative;
+  text-align: center;
+  overflow: hidden;
+  width: 100%;
+  height: 550px;
+}
+
+#title-screen .stars {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1600px;
+  max-width: none;
+  transform: translateX(-50%);
+  z-index: 0;
+  pointer-events: none;
+}
+
 #title-screen .moon {
+  width: 500px;
+  display: block;
+  margin: -220px auto 0;
   position: absolute;
   z-index: 1;
 }
 
-#title-screen .fog-back {
+#title-screen .rock {
+  width: 420px;
+  position: absolute;
+  left: 50%;
+  top: 135px;
+  transform: translateX(-50%);
   z-index: 2;
 }
 
-#title-screen .rock {
+#title-screen .wolf {
+  width: 500px;
   position: absolute;
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 3;
 }
 
-#title-screen .wolf {
-  position: absolute;
-  z-index: 4;
-}
+/* =========================
+   霧
+========================= */
 
-#title-screen .fog-mid {
-  z-index: 5;
-}
-
-#title-screen .fog-front {
-  z-index: 6;
-}
-
-#title-screen .title,
-#title-screen .home-ornament,
-#title-screen #create-room-button,
-#title-screen #join-room-button {
-  position: relative;
-  z-index: 10;
-}
-
-.home-fog {
+#title-screen .home-fog {
   position: absolute;
   left: 50%;
   width: 120%;
-  height: 260px;
-
-  background-image: url("../images/fog.png");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center bottom;
-
+  height: auto;
   transform: translateX(-50%);
   pointer-events: none;
 }
 
-.fog-back {
-  bottom: 120px;
-  opacity: 0.16;
+#title-screen .fog-back {
+  bottom: 45px;
+  opacity: 0.1;
   z-index: 1;
-  filter: blur(3px);
 }
 
-.fog-mid {
-  bottom: 55px;
-  opacity: 0.11;
-  z-index: 4;
-  filter: blur(5px);
+#title-screen .fog-mid {
+  bottom: -10px;
+  opacity: 0.25;
+  z-index: 20;
 }
 
-.fog-front {
-  bottom: -25px;
-  opacity: 0.08;
-  z-index: 5;
-  filter: blur(7px);
+#title-screen .fog-front {
+  bottom: -55px;
+  opacity: 0.18;
+  z-index: 21;
 }
 
-/* タイトル下の装飾ライン */
+/* =========================
+   タイトル
+========================= */
+
+#title-screen .title {
+  position: absolute;
+  top: 360px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 3rem;
+  font-weight: 900;
+  z-index: 30;
+}
+
+#title-screen h1 {
+  font-size: 2.5rem;
+  font-weight: 750;
+  margin-top: -20px;
+  text-shadow:
+    0 0 10px rgba(255, 255, 255, 0.5),
+    0 0 30px rgba(255, 215, 0, 0.3);
+}
+
+/* =========================
+   タイトル下の装飾ライン
+========================= */
+
 #title-screen .home-ornament {
+  position: relative;
+  z-index: 30;
+
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 14px;
+
   margin: 16px 0 42px;
+
   color: #ffd36a;
   text-shadow: 0 0 10px rgba(255, 211, 106, 0.9);
 }
@@ -107,15 +146,59 @@
   font-size: 18px;
 }
 
-/* ボタン発光 */
+/* =========================
+   ボタン
+========================= */
+
+#title-screen #create-room-button,
+#title-screen #join-room-button {
+  width: 280px;
+  padding: 16px;
+
+  border-radius: 20px;
+
+  transition: all 0.3s;
+
+  font-family: "Zen Kaku Gothic New", sans-serif;
+  font-size: 1.125rem;
+
+  position: relative;
+  top: -100px;
+  z-index: 30;
+}
+
+/* オレンジのボタン */
 #title-screen #create-room-button {
+  background:
+    linear-gradient(180deg,
+      #f08a00 0%,
+      #e06d00 55%,
+      #c95a00 100%);
+
+  color: white;
+
+  border: 1px solid rgba(255, 180, 0, 0.5);
+
   box-shadow:
     0 0 18px rgba(255, 155, 30, 0.55),
     0 0 34px rgba(255, 155, 30, 0.28),
     inset 0 0 12px rgba(255, 255, 255, 0.25);
+
+  backdrop-filter: blur(4px);
 }
 
+/* 紫のボタン */
 #title-screen #join-room-button {
+  background:
+    linear-gradient(135deg,
+      #4b2c78 0%,
+      #39205f 45%,
+      #23234a 100%);
+
+  color: #fff8e7;
+
+  border: 1px solid rgba(255, 140, 0, 0.25);
+
   box-shadow:
     0 0 18px rgba(180, 100, 255, 0.45),
     0 0 34px rgba(180, 100, 255, 0.22),
@@ -124,5 +207,5 @@
 
 #title-screen #create-room-button:hover,
 #title-screen #join-room-button:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 }
