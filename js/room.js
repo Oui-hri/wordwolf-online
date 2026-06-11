@@ -236,7 +236,6 @@ restoreSession();
 // =========================
 // 共通UI補助
 // =========================
-
 function setHidden(element, shouldHide) {
   if (!element) {
     return;
@@ -252,12 +251,13 @@ function setHidden(element, shouldHide) {
 function showTitleScreen() {
   hideAllScreens();
 
+  playBgm("./js/audio/スタート画面.mp3");
+
   const titleScreen =
     document.getElementById("title-screen");
 
   setHidden(titleScreen, false);
 }
-
 function showCreateRoomScreen() {
   hideAllScreens();
 
@@ -613,11 +613,10 @@ function joinRoom() {
 // =========================
 // 待機画面
 // =========================
-
 function showWaitingRoom(roomName) {
   hideAllScreens();
 
-  stopBgm();
+  playBgm("./js/audio/スタート画面.mp3");
 
   const waitingScreen =
     document.getElementById("waiting-screen");
@@ -635,16 +634,6 @@ function showWaitingRoom(roomName) {
   setHidden(answerArea, true);
 
   updateStartGameButton();
-}
-
-function updateStartGameButton() {
-  setHidden(startGameButton, !currentIsHost);
-
-  if (startGameButton) {
-    startGameButton.disabled = !currentIsHost;
-  }
-
-  setHidden(categoryArea, !currentIsHost);
 }
 
 // =========================
@@ -886,11 +875,13 @@ function startTopicCountdown(countdownElement) {
 // =========================
 // 話し合い画面
 // =========================
-
 function showDiscussionScreen() {
+
+  console.log("討論画面に移動");
+
   hideAllScreens();
 
-  playBgm("./js/audio/潜む怪奇.mp3");
+  playBgm("./js/audio/討論中.mp3");
 
   const discussionScreen =
     document.getElementById("discussion-screen");
@@ -917,7 +908,7 @@ function showDiscussionScreen() {
 function showTieScreen() {
   hideAllScreens();
 
-  playBgm("./js/audio/潜む怪奇.mp3");
+  playBgm("./js/audio/討論中.mp3");
 
   const tieScreen =
     document.getElementById("tie-screen");
@@ -1174,9 +1165,12 @@ function changeStatusToVoting() {
 // =========================
 
 function showVoteScreen() {
+
+  console.log("投票画面に移動");
+
   hideAllScreens();
 
-  playBgm("./js/audio/潜む怪奇.mp3");
+  playBgm("./js/audio/投票結果.mp3");
 
   const voteScreen =
     document.getElementById("vote-screen");
@@ -1557,6 +1551,7 @@ function showResultScreen() {
       }
 
       if (resultData.winner === "citizen") {
+        playBgm("./js/audio/市民勝利.mp3");
         resultContent.innerHTML = `
           <img src="images/gold.png" class="result-icon citizen-icon">
 
@@ -1610,6 +1605,7 @@ function showResultScreen() {
           </div>
         `;
       } else {
+        playBgm("./js/audio/ウルフ勝利.mp3");
         resultContent.innerHTML = `
           <img src="images/ookam_red.png" class="result-icon">
 
