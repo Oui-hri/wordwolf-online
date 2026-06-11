@@ -334,8 +334,7 @@ export function createDiscussionTopicData(
       player.role || "",
 
     message:
-      "あなたのお題：" +
-      (player.topic || "不明")
+      player.topic || "不明"
   };
 }
 
