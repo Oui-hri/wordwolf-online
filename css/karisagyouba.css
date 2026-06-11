@@ -1186,3 +1186,62 @@
     left: calc(100% - 84px);
   }
 }
+
+/* =========================
+   結果画面：ボタン間隔調整
+========================= */
+
+.result-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 22px;
+  margin-top: 36px;
+}
+
+.result-buttons+.result-buttons {
+  margin-top: 22px;
+}
+
+.result-btn {
+  width: min(76%, 620px);
+  padding: 24px 32px;
+
+  border-radius: 24px;
+
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+/* =========================
+   結果画面：ボタンサイズ調整
+========================= */
+
+.result-btn {
+  width: min(68%, 560px);
+  padding: 18px 28px;
+
+  border-radius: 22px;
+
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.result-buttons {
+  gap: 16px;
+  margin-top: 26px;
+}
+
+.result-buttons+.result-buttons {
+  margin-top: 16px;
+}
+
+/* =========================
+   結果画面：下余白調整
+========================= */
+
+#result-screen {
+  padding-bottom: 100px;
+}
