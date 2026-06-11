@@ -35,7 +35,8 @@ const roomCode = document.getElementById("room-code");
 const playerList = document.getElementById("player-list");
 const startGameButton = document.getElementById("start-game-button");
 const categoryArea = document.getElementById("category-area");
-const categorySelect = document.getElementById("category-select");
+const categoryChips = document.querySelectorAll(".category-chip");
+
 const topicCard = document.getElementById("player-word");
 
 const voteList = document.getElementById("vote-list");
@@ -636,11 +637,37 @@ function showWaitingRoom(roomName) {
   updateStartGameButton();
 }
 
+function updateStartGameButton() {
+  console.log("currentIsHost:", currentIsHost); // ← 確認用なのでこれは残していい
+
+  // ↓↓↓ これが全部抜けてる！
+  setHidden(startGameButton, !currentIsHost);
+  if (startGameButton) {
+    startGameButton.disabled = !currentIsHost;
+  }
+  setHidden(categoryArea, !currentIsHost);
+}
+
+// チップをクリックしたら選択状態を切り替える
+categoryChips.forEach((chip) => {
+  chip.addEventListener("click", () => {
+    categoryChips.forEach((btn) => btn.classList.remove("active"));
+    chip.classList.add("active");
+  });
+});
+
+function getSelectedCategory() {
+  const activeChip = document.querySelector(".category-chip.active");
+  return activeChip ? activeChip.dataset.value || "random" : "random";
+}
 // =========================
 // ゲーム開始
 // =========================
 
 function startGame() {
+  // 修正後
+  const selectedCategory = getSelectedCategory();
+
   if (!currentIsHost) {
     alert("ゲームを開始できるのはホストだけです");
     return;
