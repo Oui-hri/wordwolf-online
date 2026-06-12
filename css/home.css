@@ -382,3 +382,105 @@
   transform: translateX(-50%) translateY(-3px);
   filter: brightness(1.08);
 }
+
+/* =========================
+   スマホ対応
+========================= */
+@media screen and (max-width: 768px) {
+
+  #title-screen {
+    min-height: 100vh;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  #title-screen .stars {
+    width: 1050px;
+    top: 0;
+  }
+
+  #title-screen .moon {
+    width: 400px;
+    top: 0;
+    left: 50%;
+    margin: -120px 0 0;
+    transform: translateX(-50%);
+  }
+
+  #title-screen .rock {
+    width: 400px;
+    top: 145px;
+  }
+
+  #title-screen .wolf {
+    width: 400px;
+    top: -60px;
+  }
+
+  #title-screen .fog-back {
+    width: 850px;
+    bottom: 240px;
+    opacity: 0.3;
+  }
+
+  #title-screen .fog-mid {
+    width: 1000px;
+    bottom: 160px;
+    opacity: 0.8;
+    filter:
+        saturate(0.9) brightness(0.8) blur(2px) ;
+  }
+
+  #title-screen .fog-front {
+    width: 1200px;
+    bottom: 0px;
+  }
+
+  #title-screen .title {
+    top: 330px;
+    font-size: clamp(1.6rem, 7vw, 2rem);
+  }
+
+  #title-screen .home-ornament {
+    position: absolute;
+    top: 350px !important;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    margin: 0;
+    gap: 10px;
+  }
+
+  #title-screen .home-ornament span:first-child,
+  #title-screen .home-ornament span:last-child {
+    width: 85px;
+  }
+
+  #title-screen .ornament-paw {
+    width: 18px;
+    height: 18px;
+  }
+
+  #title-screen #create-room-button,
+  #title-screen #join-room-button {
+    width: 260px;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 16px;
+  }
+
+  #title-screen #create-room-button {
+    top: 400px;
+  }
+
+  #title-screen #join-room-button {
+    top: 480px;
+  }
+
+  #title-screen #create-room-button::before,
+  #title-screen #join-room-button::before,
+  #title-screen #create-room-button::after,
+  #title-screen #join-room-button::after {
+    width: 38px;
+  }
+}
