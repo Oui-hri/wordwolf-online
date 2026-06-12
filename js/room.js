@@ -58,8 +58,11 @@ const discussionTopic = document.getElementById("discussion-topic");
 
 const hintButton = document.getElementById("hint-button");
 const hintModal = document.getElementById("hint-modal");
+
+document.body.appendChild(hintModal);
 const hintText = document.getElementById("hint-text");
 const hintCloseButton = document.getElementById("hint-close-button");
+document.body.appendChild(hintModal);
 
 const createRoomScreen =
   document.getElementById("create-room-screen");
