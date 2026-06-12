@@ -543,13 +543,13 @@
   }
 
   #title-screen .fog-mid {
-    bottom: 300px;
+    bottom: 280px;
     width: 1000px;
   }
 
   #title-screen .fog-front {
     bottom: 0;
-    width: 2300px;
+    width: 2000px;
   }
 }
 
@@ -605,7 +605,7 @@
 }
 
 /* 標準〜大きめスマホ：iPhone 12〜15 / Pro Max系 */
-@media screen and (min-width: 380px) and (max-width: 394px) {
+@media screen and (max-width: 394px) {
 
   #title-screen .moon {
     width: 450px;
