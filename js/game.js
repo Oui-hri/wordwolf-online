@@ -375,8 +375,6 @@ export function createRestartData() {
     citizenTopic: null,
     wolfTopic: null,
     wolfIndex: null,
-
-    discussionTime: 120
   };
 }
 
