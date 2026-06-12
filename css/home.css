@@ -605,7 +605,57 @@
 }
 
 /* 標準〜大きめスマホ：iPhone 12〜15 / Pro Max系 */
-@media screen and (min-width: 400px) and (max-width: 430px) {
+@media screen and (min-width: 380px) and (max-width: 394px) {
+
+  #title-screen .moon {
+    width: 450px;
+  }
+
+  #title-screen .wolf {
+    width: 450px;
+    top: -50px;
+  }
+
+  #title-screen .rock {
+    width: 500px;
+    top: 170px;
+  }
+
+  #title-screen .title {
+    top: 450px;
+    font-size: 2.3rem;
+  }
+
+  #title-screen .home-ornament {
+    top: 500px !important;
+  }
+
+  #title-screen .home-ornament span:first-child,
+  #title-screen .home-ornament span:last-child {
+    width: 120px;
+  }
+
+  #title-screen .ornament-paw {
+    width: 30px;
+    height: 30px;
+  }
+
+  #title-screen #create-room-button {
+    top: 550px;
+  }
+
+  #title-screen #join-room-button {
+    top: 640px;
+  }
+
+  #title-screen #create-room-button,
+  #title-screen #join-room-button {
+    width: 290px;
+  }
+}
+
+/* 大きめスマホ / Pro Max系 */
+@media screen and (min-width: 394px) and (max-width: 430px) {
 
   #title-screen .moon {
     width: 500px;
