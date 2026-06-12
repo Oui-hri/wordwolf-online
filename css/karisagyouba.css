@@ -87,7 +87,8 @@
   pointer-events: none;
   user-select: none;
 
-  filter: drop-shadow(0 0 18px rgba(255, 238, 190, 0.55));
+  filter: filter:
+      drop-shadow(0 0 70px #f7feb5);
 }
 
 /* =========================
