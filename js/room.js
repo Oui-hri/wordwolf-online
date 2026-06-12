@@ -1725,24 +1725,20 @@ function setupResultButtons() {
     document.getElementById("result-quit-button");
 
   if (resultAnswerButton) {
-    resultAnswerButton.addEventListener(
-      "click",
-      showAnswerArea
-    );
+    resultAnswerButton.addEventListener("click", showAnswerArea);
   }
 
   if (resultRestartButton) {
-    resultRestartButton.addEventListener(
-      "click",
-      restartGame
-    );
+    // ホスト以外はボタンを非表示にする👇
+    if (!currentIsHost) {
+      resultRestartButton.style.display = "none";
+    } else {
+      resultRestartButton.addEventListener("click", restartGame);
+    }
   }
 
   if (resultQuitButton) {
-    resultQuitButton.addEventListener(
-      "click",
-      quitGame
-    );
+    resultQuitButton.addEventListener("click", quitGame);
   }
 }
 
