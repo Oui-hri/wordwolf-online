@@ -101,4 +101,83 @@
     margin-bottom: 20px;
   }
 
+  /* ===== 待機部屋 ===== */
+  #waiting-screen {
+    top: 0;
+  }
+
+  #waiting-screen h2 {
+    font-size: 1.5rem;
+    margin-top: 24px;
+  }
+
+  .room-card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .room-label {
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    top: 0;
+    position: static;
+  }
+
+  .room-code {
+    min-width: unset;
+    width: 100%;
+    font-size: 2.5rem;
+    letter-spacing: 16px;
+    padding: 5px 16px;
+    top: 0;
+    position: static;
+    box-sizing: border-box;
+  }
+
+  .player-card {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    top: 0;
+    position: static;
+    padding: 16px;
+  }
+
+  .player-card h3 {
+    top: 0;
+    position: static;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+
+  .player-card ul {
+    top: 0;
+    position: static;
+  }
+
+  .kick-button {
+    width: 80px;
+    height: 36px;
+    font-size: 0.85rem;
+  }
+
+  .category-chip {
+    width: 84px;
+    height: 80px;
+    font-size: 1.4rem;
+    border-radius: 16px;
+  }
+
+  .category-chip span {
+    font-size: 0.75rem;
+  }
+
+  #start-game-button {
+    width: 100%;
+    max-width: 100%;
+    font-size: 1.4rem;
+    top: 0;
+    position: static;
+    margin-top: 8px;
+  }
 }
