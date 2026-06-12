@@ -62,4 +62,43 @@
     margin-top: 8px;
   }
 
+
+
+  /* ===== ルーム参加画面 ===== */
+  #join-room-screen,
+  #create-room-screen {
+    padding-top: 24px;
+    align-items: flex-start;
+  }
+
+  .room-form-card {
+    width: 100%;
+    max-width: 100%;
+    padding: 24px 16px 32px;
+    border-radius: 24px;
+    box-sizing: border-box;
+  }
+
+  .join-title {
+    font-size: 1.6rem;
+    gap: 8px;
+    transform: translateY(0);
+    margin-bottom: 20px;
+  }
+
+  #create-room-screen .join-title {
+    transform: translateY(0);
+    margin-bottom: 20px;
+  }
+
+  #join-room-screen .room-form-card {
+    margin-top: 60px;
+  }
+
+  #join-room-screen .join-title {
+    font-size: 1.6rem;
+    transform: translateY(0);
+    margin-bottom: 20px;
+  }
+
 }
