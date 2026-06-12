@@ -384,12 +384,15 @@
 }
 
 /* =========================
-   スマホ対応
+   Home画面：スマホ共通対応
+   iPhone SE / 16e / 15 / Pro Max 共通
 ========================= */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 480px) and (orientation: portrait) {
 
   #title-screen {
-    min-height: 100vh;
+    position: relative;
+    height: 100svh;
+    min-height: 100svh;
     padding: 0;
     overflow: hidden;
   }
@@ -401,54 +404,61 @@
 
   #title-screen .moon {
     width: 400px;
-    top: 0;
+    top: 20px;
     left: 50%;
     margin: -120px 0 0;
     transform: translateX(-50%);
   }
 
-  #title-screen .rock {
-    width: 400px;
-    top: 145px;
-  }
-
   #title-screen .wolf {
     width: 400px;
-    top: -60px;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
+  #title-screen .rock {
+    width: 500px;
+    top: 140px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* 雲：高さ変更で動かないように top 固定 */
   #title-screen .fog-back {
     width: 850px;
-    bottom: 240px;
+    top: 10px;
+    bottom: auto;
     opacity: 0.3;
   }
 
   #title-screen .fog-mid {
     width: 1000px;
-    bottom: 160px;
+    top: 20px;
+    bottom: auto;
     opacity: 0.8;
-    filter:
-        saturate(0.9) brightness(0.8) blur(2px) ;
+    filter: saturate(0.9) brightness(0.8) blur(2px);
   }
 
   #title-screen .fog-front {
-    width: 1200px;
-    bottom: 0px;
+    width: 1800px;
+    top: -150px;
+    bottom: auto;
   }
 
   #title-screen .title {
-    top: 330px;
+    top: 400px;
     font-size: clamp(1.6rem, 7vw, 2rem);
   }
 
   #title-screen .home-ornament {
     position: absolute;
-    top: 350px !important;
+    top: 450px !important;
     left: 50%;
-    transform: translateX(-50%);
     width: 100%;
     margin: 0;
     gap: 10px;
+    transform: translateX(-50%);
   }
 
   #title-screen .home-ornament span:first-child,
@@ -457,24 +467,24 @@
   }
 
   #title-screen .ornament-paw {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
   }
 
   #title-screen #create-room-button,
   #title-screen #join-room-button {
     width: 260px;
     padding: 12px;
-    font-size: 1rem;
     border-radius: 16px;
+    font-size: 1rem;
   }
 
   #title-screen #create-room-button {
-    top: 400px;
+    top: 500px;
   }
 
   #title-screen #join-room-button {
-    top: 480px;
+    top: 580px;
   }
 
   #title-screen #create-room-button::before,
@@ -484,585 +494,157 @@
     width: 38px;
   }
 }
-
-/* iPhone 14 Pro Max くらいの大きめスマホ */
-@media screen and (min-width: 500px) and (max-width: 821px) {
-
-  #title-screen .moon {
-    top: 20px;
-    width: 500px;
-    margin: -125px 0 0;
-  }
-
-  #title-screen .wolf {
-    width: 510px;
-    top: -50px;
-  }
-
-  #title-screen .rock {
-    width: 520px;
-    top: 210px;
-  }
-
-  #title-screen .title {
-    top: 460px;
-    font-size: 2.2rem;
-  }
-
-  #title-screen .home-ornament {
-    top: 500px !important;
-    width: 200%;
-  }
-
-  #title-screen .home-ornament span:first-child,
-  #title-screen .home-ornament span:last-child {
-    width: 120px;
-  }
-
-  #title-screen .ornament-paw {
-    width: 35px;
-    height: 35px;
-  }
-
-  #title-screen #create-room-button {
-    top: 580px;
-    padding: 20px;
-  }
-
-  #title-screen #join-room-button {
-    top: 680px;
-    padding: 20px;
-  }
-
-  #title-screen #create-room-button,
-  #title-screen #join-room-button {
-    width: 300px;
-  }
-
-  #title-screen .fog-back {
-    bottom: 400px;
-    width: 800px;
-  }
-
-  #title-screen .fog-mid {
-    bottom: 280px;
-    width: 1000px;
-  }
-
-  #title-screen .fog-front {
-    bottom: 0;
-    width: 2000px;
-  }
-}
-
-
-/* iPhone 14 Pro Max くらいの大きめスマホ */
-@media screen and (min-width: 390px) and (max-width: 430px) {
-
-  #title-screen .moon {
-    top:20px;
-    width: 500px;
-    margin: -125px 0 0;
-  }
-
-  #title-screen .wolf {
-    width: 510px;
-    top: -50px;
-  }
-
-  #title-screen .rock {
-    width: 520px;
-    top: 210px;
-  }
-
-  #title-screen .title {
-    top: 460px;
-    font-size: 2.2rem;
-  }
-
-  #title-screen .home-ornament {
-    top: 500px !important;
-    width:200%;
-  }
-    #title-screen .home-ornament span:first-child,
-    #title-screen .home-ornament span:last-child {
-      width: 120px;
-    }
-        #title-screen .ornament-paw {
-          width: 35px;
-          height: 35px;
-        }
-
-  #title-screen #create-room-button {
-    top: 580px;
-    padding:20px;
-  }
-
-  #title-screen #join-room-button {
-    top: 680px;
-    padding: 20px;
-  }
-
-  #title-screen #create-room-button,
-  #title-screen #join-room-button {
-    width: 300px;
-  }
-
-  #title-screen .fog-back {
-    bottom: 400px;
-    width:800px;
-  }
-
-  #title-screen .fog-mid {
-    bottom: 280px;
-    width: 1000px;
-  }
-
-  #title-screen .fog-front {
-    bottom: 0;
-    width: 2000px;
-  }
-}
-
-/* 小さめスマホ：iPhone SE / 12 mini系 */
-@media screen and (max-width: 375px) {
-
-  #title-screen .moon {
-    width: 300px;
-    margin: -120px 0 0;
-  }
-
-  #title-screen .wolf {
-    width: 300px;
-    top: -35px;
-  }
-
-  #title-screen .rock {
-    width: 360px;
-    top: 145px;
-  }
-
-  #title-screen .title {
-    top: 330px;
-    font-size: 1.6rem;
-  }
-
-  #title-screen .home-ornament {
-    top: 385px !important;
-  }
-
-  #title-screen .home-ornament span:first-child,
-  #title-screen .home-ornament span:last-child {
-    width: 85px;
-  }
-
-  #title-screen .ornament-paw {
-    width: 18px;
-    height: 18px;
-  }
-
-  #title-screen #create-room-button {
-    top: 435px;
-  }
-
-  #title-screen #join-room-button {
-    top: 500px;
-  }
-
-  #title-screen #create-room-button,
-  #title-screen #join-room-button {
-    width: 260px;
-  }
-}
-
-/* 標準〜大きめスマホ：iPhone 12〜15 / Pro Max系 */
-@media screen and (max-width: 394px) {
-
-  #title-screen .moon {
-    width: 450px;
-  }
-
-  #title-screen .wolf {
-    width: 450px;
-    top: -50px;
-  }
-
-  #title-screen .rock {
-    width: 500px;
-    top: 170px;
-  }
-
-  #title-screen .title {
-    top: 450px;
-    font-size: 2.3rem;
-  }
-
-  #title-screen .home-ornament {
-    top: 500px !important;
-  }
-
-  #title-screen .home-ornament span:first-child,
-  #title-screen .home-ornament span:last-child {
-    width: 120px;
-  }
-
-  #title-screen .ornament-paw {
-    width: 30px;
-    height: 30px;
-  }
-
-  #title-screen #create-room-button {
-    top: 550px;
-  }
-
-  #title-screen #join-room-button {
-    top: 640px;
-  }
-
-  #title-screen #create-room-button,
-  #title-screen #join-room-button {
-    width: 290px;
-  }
-}
-
-/* 大きめスマホ / Pro Max系 */
-@media screen and (min-width: 394px) and (max-width: 430px) {
-
-  #title-screen .moon {
-    width: 500px;
-    margin: -125px 0 0;
-  }
-
-  #title-screen .wolf {
-    width: 500px;
-    top: -30px;
-  }
-
-  #title-screen .rock {
-    width: 500px;
-    top: 230px;
-  }
-
-  #title-screen .title {
-    top: 450px;
-    font-size: 2.3rem;
-  }
-
-  #title-screen .home-ornament {
-    top: 500px !important;
-  }
-
-  #title-screen .home-ornament span:first-child,
-  #title-screen .home-ornament span:last-child {
-    width: 120px;
-  }
-
-  #title-screen .ornament-paw {
-    width: 30px;
-    height: 30px;
-  }
-
-  #title-screen #create-room-button {
-    top: 550px;
-  }
-
-  #title-screen #join-room-button {
-    top: 640px;
-  }
-
-  #title-screen #create-room-button,
-  #title-screen #join-room-button {
-    width: 290px;
-  }
-}
-
-/* 大きめスマホ〜タブレット寄り：431px〜768px(Air) */
-@media screen and (min-width: 500px) and (max-width: 820px) {
-
-  #title-screen .moon {
-    width: 700px;
-    margin: -160px 0 0;
-  }
-
-  #title-screen .wolf {
-    width: 600px;
-    top: 50px;
-  }
-
-  #title-screen .rock {
-    width: 800px;
-    top: 300px;
-  }
-
-  #title-screen .title {
-    top: 620px;
-    font-size: 4rem;
-  }
-
-  #title-screen .home-ornament {
-    top: 670px !important;
-  }
-
-  #title-screen .home-ornament span:first-child,
-  #title-screen .home-ornament span:last-child {
-    width: 230px;
-  }
-
-  #title-screen .ornament-paw {
-    width: 35px;
-    height: 35px;
-  }
-
-  #title-screen #create-room-button {
-    top: 770px;
-    padding:30px;
-  }
-
-  #title-screen #join-room-button {
-    top: 890px;
-    padding: 30px;
-  }
-
-  #title-screen #create-room-button,
-  #title-screen #join-room-button {
-    width: 500px;
-  }
-        #title-screen .fog-back {
-          bottom: 500px;
-          width: 800px;
-        }
-
-        #title-screen .fog-mid {
-          bottom: 300px;
-          width: 1200px;
-        }
-
-        #title-screen .fog-front {
-          bottom: 0;
-          width: 2300px;
-        }
-}
-
-/*iPad mini*/
-@media screen and (min-width: 760px)and (max-width: 768px) {
-
-  #title-screen .moon {
-    width: 700px;
-    margin: -160px 0 0;
-  }
-#title-screen .wolf {
-  width: 700px;
-  top: -70px;
-}
-
-  #title-screen .rock {
-    width: 800px;
-    top: 260px;
-  }
-
-  #title-screen .title {
-    top: 600px;
-    font-size: 4rem;
-  }
-
-  #title-screen .home-ornament {
-    top: 660px !important;
-  }
-
-  #title-screen .home-ornament span:first-child,
-  #title-screen .home-ornament span:last-child {
-    width: 230px;
-  }
-
-  #title-screen .ornament-paw {
-    width: 35px;
-    height: 35px;
-  }
-
-  #title-screen #create-room-button {
-    top: 730px;
-    padding: 25px;
-  }
-
-  #title-screen #join-room-button {
-    top: 830px;
-    padding: 25px;
-  }
-
-  #title-screen #create-room-button,
-  #title-screen #join-room-button {
-    width: 500px;
-  }
-
-  #title-screen .fog-back {
-    bottom: 400px;
-    width: 800px;
-  }
-
-  #title-screen .fog-mid {
-    bottom: 200px;
-    width: 1000px;
-  }
-
-  #title-screen .fog-front {
-    bottom: 0;
-    width: 1500px;
-  }
-}
-
-/*iPad Pro*/
-@media screen and (min-width: 1024px) and (max-width: 1366px) {
-
-  #title-screen .moon {
-    width: 900px;
-  }
-
-  #title-screen .wolf {
-    width: 800px;
-    top: -50px;
-  }
-
-  #title-screen .rock {
-    width: 1000px;
-    top: 300px;
-  }
-
-  #title-screen .title {
-    top: 710px;
-    font-size: 5rem;
-  }
-
-  #title-screen .home-ornament {
-    top: 790px !important;
-  }
-
-  #title-screen .home-ornament span:first-child,
-  #title-screen .home-ornament span:last-child {
-    width: 400px;
-  }
-
-  #title-screen .ornament-paw {
-    width: 50px;
-    height: 50px;
-  }
-
-  #title-screen #create-room-button {
-    top: 900px;
-    padding: 35px;
-  }
-
-  #title-screen #join-room-button {
-    top: 1030px;
-    padding: 35px;
-  }
-
-  #title-screen #create-room-button,
-  #title-screen #join-room-button {
-    width: 600px;
-  }
-
-  #title-screen .fog-back {
-    bottom: 500px;
-    width: 1200px;
-  }
-
-  #title-screen .fog-mid {
-    bottom: 260px;
-    width: 1700px;
-  }
-
-  #title-screen .fog-front {
-    bottom: 0;
-    width: 2000px;
-  }
-}
-
 /* =========================
-   Home雲：現在の表示位置を固定
+   Home画面：縦長スマホ対応
+   iPhone Pro Max系 / 430×932
 ========================= */
+@media screen and (min-width: 421px) and (max-width: 480px) and (min-height: 900px) and (orientation: portrait) {
 
-#title-screen .home-fog.fog-position-locked {
-  position: absolute !important;
-  top: var(--fog-lock-top) !important;
-  bottom: auto !important;
+  #title-screen .fog-back {
+      width: 850px;
+      top: 10px;
+      bottom: auto;
+      opacity: 0.3;
+    }
+
+    #title-screen .fog-mid {
+      width: 1800px;
+      top: -350px;
+      bottom: auto;
+      opacity: 0.8;
+      filter: saturate(0.9) brightness(0.8) blur(2px);
+    }
+
+    #title-screen .fog-front {
+      width: 2300px;
+      top: -360px;
+      bottom: auto;
+    }
 }
 
 /* =========================
-   横向きスマホ対応
+   Home画面：スマホ横向き対応
+   844×390 / 932×430 用
 ========================= */
 @media screen and (max-width: 932px) and (orientation: landscape) {
 
   #title-screen {
-    min-height: 100vh;
-    height: 100vh;
+    position: relative;
+    width: 100vw;
+    height: 100svh;
+    min-height: 100svh;
+    padding: 0;
     overflow: hidden;
   }
 
   #title-screen .stars {
     width: 1200px;
-    top: -80px;
+    top: -120px;
+    left: 50%;
   }
 
+  /* 左側：月・狼・岩 */
   #title-screen .moon {
-    width: 360px;
-    top: 0;
-    margin: -150px 0 0;
+    width: 300px;
+    top: -110px;
+    left: 30%;
+    margin: 0;
+    transform: translateX(-50%);
   }
 
   #title-screen .wolf {
-    width: 340px;
-    top: -85px;
+    width: 300px;
+    top: -55px;
+    left: 30%;
+    transform: translateX(-50%);
   }
 
   #title-screen .rock {
-    width: 390px;
-    top: 110px;
+    width: 500px;
+    top: 40px;
+    left: 30%;
+    transform: translateX(-50%);
   }
 
+  /* 雲：横向き専用 */
+  #title-screen .fog-back {
+    width: 1000px;
+    top: -170px;
+    bottom: auto;
+    opacity: 0.3;
+  }
+
+  #title-screen .fog-mid {
+    width: 1000px;
+    top: -100px;
+
+    bottom: auto;
+    opacity: 0.8;
+    filter: saturate(0.9) brightness(0.8) blur(2px);
+  }
+
+  #title-screen .fog-front {
+    width: 1400px;
+    left:40%;
+    top: -200px;
+    bottom: auto;
+  }
+
+  /* 右側：タイトル・装飾・ボタン */
   #title-screen .title {
-    top: 250px;
-    font-size: 2rem;
+    top: 75px;
+    left: 72%;
+    font-size: 1.8rem;
+    transform: translateX(-50%);
   }
 
   #title-screen .home-ornament {
-    top: 295px !important;
-    width: 100%;
+    position: absolute;
+    top: 105px !important;
+    left: 72%;
+    width: 42%;
+    margin: 0;
+    gap: 8px;
+    transform: translateX(-50%);
   }
 
   #title-screen .home-ornament span:first-child,
   #title-screen .home-ornament span:last-child {
-    width: 120px;
+    width: 80px;
   }
 
   #title-screen .ornament-paw {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
+  }
+
+  #title-screen #create-room-button,
+  #title-screen #join-room-button {
+    left: 72%;
+    width: 240px;
+    padding: 11px;
+    border-radius: 14px;
+    font-size: 0.9rem;
+    transform: translateX(-50%);
   }
 
   #title-screen #create-room-button {
-    top: 340px;
-    width: 260px;
-    padding: 12px;
+    top: 170px;
   }
 
   #title-screen #join-room-button {
-    top: 400px;
-    width: 260px;
-    padding: 12px;
+    top: 240px;
   }
 
-  #title-screen .fog-back {
-    bottom: 160px;
-    width: 850px;
+  #title-screen #create-room-button::before,
+  #title-screen #join-room-button::before,
+  #title-screen #create-room-button::after,
+  #title-screen #join-room-button::after {
+    width: 34px;
   }
 
-  #title-screen .fog-mid {
-    bottom: 80px;
-    width: 1000px;
-  }
-
-  #title-screen .fog-front {
-    bottom: -40px;
-    width: 1400px;
+  #title-screen #create-room-button:hover,
+  #title-screen #join-room-button:hover {
+    transform: translateX(-50%) translateY(-3px);
   }
 }
